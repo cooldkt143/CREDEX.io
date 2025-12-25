@@ -1,5 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import Details from "./pages/Details.jsx";
+import Home from "./pages/Home.jsx";
 
 function App() {
   return (
@@ -7,6 +11,16 @@ function App() {
       <Routes>
         {/* Root / Landing Page */}
         <Route path="/" element={<Landing />} />
+
+        {/* Login Page */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Details Page */}
+        <Route path="/details" element={<Details />} />
+
+        {/* Home Page after setup */}
+        <Route path="/home" element={<Home />} />
 
         {/* Catch-all for invalid URLs (optional) */}
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
