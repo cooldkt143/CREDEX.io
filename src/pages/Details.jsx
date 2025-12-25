@@ -36,12 +36,26 @@ const Details = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-gradient-to-br from-[#020617] via-[#020617] to-teal-950 font-mono">
-      <div className="w-full h-screen sm:h-[70vh] sm:max-w-4xl sm:mx-auto sm:my-auto border border-teal-400/40 bg-white/5 backdrop-blur-xl shadow-[0_0_60px_rgba(45,212,191,0.25)] flex flex-col overflow-hidden sm:rounded-xl">
+    <div className="fixed min-h-screen w-full flex bg-[#020617] font-mono overflow-hidden">
+
+      {/* Background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(45,212,191,0.18),transparent_60%)] "></div>
+
+      {/* Animated grid */}
+      <div className="absolute inset-0 opacity-10 bg-[linear-gradient(transparent_95%,rgba(45,212,191,0.25)),linear-gradient(90deg,transparent_95%,rgba(45,212,191,0.25))] bg-[size:42px_42px] animate-[gridMove_30s_linear_infinite]"></div>
+
+      {/* Main Card */}
+      <div className="relative w-full h-screen sm:h-[70vh] sm:max-w-4xl sm:mx-auto sm:my-auto
+        border border-teal-400/40 bg-white/5 backdrop-blur-xl
+        shadow-[0_0_60px_rgba(45,212,191,0.25)]
+        flex flex-col overflow-hidden sm:rounded-xl
+        animate-[fadeInUp_0.8s_ease-out]">
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-          <p className="text-teal-400 text-sm">// developer.setup</p>
+          <p className="text-teal-400 text-sm">
+            // developer.setup<span className="animate-pulse">_</span>
+          </p>
           <p className="text-xs text-gray-400">step {step} / 4</p>
         </div>
 
@@ -50,8 +64,10 @@ const Details = () => {
           {[1, 2, 3, 4].map((num) => (
             <span
               key={num}
-              className={`px-3 py-1 rounded border ${
-                step === num ? "border-teal-400 text-teal-400" : "border-gray-700"
+              className={`px-3 py-1 rounded border transition-all duration-300 ${
+                step === num
+                  ? "border-teal-400 text-teal-400 shadow-[0_0_12px_rgba(45,212,191,0.6)]"
+                  : "border-gray-700"
               }`}
             >
               {num}
@@ -75,21 +91,24 @@ const Details = () => {
           <button
             onClick={prevStep}
             disabled={step === 1}
-            className="px-4 py-2 border border-teal-400/60 rounded text-gray-400 hover:text-teal-400 hover:border-teal-400 disabled:opacity-30 transition"
+            className="px-4 py-2 border border-teal-400/60 rounded
+              text-gray-400 hover:text-teal-400 hover:border-teal-400
+              disabled:opacity-30 transition hover:-translate-x-0.5"
           >
             {"<- back"}
           </button>
 
           <button
             onClick={nextStep}
-            className="px-6 py-2 rounded bg-teal-500 text-black font-semibold hover:bg-teal-400"
+            className="px-6 py-2 rounded bg-teal-500 text-black font-semibold
+              hover:bg-teal-400 transition hover:scale-[1.03] active:scale-95"
           >
             {step === 4 ? "continue()" : "next ->"}
           </button>
         </div>
       </div>
 
-      {/* Input Styles */}
+      {/* Styles */}
       <style>
         {`
           .input {
@@ -101,12 +120,23 @@ const Details = () => {
             color: #5eead4;
             font-size: 0.875rem;
             outline: none;
+            transition: border-color 0.2s ease;
           }
           .input::placeholder {
             color: #6b7280;
           }
           .input:focus {
             border-color: #2dd4bf;
+          }
+
+          @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 84px 84px; }
           }
         `}
       </style>

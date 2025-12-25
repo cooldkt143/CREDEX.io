@@ -43,6 +43,10 @@ const StepTwo = ({ formData, handleChange }) => {
     setCustomRole("");
   };
 
+  const customRoles = formData.role.filter(
+    (role) => !roles.includes(role)
+  );
+
   return (
     <div className="min-w-full px-6 sm:px-8 pb-8 overflow-y-auto">
       <p className="text-teal-400 mb-4">// developer.role</p>
@@ -95,6 +99,22 @@ const StepTwo = ({ formData, handleChange }) => {
             add
           </button>
         </div>
+
+        {/* Display added custom roles */}
+        {customRoles.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-2">
+            {customRoles.map((role) => (
+              <button
+                key={role}
+                type="button"
+                onClick={() => handleRoleToggle(role)}
+                className="px-3 py-1 text-xs rounded border border-teal-400 text-teal-400 bg-teal-400/10 hover:bg-red-500/10 hover:border-red-400 hover:text-red-400 transition"
+              >
+                {role} ✕
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
