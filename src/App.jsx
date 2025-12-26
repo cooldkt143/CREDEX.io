@@ -4,6 +4,7 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Details from "./pages/Details.jsx";
 import Home from "./pages/Home.jsx";
+import Analyze from "./pages/Analyze.jsx";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
 
         {/* Home Page after setup */}
         <Route path="/home" element={<Home />} />
+
+        {/* Analyze Page */}
+        <Route path="/analyze" element={<Analyze />} />
 
         {/* Catch-all for invalid URLs (optional) */}
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />

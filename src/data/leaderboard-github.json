@@ -1,0 +1,62 @@
+[
+  { 
+    "rank": 1, 
+    "username": "ncdai", 
+    "name": "Chánh Đại", 
+    "score": 694 
+  },
+  { 
+    "rank": 2, 
+    "username": "gaearon", 
+    "name": "Dan Abramov", 
+    "score": 672 
+  },
+  { 
+    "rank": 3, 
+    "username": "sindresorhus", 
+    "name": "Sindre Sorhus", 
+    "score": 658 
+  },
+  { 
+    "rank": 4, 
+    "username": "addyosmani", 
+    "name": "Addy Osmani", 
+    "score": 645 
+  },
+  { 
+    "rank": 5, 
+    "username": "kentcdodds", 
+    "name": "Kent C. Dodds", 
+    "score": 632 
+  },
+  { 
+    "rank": 6, 
+    "username": "yyx990803", 
+    "name": "Evan You", 
+    "score": 621 
+  },
+  { 
+    "rank": 7, 
+    "username": "tj", 
+    "name": "TJ Holowaychuk", 
+    "score": 610 
+  },
+  { 
+    "rank": 8, 
+    "username": "wesbos", 
+    "name": "Wes Bos", 
+    "score": 598 
+  },
+  { 
+    "rank": 9, 
+    "username": "paulirish", 
+    "name": "Paul Irish", 
+    "score": 589 
+  },
+  {
+    "rank": 10, 
+    "username": "torvalds", 
+    "name": "Linus Torvalds", 
+    "score": 575 
+  }
+]

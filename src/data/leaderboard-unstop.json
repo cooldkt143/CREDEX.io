@@ -1,0 +1,12 @@
+[
+  { "rank": 1, "username": "hackchamp", "name": "Aryan Patel", "score": 705 },
+  { "rank": 2, "username": "innovatorX", "name": "Mehul Shah", "score": 690 },
+  { "rank": 3, "username": "teamalpha", "name": "Alpha Squad", "score": 675 },
+  { "rank": 4, "username": "codecrusade", "name": "Rhea Malhotra", "score": 660 },
+  { "rank": 5, "username": "buildfast", "name": "Dev Collective", "score": 648 },
+  { "rank": 6, "username": "hackforge", "name": "Saurabh Mishra", "score": 635 },
+  { "rank": 7, "username": "ideators", "name": "Idea Labs", "score": 620 },
+  { "rank": 8, "username": "rapiddev", "name": "Kriti Bansal", "score": 608 },
+  { "rank": 9, "username": "prototypeX", "name": "Rohini Desai", "score": 595 },
+  { "rank": 10, "username": "launchpad", "name": "LaunchPad Team", "score": 582 }
+]

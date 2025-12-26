@@ -1,9 +1,9 @@
 const StepFour = ({ formData }) => {
   return (
     <div className="min-w-full px-6 sm:px-8 pb-8 overflow-y-auto">
-      <p className="text-teal-400 mb-4">// review.details</p>
+      <p className="text-teal-400 text-lg mb-4">// review.details</p>
 
-      <div className="text-sm text-gray-300 space-y-2">
+      <div className="text-base text-gray-300 space-y-2">
         <p><span className="text-teal-400">name:</span> {formData.firstName} {formData.lastName}</p>
         <p><span className="text-teal-400">email:</span> {formData.email}</p>
         <p><span className="text-teal-400">phone:</span> {formData.phone}</p>

@@ -120,7 +120,7 @@ const Login = () => {
           }
           @keyframes blink {
             0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0.3; }
+            25%, 75% { opacity: 0.9; }
           }
           @keyframes gridMove {
             from { background-position: 0 0; }

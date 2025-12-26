@@ -1,0 +1,12 @@
+[
+  { "rank": 1, "username": "dsageek", "name": "Harsh Gupta", "score": 710 },
+  { "rank": 2, "username": "graphguru", "name": "Ritika Sharma", "score": 695 },
+  { "rank": 3, "username": "treewalker", "name": "Mohit Agarwal", "score": 680 },
+  { "rank": 4, "username": "arrayace", "name": "Nikhil Verma", "score": 665 },
+  { "rank": 5, "username": "dpwizard", "name": "Aditi Kulkarni", "score": 650 },
+  { "rank": 6, "username": "linkedlistpro", "name": "Yash Jain", "score": 635 },
+  { "rank": 7, "username": "hashhero", "name": "Simran Kaur", "score": 620 },
+  { "rank": 8, "username": "queueking", "name": "Varun Singh", "score": 605 },
+  { "rank": 9, "username": "stackstar", "name": "Karthik Iyer", "score": 592 },
+  { "rank": 10, "username": "bitwise", "name": "Pranav Joshi", "score": 580 }
+]
