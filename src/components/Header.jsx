@@ -82,11 +82,12 @@ const Header = () => {
             Leaderboard
           </button>
           <button className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
+            Resume Builder
+          </button>
+          <button className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
             Settings
           </button>
-
           <div className="h-px bg-teal-400/20 my-1" />
-
           <button className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-400/10 transition">
             Logout
           </button>

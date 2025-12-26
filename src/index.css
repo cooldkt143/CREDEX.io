@@ -14,3 +14,13 @@
 .background-pattern {
   background-image: radial-gradient(circle at top, rgba(20, 184, 166, 0.15), transparent 80%);
 }
+
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For IE and Edge */
+}
