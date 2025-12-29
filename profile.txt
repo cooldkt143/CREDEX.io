@@ -26,7 +26,7 @@ const fadeUp = {
 };
 
 const glowCard =
-  "bg-[#050F0E]/90 border border-[#1EE3C7]/30 rounded-xl shadow-[0_0_0px_rgba(42,242,208,0.18)] hover:shadow-[0_0_5px_rgba(42,242,208,0.45)] transition-all duration-300 backdrop-blur";
+  "bg-[#050F0E]/90 border border-[#1EE3C7]/30 rounded-xl shadow-[0_0_12px_rgba(42,242,208,0.18)] hover:shadow-[0_0_24px_rgba(42,242,208,0.45)] transition-all duration-300 backdrop-blur";
 
 const iconGlow =
   "text-[34px] text-[#2AF2D0] drop-shadow-[0_0_10px_rgba(42,242,208,0.6)]";
@@ -85,7 +85,7 @@ const Profile = () => {
           whileHover={{ scale: 1.03 }}
           className={`${glowCard} p-5 flex items-center gap-4 w-full lg:w-1/3`}
         >
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#2AF2D0] to-[#1EE3C7] text-black flex items-center justify-center text-xl font-bold shadow-[0_0_10px_rgba(42,242,208,0.7)]">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#2AF2D0] to-[#1EE3C7] text-black flex items-center justify-center text-xl font-bold shadow-[0_0_25px_rgba(42,242,208,0.7)]">
             S
           </div>
 
@@ -127,13 +127,13 @@ const Profile = () => {
 
             <motion.div
               whileHover={{ rotate: 8, scale: 1.15 }}
-              className="w-20 h-20 rounded-full border-4 border-[#2AF2D0] flex items-center justify-center font-bold text-[#2AF2D0] shadow-[0_0_10px_rgba(42,242,208,0.8)] text-lg lg:text-xl"
+              className="w-20 h-20 rounded-full border-4 border-[#2AF2D0] flex items-center justify-center font-bold text-[#2AF2D0] shadow-[0_0_25px_rgba(42,242,208,0.8)] text-lg lg:text-xl"
             >
               0%
             </motion.div>
           </div>
 
-          <button className="mt-4 text-base lg:text-lg border border-[#2AF2D0] text-[#2AF2D0] px-6 py-2 rounded-2xl hover:bg-[#2AF2D0] hover:text-black transition shadow-[0_0_10px_rgba(42,242,208,0.5)]">
+          <button className="mt-4 text-base lg:text-lg border border-[#2AF2D0] text-[#2AF2D0] px-6 py-2 rounded-2xl hover:bg-[#2AF2D0] hover:text-black transition shadow-[0_0_20px_rgba(42,242,208,0.5)]">
             Add_missing_details()
           </button>
         </motion.div>
@@ -210,7 +210,7 @@ const Profile = () => {
               <h3 className="text-lg font-semibold text-[#2AF2D0]">
                 platform_scores
               </h3>
-              <HiTrendingUp className="text-[30px] text-[#2AF2D0] drop-shadow-[0_0_0px_rgba(42,242,208,0.7)]" />
+              <HiTrendingUp className="text-[30px] text-[#2AF2D0] drop-shadow-[0_0_15px_rgba(42,242,208,0.7)]" />
             </div>
 
             <div className="flex flex-wrap gap-4 justify-start">
@@ -218,15 +218,15 @@ const Profile = () => {
                 <motion.div
                   key={i}
                   whileHover={{
-                    scale: 1.05,
-                    boxShadow: "0 0 12px rgba(42,242,208,0.7)",
+                    scale: 1.12,
+                    boxShadow: "0 0 35px rgba(42,242,208,0.7)",
                   }}
-                  className="flex-1 min-w-[140px] max-w-[180px] border border-[#2AF2D0]/40 rounded-lg p-4 text-center text-[#2AF2D0] bg-[#031917]/60 cursor-pointer"
+                  className="flex-1 min-w-[120px] max-w-[150px] border border-[#2AF2D0]/40 rounded-lg p-4 text-center text-[#2AF2D0] bg-[#031917]/60 cursor-pointer"
                 >
                   <div className="text-[38px] drop-shadow-[0_0_14px_rgba(42,242,208,0.8)]">
                     {item.icon}
                   </div>
-                  <p className="mt-1 font-semibold text-base">{item.name}_score</p>
+                  <p className="mt-1 font-semibold">{item.name}_score</p>
                   <div className="mt-1 h-2 w-full bg-[#0B1F1D] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-[#2AF2D0] rounded-full"

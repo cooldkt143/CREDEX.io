@@ -23,7 +23,7 @@ const Header = () => {
     <>
       <header
         className="fixed top-0 left-0 right-0 z-50
-        w-full pl-1 pr-1 sm:pl-10 sm:pr-10
+        w-full pl-1 pr-1 sm:pl-5 sm:pr-5
         backdrop-blur-md bg-black/40
         border-b border-teal-400/40"
       >
@@ -31,11 +31,24 @@ const Header = () => {
           
           {/* Left */}
           <div className="flex items-center gap-2 sm:gap-3">
+            
+            {/* Back Arrow */}
+            <button
+              onClick={() => navigate("/home")}
+              className="w-8 h-8 flex items-center justify-center
+              rounded-md hover:bg-teal-400/10 transition"
+            >
+              <span className="material-symbols-outlined text-teal-400 text-xl">
+                arrow_back
+              </span>
+            </button>
+
             <img
               src={logo}
               alt="Credex Logo"
               className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
             />
+
             <span className="text-teal-400 pl-2 font-mono text-lg sm:text-xl font-semibold tracking-wide">
               CREDEX<span className="text-gray-300">.io</span>
             </span>
