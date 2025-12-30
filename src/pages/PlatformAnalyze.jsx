@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import IdAnalyze from "../components/analyze/IdAnalyze";
 import { motion } from "framer-motion";
 
-const Analyze = () => {
+const PlatformAnalyze = () => {
   return (
     <div
       className="relative min-h-screen overflow-x-hidden bg-black text-white
@@ -45,4 +45,4 @@ const Analyze = () => {
   );
 };
 
-export default Analyze;
+export default PlatformAnalyze;

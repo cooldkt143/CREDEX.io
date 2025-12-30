@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Header from "../components/Header";
 import HomeHero from "../components/home/HomeHero";
-import Leaderboard from "../components/home/Leaderboard";
+import PlatformSection from "../components/home/PlatformSection";
+import ResumeBuilderATSSection from "../components/home/ResumeBuilderATSSection";
+import Footer from "../components/home/Footer";
 import TerminalLoader from "../components/home/TerminalLoader";
 
 const Home = () => {
@@ -33,13 +35,19 @@ const Home = () => {
       >
         <Header />
 
-        <div className="pt-6 sm:pt-10">
+        <div className="pt-6 sm:pt-10 pl-5 pr-5 sm:pl-0 sm:pr-0">
           <HomeHero />
         </div>
 
-        <div className="mb-20 px-4 pt-4 sm:pt-10">
-          <Leaderboard />
+        <div className="pt-20 sm:pt-10 pl-5 pr-5 sm:pl-0 sm:pr-0">
+          <PlatformSection />
         </div>
+
+        <div className="pt-20 sm:pt-10 pl-5 pr-5 sm:pl-0 sm:pr-0">
+          <ResumeBuilderATSSection />
+        </div>
+
+        <Footer />
       </motion.div>
     </div>
   );

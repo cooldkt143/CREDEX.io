@@ -129,8 +129,18 @@ const Header = () => {
               setOpen(false);
             }}
           className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
-            Resume Builder
+            Resume & ATS
           </button>
+
+          <button 
+            onClick={() => {
+              navigate("/roademap-builder");
+              setOpen(false);
+            }}
+          className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
+            RoadMap Builder
+          </button>
+
 
           <button 
             onClick={() => {

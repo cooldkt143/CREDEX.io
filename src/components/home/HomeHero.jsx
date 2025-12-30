@@ -5,7 +5,6 @@ const HomeHero = () => {
   const navigate = useNavigate();
   return (
     <section className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 text-center">
-
       {/* Terminal badge */}
       <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-black/50 px-4 py-1 font-mono text-sm text-teal-400">
         <span className="h-2 w-2 animate-pulse rounded-full bg-teal-400" />
@@ -32,7 +31,7 @@ const HomeHero = () => {
       </p>
 
       <p className="mt-3 max-w-xl font-mono text-sm text-gray-400 sm:text-base">
-        CREDEX analyzes real builds and problem solving to generate a credibility
+        CREDEX analyzes real builds and problem solving to generate a credex
         score and a clear next step roadmap.
       </p>
 
@@ -48,7 +47,7 @@ const HomeHero = () => {
           <span className="text-teal-400">$</span>
           <span  
             className="text-lg" 
-            onClick={() => navigate("/analyze")}
+            onClick={() => navigate("/credex-analyze")}
           >your_credex.analyze()</span>
           <span className="absolute -right-2 -top-2 h-2 w-2 rounded-full bg-teal-400 opacity-0 transition" />
         </button>
