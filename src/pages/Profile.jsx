@@ -16,279 +16,265 @@ import {
   FaLightbulb,
 } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
-import { GiGraduateCap } from "react-icons/gi";
-import { MdDesignServices } from "react-icons/md";
-import Header from "../components/Header.jsx";
+import Header from "../components/Header";
 
+/* Animations */
 const fadeUp = {
-  hidden: { opacity: 0, y: 25 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
 };
 
-const glowCard =
-  "bg-[#050F0E]/90 border border-[#1EE3C7]/30 rounded-xl shadow-[0_0_0px_rgba(42,242,208,0.18)] hover:shadow-[0_0_5px_rgba(42,242,208,0.45)] transition-all duration-300 backdrop-blur";
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
-const iconGlow =
-  "text-[34px] text-[#2AF2D0] drop-shadow-[0_0_10px_rgba(42,242,208,0.6)]";
+/* Shared Card Style (HOME + PROFILE) */
+const card =
+  "bg-black/60 border border-teal-400/20 rounded-2xl backdrop-blur-md shadow-[0_0_20px_rgba(20,184,166,0.08)] hover:shadow-[0_0_32px_rgba(20,184,166,0.18)] transition";
+
+/* Data */
+const platforms = [
+  { icon: <FaGithub />, name: "github", score: 720 },
+  { icon: <FaHackerrank />, name: "hackerrank", score: 680 },
+  { icon: <SiLeetcode />, name: "leetcode", score: 540 },
+  { icon: <FaLinkedin />, name: "linkedin", score: 610 },
+];
+
+const skills = [
+  "javascript",
+  "react",
+  "node",
+  "html",
+  "css",
+  "tailwind",
+];
+
+const education = [
+  {
+    degree: "B.Tech Computer Science",
+    institution: "XYZ University",
+    year: "2022 – 2026",
+  },
+  {
+    degree: "Higher Secondary",
+    institution: "ABC School",
+    year: "2020 – 2022",
+  },
+];
 
 const Profile = () => {
-  const platforms = [
-    { icon: <FaGithub />, name: "github", score: 720 },
-    { icon: <FaHackerrank />, name: "hackerrank", score: 680 },
-    { icon: <SiLeetcode />, name: "leetcode", score: 540 },
-    { icon: <FaLinkedin />, name: "linkedin", score: 610 },
-  ];
-
-  const skills = [
-    { name: "javascript", icon: <MdDesignServices /> },
-    { name: "react_js", icon: <MdDesignServices /> },
-    { name: "node_js", icon: <MdDesignServices /> },
-    { name: "html", icon: <MdDesignServices /> },
-    { name: "css", icon: <MdDesignServices /> },
-    { name: "tailwind_css", icon: <MdDesignServices /> },
-  ];
-
-  const education = [
-    {
-      degree: "btech_computer_science",
-      institution: "xyz_university",
-      year: "2022_2026",
-      icon: <GiGraduateCap />,
-    },
-    {
-      degree: "higher_secondary",
-      institution: "abc_school",
-      year: "2020_2022",
-      icon: <GiGraduateCap />,
-    },
-  ];
-
   return (
     <motion.div
-      className="relative min-h-screen pt-20 overflow-hidden p-4 space-y-6 pl-5 pr-5 sm:pl-10 sm:pr-10
-      font-mono text-[#E6FFFA]
-      bg-black
-      bg-[radial-gradient(circle_at_center,_rgba(20,184,166,0.15),_transparent_150%)]
-      before:absolute before:inset-0 before:pointer-events-none
-      before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]
-      before:bg-[size:40px_40px] before:opacity-20"
       initial="hidden"
       animate="visible"
       variants={fadeUp}
+      className="
+        relative min-h-screen pt-20 px-5 sm:px-10 space-y-6
+        bg-[#05080F] text-slate-200 overflow-hidden
+        bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.14),_transparent_75%)]
+        before:absolute before:inset-0
+        before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]
+        before:bg-[size:36px_36px]
+        before:opacity-20
+        before:pointer-events-none
+      "
     >
       <Header />
 
-      {/* HEADER */}
-      <div className="relative z-10 flex flex-col lg:flex-row gap-5">
+      {/* TOP GRID */}
+      <motion.div
+        variants={stagger}
+        className="grid lg:grid-cols-3 gap-5 relative z-10"
+      >
         {/* PROFILE CARD */}
-        <motion.div
-          whileHover={{ scale: 1.03 }}
-          className={`${glowCard} p-5 flex items-center gap-4 w-full lg:w-1/3`}
-        >
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#2AF2D0] to-[#1EE3C7] text-black flex items-center justify-center text-xl font-bold shadow-[0_0_10px_rgba(42,242,208,0.7)]">
+        <motion.div variants={fadeUp} className={`${card} p-5 flex gap-4`}>
+          <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
             S
           </div>
 
-          <div className="flex-1">
-            <h2 className="text-xl font-semibold text-[#2AF2D0]">
-              simran_patra 🇮🇳
+          <div>
+            <h2 className="text-lg font-semibold text-white font-mono">
+              simran_patra
             </h2>
-            <p className="text-sm text-[#7DDDD0]">@patra_simran_92</p>
+            <p className="text-sm text-slate-400 font-mono">
+              @patra_simran_92
+            </p>
 
-            <div className="flex items-center gap-2 mt-2">
-              <HiTrendingUp className="text-[#2AF2D0] text-xl" />
-              <span className="text-[#7DDDD0] text-sm">
-                leaderboard_rank = 15
-              </span>
+            <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
+              <HiTrendingUp className="text-teal-400" />
+              rank = 15
             </div>
 
             <div className="flex flex-wrap gap-2 mt-2">
-              <span className="px-2 py-1 bg-[#1EE3C7]/30 text-[#2AF2D0] rounded-full text-xs flex items-center gap-1">
-                <FaStar /> github_star_enabled
-              </span>
-              <span className="px-2 py-1 bg-[#1EE3C7]/30 text-[#2AF2D0] rounded-full text-xs flex items-center gap-1">
-                <FaTrophy /> hackerrank_level_expert
-              </span>
+              <Badge icon={<FaStar />} text="github_star" />
+              <Badge icon={<FaTrophy />} text="hackerrank_expert" />
             </div>
           </div>
         </motion.div>
 
-        {/* PROFILE COMPLETION */}
-        <motion.div className={`${glowCard} p-8 w-full lg:w-2/3`}>
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-5">
-            <div className="flex-1">
-              <h3 className="text-xl lg:text-2xl font-bold text-[#2AF2D0]">
-                completeProfile()
-              </h3>
-              <p className="text-sm lg:text-base text-[#7DDDD0] mt-2 max-w-md">
-                system_uses_profile_data_for_rank_analysis
-              </p>
-            </div>
+        {/* COMPLETE PROFILE */}
+        <motion.div
+          variants={fadeUp}
+          className={`${card} p-6 lg:col-span-2 flex justify-between items-center`}
+        >
+          <div>
+            <h3 className="text-xl text-white font-semibold font-mono">
+              completeProfile()
+            </h3>
+            <p className="text-sm text-slate-400 mt-1 font-mono">
+              profile_data_used_for_ranking
+            </p>
 
-            <motion.div
-              whileHover={{ rotate: 8, scale: 1.15 }}
-              className="w-20 h-20 rounded-full border-4 border-[#2AF2D0] flex items-center justify-center font-bold text-[#2AF2D0] shadow-[0_0_10px_rgba(42,242,208,0.8)] text-lg lg:text-xl"
-            >
-              0%
-            </motion.div>
+            <button className="mt-4 px-5 py-2 rounded-lg bg-teal-400 text-black font-mono hover:bg-teal-300 transition shadow-[0_0_16px_rgba(20,184,166,0.5)]">
+              add_missing_details()
+            </button>
           </div>
 
-          <button className="mt-4 text-base lg:text-lg border border-[#2AF2D0] text-[#2AF2D0] px-6 py-2 rounded-2xl hover:bg-[#2AF2D0] hover:text-black transition shadow-[0_0_10px_rgba(42,242,208,0.5)]">
-            Add_missing_details()
-          </button>
+          <motion.div
+            animate={{
+              boxShadow: [
+                "0 0 10px rgba(20,184,166,0.3)",
+                "0 0 18px rgba(20,184,166,0.6)",
+                "0 0 10px rgba(20,184,166,0.3)",
+              ],
+            }}
+            transition={{ duration: 2.4, repeat: Infinity }}
+            className="w-16 h-16 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono"
+          >
+            0%
+          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* MAIN GRID */}
-      <div className="relative z-10 grid lg:grid-cols-2 gap-5">
-        {/* LEFT COLUMN */}
+      <motion.div
+        variants={stagger}
+        className="grid lg:grid-cols-2 gap-5 relative z-10"
+      >
+        {/* LEFT */}
         <div className="space-y-5">
-          {/* PERSONAL INFO */}
-          <motion.div variants={fadeUp} className={`${glowCard} p-5`}>
-            <h3 className="text-lg font-semibold text-[#2AF2D0] mb-3">
-              personal_info.json
-            </h3>
+          <Card title="personal_info">
+            <InfoRow icon={<HiOutlineMail />} text="email_verified" />
+            <InfoRow icon={<HiOutlinePhone />} text="phone = null" />
+            <InfoRow icon={<HiOutlineLocationMarker />} text='location = "IN"' />
+          </Card>
 
-            <div className="space-y-2 text-sm text-[#7DDDD0]">
-              <p className="flex items-center gap-3 hover:text-[#2AF2D0] transition">
-                <HiOutlineMail className={iconGlow} /> email_address
-                <button className="ml-auto text-xs text-[#2AF2D0] hover:underline">
-                  update()
-                </button>
-              </p>
-
-              <p className="flex items-center gap-3 hover:text-[#2AF2D0] transition">
-                <HiOutlinePhone className={iconGlow} /> phone_number = null
-                <button className="ml-auto text-xs text-[#2AF2D0] hover:underline">
-                  update()
-                </button>
-              </p>
-
-              <p className="flex items-center gap-3 hover:text-[#2AF2D0] transition">
-                <HiOutlineLocationMarker className={iconGlow} /> location = "IN"
-              </p>
-            </div>
-          </motion.div>
-
-          {/* RESUME */}
-          <motion.div variants={fadeUp} className={`${glowCard} p-5`}>
-            <h3 className="text-lg font-semibold text-[#2AF2D0]">
-              resume.pdf
-            </h3>
-            <p className="text-sm text-[#7DDDD0] mt-1">
+          <Card title="resume">
+            <p className="text-sm text-slate-400 font-mono">
               resume_not_found
             </p>
-            <button className="flex items-center gap-3 text-[#2AF2D0] mt-2 hover:gap-4 transition-all">
-              <HiOutlineDocumentAdd className={iconGlow} /> upload_resume()
+            <button className="mt-2 flex items-center gap-2 text-teal-400 font-mono">
+              <HiOutlineDocumentAdd /> upload_resume()
             </button>
-          </motion.div>
+          </Card>
 
-          {/* SKILLS */}
-          <motion.div variants={fadeUp} className={`${glowCard} p-5`}>
-            <h3 className="text-lg font-semibold text-[#2AF2D0] mb-3 flex items-center gap-2">
-              <MdDesignServices className="text-[#2AF2D0] text-xl" /> tech_stack[]
-            </h3>
-
+          <Card title="tech_stack">
             <div className="flex flex-wrap gap-2">
-              {skills.map((skill, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 bg-[#1EE3C7]/30 text-[#2AF2D0] rounded-full text-sm cursor-pointer hover:bg-[#2AF2D0] hover:text-black transition flex items-center gap-1"
-                >
-                  {skill.icon} {skill.name}
+              {skills.map((s, i) => (
+                <span key={i} className="skill-chip">
+                  {s}
                 </span>
               ))}
             </div>
-          </motion.div>
+          </Card>
         </div>
 
-        {/* RIGHT COLUMN */}
+        {/* RIGHT */}
         <div className="space-y-5">
-          {/* PLATFORM SCORES */}
-          <motion.div variants={fadeUp} className={`${glowCard} p-5`}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#2AF2D0]">
-                platform_scores
-              </h3>
-              <HiTrendingUp className="text-[30px] text-[#2AF2D0] drop-shadow-[0_0_0px_rgba(42,242,208,0.7)]" />
-            </div>
-
-            <div className="flex flex-wrap gap-4 justify-start">
-              {platforms.map((item, i) => (
-                <motion.div
-                  key={i}
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: "0 0 12px rgba(42,242,208,0.7)",
-                  }}
-                  className="flex-1 min-w-[140px] max-w-[180px] border border-[#2AF2D0]/40 rounded-lg p-4 text-center text-[#2AF2D0] bg-[#031917]/60 cursor-pointer"
-                >
-                  <div className="text-[38px] drop-shadow-[0_0_14px_rgba(42,242,208,0.8)]">
-                    {item.icon}
+          <Card title="platform_scores">
+            <div className="grid grid-cols-2 gap-4">
+              {platforms.map((p, i) => (
+                <div key={i} className="score-card">
+                  <div className="text-2xl text-teal-400 mb-1">
+                    {p.icon}
                   </div>
-                  <p className="mt-1 font-semibold text-base">{item.name}_score</p>
-                  <div className="mt-1 h-2 w-full bg-[#0B1F1D] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[#2AF2D0] rounded-full"
-                      style={{ width: `${(item.score / 1000) * 100}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-xs text-[#7DDDD0] mt-1">
-                    score = {item.score}
+                  <p className="font-mono">{p.name}</p>
+                  <p className="text-sm text-slate-400 font-mono">
+                    score = {p.score}
                   </p>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div className={`${glowCard} p-3 mt-4 flex items-center gap-2`}>
-              <FaLightbulb className="text-[#2AF2D0]" />
-              <p className="text-sm text-[#7DDDD0]">
-                hint: leetcode.solveOneMore()
-              </p>
-            </motion.div>
-          </motion.div>
-
-          {/* CERTIFICATIONS */}
-          <motion.div variants={fadeUp} className={`${glowCard} p-5`}>
-            <h3 className="text-lg font-semibold text-[#2AF2D0]">
-              certifications[]
-            </h3>
-            <p className="text-sm text-[#7DDDD0] mt-1">
-              certifications.length === 0
-              <span className="text-[#2AF2D0] hover:underline cursor-pointer ml-1">
-                start_certification()
-              </span>
-            </p>
-          </motion.div>
-
-          {/* EDUCATION */}
-          <motion.div variants={fadeUp} className={`${glowCard} p-5`}>
-            <h3 className="text-lg font-semibold text-[#2AF2D0] mb-3 flex items-center gap-2">
-              <GiGraduateCap className="text-[#2AF2D0] text-xl" /> education_timeline
-            </h3>
-
-            <div className="space-y-2 text-[#7DDDD0]">
-              {education.map((edu, i) => (
-                <div
-                  key={i}
-                  className="border-l-2 border-[#2AF2D0] pl-3 flex items-center gap-2"
-                >
-                  {edu.icon}
-                  <div>
-                    <p className="font-semibold text-[#2AF2D0]">
-                      {edu.degree}
-                    </p>
-                    <p className="text-sm">{edu.institution}</p>
-                    <p className="text-xs">{edu.year}</p>
-                  </div>
                 </div>
               ))}
             </div>
-          </motion.div>
+
+            <p className="mt-4 text-sm text-slate-400 font-mono flex items-center gap-2">
+              <FaLightbulb className="text-teal-400" />
+              hint: solve_more_problems()
+            </p>
+          </Card>
+
+          <Card title="certifications">
+            <p className="text-sm text-slate-400 font-mono">
+              none_found →{" "}
+              <span className="text-teal-400 cursor-pointer">
+                start_certification()
+              </span>
+            </p>
+          </Card>
+
+          <Card title="education">
+            {education.map((e, i) => (
+              <div key={i} className="border-l border-teal-400/60 pl-3 mb-3">
+                <p className="font-mono text-white">{e.degree}</p>
+                <p className="text-sm text-slate-400 font-mono">
+                  {e.institution}
+                </p>
+                <p className="text-xs text-slate-500 font-mono">
+                  {e.year}
+                </p>
+              </div>
+            ))}
+          </Card>
         </div>
-      </div>
+      </motion.div>
+
+      {/* LOCAL STYLES */}
+      <style>{`
+        .skill-chip {
+          padding: 0.3rem 0.7rem;
+          border-radius: 999px;
+          background: rgba(20,184,166,0.15);
+          color: #5eead4;
+          font-size: 0.75rem;
+          font-family: monospace;
+        }
+        .score-card {
+          padding: 1rem;
+          border-radius: 1rem;
+          background: rgba(20,184,166,0.1);
+          font-family: monospace;
+        }
+      `}</style>
     </motion.div>
   );
 };
+
+/* Reusable Components */
+const Card = ({ title, children }) => (
+  <motion.div variants={fadeUp} className={`${card} p-5`}>
+    <h3 className="font-mono text-teal-400 mb-3">{title}</h3>
+    {children}
+  </motion.div>
+);
+
+const InfoRow = ({ icon, text }) => (
+  <div className="flex items-center gap-3 text-sm text-slate-400 font-mono mt-2">
+    <span className="text-teal-400">{icon}</span>
+    {text}
+    <span className="ml-auto text-teal-400 cursor-pointer">
+      update()
+    </span>
+  </div>
+);
+
+const Badge = ({ icon, text }) => (
+  <span className="text-xs px-2 py-1 rounded-full bg-teal-400/15 text-teal-400 font-mono flex items-center gap-1">
+    {icon} {text}
+  </span>
+);
 
 export default Profile;
