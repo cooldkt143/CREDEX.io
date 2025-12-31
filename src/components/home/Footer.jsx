@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative mt-24 border-t border-teal-400/20 bg-black/80 backdrop-blur">
+    <footer className="relative border-t border-teal-400/20 bg-black/80 backdrop-blur">
       {/* Neon glow background */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_bottom,_rgba(20,184,166,0.15),_transparent_100%)]" />
 

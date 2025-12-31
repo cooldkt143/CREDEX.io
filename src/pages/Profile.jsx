@@ -76,7 +76,7 @@ const Profile = () => {
       className="
         relative min-h-screen pt-20 px-5 sm:px-10 space-y-6
         bg-[#05080F] text-slate-200 overflow-hidden
-        bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.14),_transparent_75%)]
+        bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.14),_transparent_105%)]
         before:absolute before:inset-0
         before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]
         before:bg-[size:36px_36px]
