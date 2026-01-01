@@ -3,7 +3,7 @@ import { Upload, FilePlus } from "lucide-react";
 
 const ResumeSource = ({ onCreate, onUpload }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-5 sm:p-10">
       {/* Heading */}
       <div className="text-center mb-8 px-4 sm:px-10">
         <h1 className="text-teal-400 font-mono text-lg mb-2">

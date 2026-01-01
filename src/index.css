@@ -24,3 +24,8 @@ html, body {
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none; /* For IE and Edge */
 }
+.input {
+  @apply w-full rounded-md bg-slate-900 border border-slate-700
+  px-3 py-2 text-sm text-slate-200
+  focus:outline-none focus:border-teal-400;
+}

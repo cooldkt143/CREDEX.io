@@ -69,7 +69,7 @@ const ResumeBuilderATSSection = () => {
           </ul>
 
           <button
-            onClick={() => navigate("/ats-analyzer")}
+            onClick={() => navigate("/ats-checker")}
             className="mt-6 inline-flex items-center gap-2 rounded-md border border-teal-400/30 bg-black px-4 py-2 font-mono text-sm text-teal-400 hover:bg-teal-400/10 transition"
           >
             <span>$</span> analyze_resume()

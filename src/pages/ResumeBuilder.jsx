@@ -130,7 +130,7 @@ const ResumeBuilder = () => {
           className="relative z-10 mt-10 sm:mt-4 max-w-3xl mx-auto"
           variants={fadeUpVariant}
         >
-          <div className="relative bg-black/70 border border-slate-800 rounded-xl p-5 sm:p-8 backdrop-blur-sm">
+          <div className="relative bg-black/70 border border-slate-800 rounded-xl backdrop-blur-sm">
             {renderStep()}
           </div>
         </motion.div>

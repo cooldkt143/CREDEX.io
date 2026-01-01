@@ -8,7 +8,7 @@ const TemplatePage = ({ onChooseTemplate }) => {
   const scrollRight = () => scrollRef.current.scrollBy({ left: 220, behavior: "smooth" });
 
   return (
-    <div className="relative bg-black text-white pb-6 overflow-hidden">
+    <div className="relative bg-black text-white pb-10 overflow-hidden p-5 sm:p-10 rounded-xl border border-slate-800">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Heading */}
