@@ -52,15 +52,13 @@ const Details = () => {
         animate-[fadeInUp_0.8s_ease-out]">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-          <p className="text-teal-400 text-sm">
-            // developer.setup<span className="animate-pulse">_</span>
-          </p>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700 flex-shrink-0">
+          <p className="text-teal-400 text-sm">// developer.setup<span className="animate-pulse">_</span></p>
           <p className="text-xs text-gray-400">step {step} / 4</p>
         </div>
 
         {/* Step Indicators */}
-        <div className="flex justify-center gap-3 py-4 text-xs text-gray-400">
+        <div className="flex justify-center gap-3 py-4 text-xs text-gray-400 flex-shrink-0">
           {[1, 2, 3, 4].map((num) => (
             <span
               key={num}
@@ -76,10 +74,7 @@ const Details = () => {
         </div>
 
         {/* Sliding Steps */}
-        <div
-          className="flex flex-1 transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
-        >
+        <div className="flex flex-1 transition-transform duration-500 ease-in-out overflow-hidden">
           <StepOne formData={formData} handleChange={handleChange} />
           <StepTwo formData={formData} handleChange={handleChange} />
           <StepThree formData={formData} handleChange={handleChange} />
@@ -87,21 +82,18 @@ const Details = () => {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between items-center px-6 py-4 border-t border-gray-700">
+        <div className="flex justify-between items-center px-6 py-4 border-t border-gray-700 flex-shrink-0">
           <button
             onClick={prevStep}
             disabled={step === 1}
-            className="px-4 py-2 border border-teal-400/60 rounded
-              text-gray-400 hover:text-teal-400 hover:border-teal-400
-              disabled:opacity-30 transition hover:-translate-x-0.5"
+            className="px-4 py-2 border border-teal-400/60 rounded text-gray-400 hover:text-teal-400 hover:border-teal-400 disabled:opacity-30 transition hover:-translate-x-0.5"
           >
             {"<- back"}
           </button>
 
           <button
             onClick={nextStep}
-            className="px-6 py-2 rounded bg-teal-500 text-black font-semibold
-              hover:bg-teal-400 transition hover:scale-[1.03] active:scale-95"
+            className="px-6 py-2 rounded bg-teal-500 text-black font-semibold hover:bg-teal-400 transition hover:scale-[1.03] active:scale-95"
           >
             {step === 4 ? "continue()" : "next ->"}
           </button>

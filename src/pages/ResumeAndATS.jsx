@@ -159,10 +159,10 @@ const ResumeAndATS = () => {
             </ul>
 
             <button
-              onClick={() => navigate("/ats-analyzer")}
+              onClick={() => navigate("/ats-checker")}
               className="mt-6 inline-flex items-center gap-2 rounded-md border border-teal-400/30 px-4 py-2 text-sm text-teal-400 hover:bg-teal-400/10 transition"
             >
-              <span>$</span> analyze_resume()
+              <span>$</span> analyze_checker()
             </button>
           </motion.div>
         </div>

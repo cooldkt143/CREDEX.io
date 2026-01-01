@@ -10,6 +10,8 @@ import Profile from "./pages/Profile.jsx";
 import LeaderBoard from "./pages/LeaderBoard.jsx";
 import Settings from "./pages/Settings.jsx";
 import CredexAnalyze from "./pages/CredexAnalyze.jsx";
+import ResumeBuilder from "./pages/ResumeBuilder.jsx";
+import ATSChecker from "./pages/ATSChecker.jsx";
 
 function App() {
   return (
@@ -33,6 +35,12 @@ function App() {
         <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/resume" element={<ResumeAndATS />} />
         <Route path="/settings" element={<Settings />} />
+
+        {/* Resume Builder Page */}
+        <Route path="/resume-builder" element={<ResumeBuilder />} />
+
+        {/* ATS Checker Page */}
+        <Route path="/ats-checker" element={<ATSChecker />} />
 
         {/* Credex Analyze Page */}
         <Route path="/credex-analyze" element={<CredexAnalyze />} />

@@ -34,7 +34,7 @@ const Header = () => {
             
             {/* Back Arrow */}
             <button
-              onClick={() => navigate("/home")}
+              onClick={() => navigate(-1)}
               className="w-8 h-8 flex items-center justify-center
               rounded-md hover:bg-teal-400/10 transition"
             >
