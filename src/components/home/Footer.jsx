@@ -27,12 +27,23 @@ const Footer = () => {
               Quick Links
             </h4>
             <ul className="space-y-3 text-sm text-white/70">
-              {["Home", "Credex Analyze", "Platforms Score Card", "Resume builder", "ATS Checker"].map((item) => (
+              {[
+                { label: "Home", id: "home" },
+                { label: "Credex Analyze", id: "home" },
+                { label: "Platforms Score Card", id: "platform-score-card" },
+                { label: "Resume builder and ATS Checker", id: "resume-builder-ats" },
+              ].map((item) => (
                 <li
-                  key={item}
-                  className="cursor-pointer transition-all hover:text-teal-400 hover:translate-x-1 hover:drop-shadow-[0_0_8px_rgba(20,184,166,0.6)]"
+                  key={item.id}
+                  onClick={() => {
+                    const section = document.getElementById(item.id);
+                    section?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="cursor-pointer transition-all
+                  hover:text-teal-400 hover:translate-x-1
+                  hover:drop-shadow-[0_0_8px_rgba(20,184,166,0.6)]"
                 >
-                  {item}
+                  {item.label}
                 </li>
               ))}
             </ul>

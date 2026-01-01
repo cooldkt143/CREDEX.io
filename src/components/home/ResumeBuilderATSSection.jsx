@@ -5,7 +5,10 @@ const ResumeBuilderATSSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative z-10 flex min-h-screen flex-col items-center justify-start px-4 text-center">
+    <section 
+      id="resume-builder-ats"
+      className="relative z-10 flex min-h-screen flex-col items-center justify-start px-4 pt-20 text-center"
+    >
       {/* Heading */}
       <h2 className="text-3xl font-bold text-gray-100 sm:text-4xl md:text-5xl">
         Resume built on{" "}

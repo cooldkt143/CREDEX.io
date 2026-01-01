@@ -5,7 +5,11 @@ import platformCard from "../../assets/images/platform_score_card.png";
 const PlatformSection = () => {
   const navigate = useNavigate();
   return (
-    <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 pt-0 pb-24 md:flex-row md:gap-20 md:pt-0">
+    <section 
+      id="platform-score-card"
+      className="relative z-10 flex min-h-screen flex-col items-center 
+      justify-center px-4 pt-0 pb-24 md:flex-row md:gap-20 md:pt-0"
+    >
 
       {/* Left content */}
       <div className="max-w-xl text-center md:text-left">
