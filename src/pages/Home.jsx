@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import HomeHero from "../components/home/HomeHero";
 import PlatformSection from "../components/home/PlatformSection";
 import ResumeBuilderATSSection from "../components/home/ResumeBuilderATSSection";
+import Roadmap from "../components/home/Roadmap";
 import Footer from "../components/home/Footer";
 import TerminalLoader from "../components/home/TerminalLoader";
 
@@ -45,6 +46,10 @@ const Home = () => {
 
         <div className="pt-20 sm:pt-10 pl-5 pr-5 sm:pl-0 sm:pr-0">
           <ResumeBuilderATSSection />
+        </div>
+
+        <div className="pt-20 sm:pt-10 pl-5 pr-5 sm:pl-0 sm:pr-0">
+          <Roadmap />
         </div>
 
         <Footer />

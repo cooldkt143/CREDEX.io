@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Sidebar from "./Sidebar";
-import StepRenderer from "./StepRenderer";
+import Sidebar from "./edit-details/Sidebar";
+import StepRenderer from "./edit-details/StepRenderer";
 
 const EditDetails = () => {
   const [activeStep, setActiveStep] = useState(1);

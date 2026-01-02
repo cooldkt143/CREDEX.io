@@ -12,6 +12,7 @@ import Settings from "./pages/Settings.jsx";
 import CredexAnalyze from "./pages/CredexAnalyze.jsx";
 import ResumeBuilder from "./pages/ResumeBuilder.jsx";
 import ATSChecker from "./pages/ATSChecker.jsx";
+import RoadmapBuilder from "./pages/RoadmapBuilder.jsx";
 
 function App() {
   return (
@@ -36,17 +37,18 @@ function App() {
         <Route path="/resume" element={<ResumeAndATS />} />
         <Route path="/settings" element={<Settings />} />
 
-        {/* Resume Builder Page */}
-        <Route path="/resume-builder" element={<ResumeBuilder />} />
-
-        {/* ATS Checker Page */}
-        <Route path="/ats-checker" element={<ATSChecker />} />
-
         {/* Credex Analyze Page */}
         <Route path="/credex-analyze" element={<CredexAnalyze />} />
 
         {/* Platform Analyze Page */}
         <Route path="/platform-analyze" element={<PlatformAnalyze />} />
+
+        {/* Resume Builder and ATS Checker Pages */}
+        <Route path="/resume-builder" element={<ResumeBuilder />} />
+        <Route path="/ats-checker" element={<ATSChecker />} />
+
+        {/* Roadmap Builder Page */}
+        <Route path="/roadmap-builder" element={<RoadmapBuilder />} />
 
         {/* Catch-all for invalid URLs (optional) */}
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />

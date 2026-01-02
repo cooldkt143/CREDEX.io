@@ -134,7 +134,7 @@ const Header = () => {
 
           <button 
             onClick={() => {
-              navigate("/roademap-builder");
+              navigate("/roadmap-builder");
               setOpen(false);
             }}
           className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">

@@ -32,6 +32,7 @@ const Footer = () => {
                 { label: "Credex Analyze", id: "home" },
                 { label: "Platforms Score Card", id: "platform-score-card" },
                 { label: "Resume builder and ATS Checker", id: "resume-builder-ats" },
+                { label: "Roadmap Builder", id: "roadmap" },
               ].map((item) => (
                 <li
                   key={item.id}
