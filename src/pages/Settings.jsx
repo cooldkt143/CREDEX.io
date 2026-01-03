@@ -2,7 +2,6 @@ import { useState } from "react";
 import logo from "../assets/images/credex.io_logo.png";
 import Header from "../components/Header";
 
-
 export default function Settings() {
   const [active, setActive] = useState("personal");
   const [showSub, setShowSub] = useState(false);
