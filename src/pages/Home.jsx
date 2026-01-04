@@ -9,14 +9,21 @@ import Footer from "../components/home/Footer";
 import TerminalLoader from "../components/home/TerminalLoader";
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2800);
+    const hasSeenLoader = sessionStorage.getItem("homeLoaderSeen");
 
-    return () => clearTimeout(timer);
+    if (!hasSeenLoader) {
+      setLoading(true);
+
+      const timer = setTimeout(() => {
+        setLoading(false);
+        sessionStorage.setItem("homeLoaderSeen", "true");
+      }, 2800);
+
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   return (

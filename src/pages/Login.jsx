@@ -18,30 +18,22 @@ const Login = () => {
       <div className="absolute inset-0 opacity-10 bg-[linear-gradient(transparent_95%,rgba(45,212,191,0.2)),linear-gradient(90deg,transparent_95%,rgba(45,212,191,0.2))] bg-[size:40px_40px] animate-[gridMove_20s_linear_infinite]"></div>
 
       {/* Login Card */}
-      <div className="relative w-full max-w-[420px] rounded-xl p-6 sm:p-8 backdrop-blur-2xl bg-white/5 border border-teal-400/40 shadow-[0_0_40px_rgba(45,212,191,0.25)] font-mono
-        animate-[fadeInUp_0.9s_ease-out]">
+      <div className="relative w-full max-w-[450px] rounded-xl p-6 sm:p-8 backdrop-blur-2xl bg-white/5 border border-teal-400/40 shadow-[0_0_40px_rgba(45,212,191,0.25)] font-mono animate-[fadeInUp_0.9s_ease-out]">
 
         {/* Fake editor header */}
         <div className="flex items-center gap-2 mb-5">
           <span className="w-3 h-3 rounded-full bg-red-500"></span>
           <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
           <span className="w-3 h-3 rounded-full bg-green-500"></span>
-          <span className="ml-3 text-xs text-gray-400 animate-[blink_1.2s_infinite]">
-            CREDEX.io
-          </span>
+          <span className="ml-3 text-xs text-gray-400 animate-[blink_1.2s_infinite]">CREDEX.io</span>
         </div>
 
         {/* Animated heading */}
-        <h2 className="text-teal-400 text-base sm:text-lg mb-5">
-          {"// Log in to your developer account"}
-          <span className="ml-1 animate-pulse">_</span>
-        </h2>
+        <h2 className="text-teal-400 text-base sm:text-lg mb-5">// Log in to your developer account <span className="ml-1 animate-pulse">_</span></h2>
 
         {/* Username */}
         <div className="mb-4 animate-[fadeIn_1.1s_ease-out]">
-          <label className="text-gray-400 text-xs sm:text-sm block mb-1">
-            username
-          </label>
+          <label className="text-gray-400 text-xs sm:text-sm block mb-1">username</label>
           <input
             type="text"
             placeholder="username"
@@ -51,9 +43,7 @@ const Login = () => {
 
         {/* Password */}
         <div className="mb-5 animate-[fadeIn_1.2s_ease-out]">
-          <label className="text-gray-400 text-xs sm:text-sm block mb-1">
-            password
-          </label>
+          <label className="text-gray-400 text-xs sm:text-sm block mb-1">password</label>
           <input
             type="password"
             placeholder="••••••••"
@@ -64,8 +54,7 @@ const Login = () => {
         {/* Login Button */}
         <button
           onClick={() => navigate("/home")}
-          className="w-full py-2 rounded-md bg-teal-500/90 hover:bg-teal-400 text-black font-semibold transition shadow-[0_0_15px_rgba(45,212,191,0.6)] text-sm
-          hover:scale-[1.02] active:scale-95"
+          className="w-full py-2 rounded-md bg-teal-500/90 hover:bg-teal-400 text-black font-semibold transition shadow-[0_0_15px_rgba(45,212,191,0.6)] text-sm hover:scale-[1.02] active:scale-95"
         >
           login()
         </button>
@@ -77,31 +66,25 @@ const Login = () => {
           <div className="flex-1 h-px bg-gray-700"></div>
         </div>
 
-        {/* Social Buttons */}
-        <div className="flex flex-col gap-3">
-          <button className="flex items-center gap-3 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-x-1">
+        {/* Social Buttons in single row */}
+        <div className="flex gap-3 justify-center">
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={googleIcon} alt="Google" className="w-5 h-5" />
-            <span className="text-sm text-gray-300">Continue with Google</span>
+            <span className="text-sm text-gray-300">Google</span>
           </button>
-
-          <button className="flex items-center gap-3 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-x-1">
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={linkedinIcon} alt="LinkedIn" className="w-5 h-5" />
-            <span className="text-sm text-gray-300">Continue with LinkedIn</span>
+            <span className="text-sm text-gray-300">LinkedIn</span>
           </button>
-
-          <button className="flex items-center gap-3 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-x-1">
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={githubIcon} alt="GitHub" className="w-5 h-5" />
-            <span className="text-sm text-gray-300">Continue with GitHub</span>
+            <span className="text-sm text-gray-300">GitHub</span>
           </button>
         </div>
 
         {/* Sign up option */}
-        <p className="mt-5 text-xs text-gray-500 text-center">
-          {"// new here? "}
-          <span
-            className="text-teal-400 cursor-pointer hover:underline"
-            onClick={() => navigate("/signup")}
-          >
+        <p className="mt-5 text-xs text-gray-500 text-center">// new here?{" "}
+          <span className="text-teal-400 cursor-pointer hover:underline" onClick={() => navigate("/signup")}>
             create_account()
           </span>
         </p>

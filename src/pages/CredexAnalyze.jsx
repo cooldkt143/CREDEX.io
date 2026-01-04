@@ -1,18 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  FaGithub,
-  FaLinkedin,
-  FaHackerrank,
-  FaPlus,
-  FaRocket,
-  FaFilePdf,
-} from "react-icons/fa";
-import { SiLeetcode } from "react-icons/si";
+import { FaGithub, FaLinkedin, FaPlus, FaRocket, FaFilePdf } from "react-icons/fa";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-
-// Import your Header component
 import Header from "../components/Header";
 
 const CredexAnalyze = () => {
@@ -22,8 +12,6 @@ const CredexAnalyze = () => {
     fullName: "",
     experience: "",
     github: { username: "", link: "" },
-    leetcode: { username: "", link: "" },
-    hackerrank: { username: "", link: "" },
     linkedin: { username: "", link: "" },
     resume: null,
   });
@@ -31,32 +19,22 @@ const CredexAnalyze = () => {
   const [showCertificate, setShowCertificate] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
   const handlePlatformChange = (platform, field, value) => {
-    setForm({
-      ...form,
-      [platform]: { ...form[platform], [field]: value },
-    });
+    setForm({ ...form, [platform]: { ...form[platform], [field]: value } });
   };
-
   const handleResumeUpload = (e) => setForm({ ...form, resume: e.target.files[0] });
-
   const handleProjectChange = (i, field, value) => {
     const updated = [...projects];
     updated[i][field] = value;
     setProjects(updated);
   };
-
   const addProject = () => setProjects([...projects, { name: "", repo: "", live: "" }]);
-
   const handleOtherPlatformChange = (i, field, value) => {
     const updated = [...otherPlatforms];
     updated[i][field] = value;
     setOtherPlatforms(updated);
   };
-
   const addOtherPlatform = () => setOtherPlatforms([...otherPlatforms, { platform: "", username: "", link: "" }]);
-
   const runAnalysis = () => {
     const generatedScore = Math.floor(Math.random() * 41) + 60; // 60-100
     setScore(generatedScore);
@@ -64,29 +42,30 @@ const CredexAnalyze = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020d0c] text-white px-6 py-12 font-mono">
-
-      {/* Add Header at the top */}
+    <div
+      className="relative min-h-screen overflow-x-hidden bg-black text-white
+      bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.15),_transparent_80%)]
+      before:absolute px-6 py-12
+      before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]
+      before:bg-[size:40px_40px] before:opacity-20"
+    >
+      {/* Header */}
       <Header />
 
-      {/* Main content wrapper with padding to avoid overlap with fixed header */}
-      <div className="pt-24">
-        {/* Page Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <p className="text-[#2AF2D0] text-sm mb-2">~/credex/analyze</p>
-          <h1 className="text-4xl font-bold text-[#2AF2D0]">
-            Credex Score Calculator
-          </h1>
+      <div className="pt-24 max-w-6xl mx-auto space-y-12">
+        {/* PAGE HEADER */}
+        <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-black/50 px-4 py-1 font-mono text-sm text-teal-400">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-teal-400" />
+            ~/credex/analyze
+          </div>
+          <h1 className="text-4xl font-bold text-[#2AF2D0]">Credex Score Calculator</h1>
           <p className="text-gray-400 mt-3 max-w-xl mx-auto">
             Analyze real developer signals across platforms and projects.
           </p>
         </motion.div>
 
-        {/* Section 1: Career Context */}
+        {/* CAREER CONTEXT */}
         <Section title="Career Context">
           <Input label="Full Name" name="fullName" value={form.fullName} onChange={handleChange} />
           <Select
@@ -96,51 +75,15 @@ const CredexAnalyze = () => {
             onChange={handleChange}
             options={["Student", "Fresher", "1–3 Years", "3+ Years"]}
           />
-          <div className="border border-[#2AF2D0]/30 rounded-xl px-4 py-3 flex items-center gap-3">
-            <FaFilePdf className="text-[#2AF2D0]" />
-
-            {/* Hidden file input */}
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={handleResumeUpload}
-              id="resumeUpload"
-              className="hidden"
-            />
-
-            {/* Custom button */}
-            <label
-              htmlFor="resumeUpload"
-              className="cursor-pointer w-full text-sm text-[#2AF2D0]
-               bg-black/20 backdrop-blur-sm px-3 py-2 rounded-xl
-               hover:bg-[#2AF2D0]/10 flex justify-between items-center
-               transition-colors duration-200"
-            >
-              {form.resume ? form.resume.name : "Upload Resume"}
-              <span className="text-[#2AF2D0]/80 text-xs">Browse</span>
-            </label>
-          </div>
-
+          <ResumeUpload file={form.resume} onUpload={handleResumeUpload} />
         </Section>
 
-        {/* Section 2: Platform Profiles */}
+        {/* PLATFORM PROFILES */}
         <Section title="Platform Profiles">
           <PlatformInput
             icon={<FaGithub />}
             platform="GitHub"
             platformData={form.github}
-            handlePlatformChange={handlePlatformChange}
-          />
-          <PlatformInput
-            icon={<SiLeetcode />}
-            platform="LeetCode"
-            platformData={form.leetcode}
-            handlePlatformChange={handlePlatformChange}
-          />
-          <PlatformInput
-            icon={<FaHackerrank />}
-            platform="HackerRank"
-            platformData={form.hackerrank}
             handlePlatformChange={handlePlatformChange}
           />
           <PlatformInput
@@ -151,7 +94,7 @@ const CredexAnalyze = () => {
           />
         </Section>
 
-        {/* Section 2b: Other Platforms */}
+        {/* OTHER PLATFORMS */}
         <Section title="Other Platforms">
           {otherPlatforms.map((p, i) => (
             <div key={i} className="border border-[#2AF2D0]/30 rounded-xl p-4 space-y-3">
@@ -175,7 +118,7 @@ const CredexAnalyze = () => {
           </button>
         </Section>
 
-        {/* Section 3: Project Proof */}
+        {/* PROJECTS */}
         <Section title="Deployed Projects">
           {projects.map((p, i) => (
             <div key={i} className="border border-[#2AF2D0]/30 rounded-xl p-4 space-y-3">
@@ -192,7 +135,7 @@ const CredexAnalyze = () => {
           </button>
         </Section>
 
-        {/* Analyze Button */}
+        {/* RUN ANALYSIS BUTTON */}
         <div className="text-center mt-12">
           <button
             onClick={runAnalysis}
@@ -200,35 +143,26 @@ const CredexAnalyze = () => {
             hover:bg-[#2AF2D0] hover:text-black transition
             shadow-[0_0_25px_rgba(42,242,208,0.5)]"
           >
-            <FaRocket className="inline mr-2" />
-            Run Credex Analysis
+            <FaRocket className="inline mr-2" /> Run Credex Analysis
           </button>
         </div>
 
-        {/* Certificate */}
+        {/* CERTIFICATE */}
         {showCertificate && <Certificate name={form.fullName} score={score} />}
       </div>
     </div>
   );
 };
 
-/* ---------- Platform Input (Profile Link Only) ---------- */
+/* ---------- PLATFORM INPUT ---------- */
 const PlatformInput = ({ icon, platform, platformData, handlePlatformChange }) => (
   <div className="space-y-2">
     <div className="flex items-center gap-3">
-      {/* Neon Icon Background */}
       <div className="p-2 rounded-full bg-gradient-to-tr from-[#81d0c3] to-[#5bb2ac] 
-                  shadow-[0_0_12px_rgba(42,242,208,0.6)] text-black">
-        {icon}
-      </div>
-
-      {/* Gradient Platform Name */}
+                  shadow-[0_0_12px_rgba(42,242,208,0.6)] text-black">{icon}</div>
       <span className="text-lg font-bold text-transparent bg-clip-text 
-                   bg-gradient-to-r from-[#2AF2D0] to-[#00fff0]">
-        {platform}
-      </span>
+                   bg-gradient-to-r from-[#2AF2D0] to-[#00fff0]">{platform}</span>
     </div>
-
     <Input
       label={`${platform} Profile Link`}
       value={platformData.link}
@@ -237,7 +171,7 @@ const PlatformInput = ({ icon, platform, platformData, handlePlatformChange }) =
   </div>
 );
 
-/* ---------- Certificate Component ---------- */
+/* ---------- CERTIFICATE ---------- */
 const Certificate = ({ name, score }) => {
   const downloadCertificate = async () => {
     const element = document.getElementById("credex-certificate");
@@ -280,10 +214,10 @@ const Certificate = ({ name, score }) => {
   );
 };
 
-/* ---------- Reusable Components ---------- */
+/* ---------- REUSABLE COMPONENTS ---------- */
 const Section = ({ title, children }) => (
-  <div className="max-w-5xl mx-auto mt-12">
-    <h2 className="text-xl text-[#2AF2D0] mb-4">{title}</h2>
+  <div className="mt-12 space-y-4">
+    <h2 className="text-xl text-[#2AF2D0] font-semibold">{title}</h2>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
   </div>
 );
@@ -301,10 +235,7 @@ const Input = ({ icon, label, ...props }) => (
 
 const Select = ({ label, options, ...props }) => (
   <div className="border border-[#2AF2D0]/30 rounded-xl px-4 py-3">
-    <select
-      {...props}
-      className="bg-transparent outline-none w-full text-sm text-gray-300"
-    >
+    <select {...props} className="bg-transparent outline-none w-full text-sm text-gray-300">
       <option value="">{label}</option>
       {options.map((o, i) => (
         <option key={i} value={o} className="bg-[#020d0c]">
@@ -312,6 +243,20 @@ const Select = ({ label, options, ...props }) => (
         </option>
       ))}
     </select>
+  </div>
+);
+
+const ResumeUpload = ({ file, onUpload }) => (
+  <div className="border border-[#2AF2D0]/30 rounded-xl px-4 py-3 flex items-center gap-3">
+    <FaFilePdf className="text-[#2AF2D0]" />
+    <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} id="resumeUpload" className="hidden" />
+    <label
+      htmlFor="resumeUpload"
+      className="cursor-pointer w-full text-sm text-[#2AF2D0] bg-black/20 backdrop-blur-sm px-3 py-2 rounded-xl flex justify-between items-center hover:bg-[#2AF2D0]/10 transition-colors duration-200"
+    >
+      {file ? file.name : "Upload Resume"}
+      <span className="text-[#2AF2D0]/80 text-xs">Browse</span>
+    </label>
   </div>
 );
 

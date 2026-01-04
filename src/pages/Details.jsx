@@ -45,7 +45,7 @@ const Details = () => {
       <div className="absolute inset-0 opacity-10 bg-[linear-gradient(transparent_95%,rgba(45,212,191,0.25)),linear-gradient(90deg,transparent_95%,rgba(45,212,191,0.25))] bg-[size:42px_42px] animate-[gridMove_30s_linear_infinite]"></div>
 
       {/* Main Card */}
-      <div className="relative w-full h-screen sm:h-[70vh] sm:max-w-4xl sm:mx-auto sm:my-auto
+      <div className="relative w-full h-screen sm:h-[70%] sm:max-w-4xl sm:mx-auto sm:my-auto
         border border-teal-400/40 bg-white/5 backdrop-blur-xl
         shadow-[0_0_60px_rgba(45,212,191,0.25)]
         flex flex-col overflow-hidden sm:rounded-xl
@@ -74,7 +74,10 @@ const Details = () => {
         </div>
 
         {/* Sliding Steps */}
-        <div className="flex flex-1 transition-transform duration-500 ease-in-out overflow-hidden">
+        <div
+          className="flex flex-1 transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
+        >
           <StepOne formData={formData} handleChange={handleChange} />
           <StepTwo formData={formData} handleChange={handleChange} />
           <StepThree formData={formData} handleChange={handleChange} />

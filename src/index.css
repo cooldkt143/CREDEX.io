@@ -29,3 +29,11 @@ html, body {
   px-3 py-2 text-sm text-slate-200
   focus:outline-none focus:border-teal-400;
 }
+
+.input {
+  @apply w-full p-3 bg-black/40 border border-emerald-400/30 rounded;
+}
+
+.btn-primary {
+  @apply px-5 py-2 bg-emerald-400 text-black font-bold rounded;
+}

@@ -18,30 +18,22 @@ const Signup = () => {
       <div className="absolute inset-0 opacity-10 bg-[linear-gradient(transparent_95%,rgba(45,212,191,0.25)),linear-gradient(90deg,transparent_95%,rgba(45,212,191,0.25))] bg-[size:42px_42px] animate-[gridMove_22s_linear_infinite]"></div>
 
       {/* Signup Card */}
-      <div className="relative w-full max-w-[440px] rounded-xl p-6 sm:p-8 backdrop-blur-2xl bg-white/5 border border-teal-400/40 shadow-[0_0_45px_rgba(45,212,191,0.25)] font-mono
-        animate-[fadeInUp_0.9s_ease-out]">
+      <div className="relative w-full max-w-[440px] rounded-xl p-6 sm:p-8 backdrop-blur-2xl bg-white/5 border border-teal-400/40 shadow-[0_0_45px_rgba(45,212,191,0.25)] font-mono animate-[fadeInUp_0.9s_ease-out]">
 
         {/* Fake editor header */}
         <div className="flex items-center gap-2 mb-5">
           <span className="w-3 h-3 rounded-full bg-red-500"></span>
           <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
           <span className="w-3 h-3 rounded-full bg-green-500"></span>
-          <span className="ml-3 text-xs text-gray-400 animate-[blink_1.3s_infinite]">
-            CREDEX.io
-          </span>
+          <span className="ml-3 text-xs text-gray-400 animate-[blink_1.3s_infinite]">CREDEX.io</span>
         </div>
 
         {/* Heading */}
-        <h2 className="text-teal-400 text-base sm:text-lg mb-5">
-          {"// create your developer account"}
-          <span className="ml-1 animate-pulse">_</span>
-        </h2>
+        <h2 className="text-teal-400 text-base sm:text-lg mb-5">// create your developer account <span className="ml-1 animate-pulse">_</span></h2>
 
         {/* Name */}
         <div className="mb-4 animate-[fadeIn_1.1s_ease-out]">
-          <label className="text-gray-400 text-xs sm:text-sm block mb-1">
-            name
-          </label>
+          <label className="text-gray-400 text-xs sm:text-sm block mb-1">name</label>
           <input
             type="text"
             placeholder="your_name"
@@ -51,9 +43,7 @@ const Signup = () => {
 
         {/* Email */}
         <div className="mb-4 animate-[fadeIn_1.2s_ease-out]">
-          <label className="text-gray-400 text-xs sm:text-sm block mb-1">
-            email
-          </label>
+          <label className="text-gray-400 text-xs sm:text-sm block mb-1">email</label>
           <input
             type="email"
             placeholder="dev@email.com"
@@ -63,9 +53,7 @@ const Signup = () => {
 
         {/* Password */}
         <div className="mb-4 animate-[fadeIn_1.3s_ease-out]">
-          <label className="text-gray-400 text-xs sm:text-sm block mb-1">
-            password
-          </label>
+          <label className="text-gray-400 text-xs sm:text-sm block mb-1">password</label>
           <input
             type="password"
             placeholder="••••••••"
@@ -75,9 +63,7 @@ const Signup = () => {
 
         {/* Confirm Password */}
         <div className="mb-5 animate-[fadeIn_1.4s_ease-out]">
-          <label className="text-gray-400 text-xs sm:text-sm block mb-1">
-            confirm_password
-          </label>
+          <label className="text-gray-400 text-xs sm:text-sm block mb-1">confirm_password</label>
           <input
             type="password"
             placeholder="••••••••"
@@ -101,31 +87,25 @@ const Signup = () => {
           <div className="flex-1 h-px bg-gray-700"></div>
         </div>
 
-        {/* Social Signup */}
-        <div className="flex flex-col gap-3">
-          <button className="flex items-center gap-3 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-x-1">
+        {/* Social Signup - Single Row */}
+        <div className="flex gap-3 justify-center">
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={googleIcon} alt="Google" className="w-5 h-5" />
-            <span className="text-sm text-gray-300">Sign up with Google</span>
+            <span className="text-sm text-gray-300">Google</span>
           </button>
-
-          <button className="flex items-center gap-3 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-x-1">
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={linkedinIcon} alt="LinkedIn" className="w-5 h-5" />
-            <span className="text-sm text-gray-300">Sign up with LinkedIn</span>
+            <span className="text-sm text-gray-300">LinkedIn</span>
           </button>
-
-          <button className="flex items-center gap-3 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-x-1">
+          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={githubIcon} alt="GitHub" className="w-5 h-5" />
-            <span className="text-sm text-gray-300">Sign up with GitHub</span>
+            <span className="text-sm text-gray-300">GitHub</span>
           </button>
         </div>
 
         {/* Back to login */}
-        <p className="mt-5 text-xs text-gray-500 text-center">
-          {"// already have an account? "}
-          <span
-            className="text-teal-400 cursor-pointer hover:underline"
-            onClick={() => navigate("/login")}
-          >
+        <p className="mt-5 text-xs text-gray-500 text-center">// already have an account?{" "}
+          <span className="text-teal-400 cursor-pointer hover:underline" onClick={() => navigate("/login")}>
             login()
           </span>
         </p>
