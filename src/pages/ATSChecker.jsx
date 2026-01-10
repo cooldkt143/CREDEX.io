@@ -5,10 +5,13 @@ import { UploadCloud, CheckCircle } from "lucide-react";
 const ATSChecker = () => {
   const [file, setFile] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [jobDescription, setJobDescription] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const inputRef = useRef(null);
 
+  // Handle file selection
   const handleFile = (selectedFile) => {
     if (!selectedFile) return;
 
@@ -18,7 +21,6 @@ const ATSChecker = () => {
     }
 
     setFile(selectedFile);
-    analyzeFile();
   };
 
   const handleFileChange = (e) => {
@@ -26,18 +28,41 @@ const ATSChecker = () => {
     e.target.value = "";
   };
 
-  const analyzeFile = () => {
-    setTimeout(() => {
+  // 🔥 REAL BACKEND CALL
+  const analyzeFile = async () => {
+    if (!file || !jobDescription) {
+      alert("Please upload resume and paste job description");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("resume", file);
+    formData.append("job_description", jobDescription);
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:8000/api/resume/check",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
       setAnalysisResult({
-        score: 85,
-        keywords: ["JavaScript", "React", "Tailwind", "Frontend"],
-        suggestions: [
-          "Add more action verbs",
-          "Include measurable results",
-          "Use proper section headings",
-        ],
+        score: data.data.ats_score,
+        keywords: data.data.matched_keywords,
+        suggestions: data.data.missing_keywords.slice(0, 5),
       });
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to connect to backend");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Drag & Drop handlers
@@ -76,9 +101,8 @@ const ATSChecker = () => {
             ATS Resume Checker
           </h1>
           <p className="text-slate-400 font-mono text-sm">
-            Upload your resume in PDF format and get instant feedback on ATS
-            compatibility. Improve structure, keywords, and clarity to boost
-            shortlisting chances.
+            Upload your resume and check ATS compatibility using real backend
+            analysis.
           </p>
         </div>
 
@@ -132,6 +156,33 @@ const ATSChecker = () => {
           )}
         </div>
 
+        {/* Job Description */}
+        <div className="border border-slate-800 rounded-lg p-6 bg-slate-900/40">
+          <p className="text-slate-400 font-mono text-xs mb-2">
+            Paste Job Description
+          </p>
+
+          <textarea
+            rows="6"
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+            className="w-full bg-slate-950 text-slate-200 border border-slate-800
+            rounded-md p-3 font-mono text-sm focus:outline-none"
+            placeholder="Paste job description here..."
+          />
+        </div>
+
+        {/* Analyze Button */}
+        <button
+          onClick={analyzeFile}
+          disabled={loading}
+          className="px-6 py-3 rounded-md border border-teal-500/30
+          bg-teal-500/10 text-teal-400 font-mono text-sm
+          hover:bg-teal-500/20 disabled:opacity-50"
+        >
+          {loading ? "Analyzing..." : "Check ATS Score"}
+        </button>
+
         {/* Analysis Results */}
         {analysisResult && (
           <div className="border border-slate-800 rounded-lg p-6 bg-slate-900/40 space-y-4">
@@ -150,7 +201,7 @@ const ATSChecker = () => {
 
             <div>
               <p className="text-slate-400 font-mono text-xs mb-1">
-                Keywords detected
+                Keywords matched
               </p>
               <div className="flex flex-wrap gap-2">
                 {analysisResult.keywords.map((kw, idx) => (
@@ -167,7 +218,7 @@ const ATSChecker = () => {
 
             <div>
               <p className="text-slate-400 font-mono text-xs mb-1">
-                Suggestions
+                Missing Keywords
               </p>
               <ul className="list-disc list-inside text-slate-300 font-mono text-sm space-y-1">
                 {analysisResult.suggestions.map((s, idx) => (
@@ -181,7 +232,7 @@ const ATSChecker = () => {
 
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 border-t bg-black border-slate-800 p-4 text-center text-slate-500 text-xs font-mono">
-        © 2026 ATS Checker • Built with React & Tailwind
+        © 2026 ATS Checker • Built with React & FastAPI
       </footer>
     </div>
   );
