@@ -8,21 +8,22 @@ import ResumeSource from "../components/resumeLayout/ResumeSource";
 import EditDetails from "../components/resumeLayout/EditDetails";
 import Preview from "../components/resumeLayout/Preview";
 
+// Updated Step Order
 const steps = [
   {
     id: 1,
-    title: "Template_Selection",
-    hint: "Choose a resume template to define layout and style"
-  },
-  {
-    id: 2,
     title: "Resume_Source",
     hint: "Create your resume from scratch or upload an existing one to extract details"
   },
   {
-    id: 3,
+    id: 2,
     title: "Edit_Details",
     hint: "Review and refine personal info, experience, skills, and projects"
+  },
+  {
+    id: 3,
+    title: "Template_Selection",
+    hint: "Choose a resume template to define layout and style"
   },
   {
     id: 4,
@@ -51,11 +52,11 @@ const ResumeBuilder = () => {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Template onChooseTemplate={() => setCurrentStep(2)} />;
-      case 2:
         return <ResumeSource />;
-      case 3:
+      case 2:
         return <EditDetails />;
+      case 3:
+        return <Template onChooseTemplate={() => setCurrentStep(4)} />;
       case 4:
         return <Preview />;
       default:
@@ -125,7 +126,7 @@ const ResumeBuilder = () => {
           </p>
         </motion.div>
 
-        {/* Content Box */}
+        {/* Content */}
         <motion.div
           className="relative z-10 mt-10 sm:mt-4 max-w-3xl mx-auto"
           variants={fadeUpVariant}
@@ -135,35 +136,37 @@ const ResumeBuilder = () => {
           </div>
         </motion.div>
 
-        {/* Navigation */}
-        {currentStep !== 1 && (
-          <motion.div
-            className="relative z-10 mt-10 flex justify-between items-center max-w-3xl mx-auto pb-6 font-mono gap-4"
-            variants={fadeUpVariant}
+        {/* Navigation (VISIBLE ON STEP 1 TOO) */}
+        <motion.div
+          className="relative z-10 mt-10 flex justify-between items-center max-w-3xl mx-auto pb-6 font-mono gap-4"
+          variants={fadeUpVariant}
+        >
+          <button
+            onClick={prevStep}
+            disabled={currentStep === 1}
+            className={`w-1/2 sm:w-auto px-5 py-2 rounded-md border text-sm
+              ${currentStep === 1
+                ? "border-slate-700 text-slate-600 cursor-not-allowed"
+                : "border-slate-500 text-slate-300 hover:bg-slate-900"}`}
           >
-            <button
-              onClick={prevStep}
-              className="w-1/2 sm:w-auto px-5 py-2 rounded-md border text-sm border-slate-500 text-slate-300 hover:bg-slate-900"
-            >
-              back()
-            </button>
+            back()
+          </button>
 
-            <button
-              onClick={currentStep === steps.length ? undefined : nextStep}
-              className="w-1/2 sm:w-auto px-5 py-2 rounded-md text-sm flex items-center justify-center gap-2
-                bg-teal-500 text-black hover:bg-teal-400 shadow-[0_0_18px_rgba(20,184,166,0.5)]"
-            >
-              {currentStep === steps.length ? (
-                <>
-                  <Download size={16} />
-                  export.resume()
-                </>
-              ) : (
-                "continue()"
-              )}
-            </button>
-          </motion.div>
-        )}
+          <button
+            onClick={currentStep === steps.length ? undefined : nextStep}
+            className="w-1/2 sm:w-auto px-5 py-2 rounded-md text-sm flex items-center justify-center gap-2
+              bg-teal-500 text-black hover:bg-teal-400 shadow-[0_0_18px_rgba(20,184,166,0.5)]"
+          >
+            {currentStep === steps.length ? (
+              <>
+                <Download size={16} />
+                export.resume()
+              </>
+            ) : (
+              "continue()"
+            )}
+          </button>
+        </motion.div>
       </div>
     </div>
   );

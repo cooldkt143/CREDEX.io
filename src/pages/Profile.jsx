@@ -89,66 +89,64 @@ const Profile = () => {
       {/* TOP GRID */}
       <motion.div
         variants={stagger}
-        className="grid lg:grid-cols-3 gap-5 relative z-10"
+        className="grid lg:grid-cols-3 gap-5 relative z-10 items-stretch"
       >
+
         {/* PROFILE CARD */}
-        <motion.div variants={fadeUp} className={`${card} p-5 flex gap-4`}>
-          <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
-            S
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold text-white font-mono">
-              simran_patra
-            </h2>
-            <p className="text-sm text-slate-400 font-mono">
-              @patra_simran_92
-            </p>
-
-            <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
-              <HiTrendingUp className="text-teal-400" />
-              rank = 15
-            </div>
-
-            <div className="flex flex-wrap gap-2 mt-2">
-              <Badge icon={<FaStar />} text="github_star" />
-              <Badge icon={<FaTrophy />} text="hackerrank_expert" />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* COMPLETE PROFILE */}
         <motion.div
           variants={fadeUp}
-          className={`${card} p-6 lg:col-span-2 flex justify-between items-center`}
+          className={`${card} p-6 flex flex-col gap-1 h-full lg:col-span-2`}
         >
-          <div>
-            <h3 className="text-xl text-white font-semibold font-mono">
-              completeProfile()
-            </h3>
-            <p className="text-sm text-slate-400 mt-1 font-mono">
-              profile_data_used_for_ranking
-            </p>
 
-            <button className="mt-4 px-5 py-2 rounded-lg bg-teal-400 text-black font-mono hover:bg-teal-300 transition shadow-[0_0_16px_rgba(20,184,166,0.5)]">
-              add_missing_details()
-            </button>
+          {/* Top user info */}
+          <div className="flex gap-4 items-center">
+            <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
+              S
+            </div>
+
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-white font-mono">
+                simran_patra
+              </h2>
+              <p className="text-sm text-slate-400 font-mono">
+                @patra_simran_92
+              </p>
+
+              <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
+                <HiTrendingUp className="text-teal-400" />
+                rank = 15
+              </div>
+
+              <div className="flex flex-wrap gap-2 mt-2">
+                <Badge icon={<FaStar />} text="github_star" />
+                <Badge icon={<FaTrophy />} text="hackerrank_expert" />
+              </div>
+            </div>
+
+            {/* Complete Profile Section on the right */}
+            <div className="flex flex-col items-end">
+              <motion.div
+                animate={{
+                  boxShadow: [
+                    "0 0 12px rgba(20,184,166,0.4)",
+                    "0 0 26px rgba(20,184,166,0.7)",
+                    "0 0 12px rgba(20,184,166,0.4)",
+                  ],
+                }}
+                transition={{ duration: 2.4, repeat: Infinity }}
+                className="w-20 h-20 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono mt-2 text-xl"
+              >
+                0%
+              </motion.div>
+
+              <button className="mt-2 px-3 py-1 rounded-lg bg-teal-400 text-black font-mono hover:bg-teal-300 transition shadow-[0_0_12px_rgba(20,184,166,0.5)]">
+                completeProfile()
+              </button>
+
+            </div>
           </div>
-
-          <motion.div
-            animate={{
-              boxShadow: [
-                "0 0 10px rgba(20,184,166,0.3)",
-                "0 0 18px rgba(20,184,166,0.6)",
-                "0 0 10px rgba(20,184,166,0.3)",
-              ],
-            }}
-            transition={{ duration: 2.4, repeat: Infinity }}
-            className="w-16 h-16 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono"
-          >
-            0%
-          </motion.div>
         </motion.div>
+
       </motion.div>
 
       {/* MAIN GRID */}
@@ -158,22 +156,24 @@ const Profile = () => {
       >
         {/* LEFT */}
         <div className="space-y-5">
-          <Card title="personal_info">
+          <Card title="profile_details">
+            {/* personal_info */}
+            <h4 className="font-mono text-teal-400 mt-2">personal_info</h4>
             <InfoRow icon={<HiOutlineMail />} text="email_verified" />
             <InfoRow icon={<HiOutlinePhone />} text="phone = null" />
             <InfoRow icon={<HiOutlineLocationMarker />} text='location = "IN"' />
-          </Card>
 
-          <Card title="resume">
-            <p className="text-sm text-slate-400 font-mono">
-              resume_not_found
-            </p>
+            {/* resume */}
+            <hr className="my-3 border-teal-500/30" />
+            <h4 className="font-mono text-teal-400">resume</h4>
+            <p className="text-sm text-slate-400 font-mono">resume_not_found</p>
             <button className="mt-2 flex items-center gap-2 text-teal-400 font-mono">
               <HiOutlineDocumentAdd /> upload_resume()
             </button>
-          </Card>
 
-          <Card title="tech_stack">
+            {/* tech_stack */}
+            <hr className="my-3 border-teal-500/30" />
+            <h4 className="font-mono text-teal-400">tech_stack</h4>
             <div className="flex flex-wrap gap-2">
               {skills.map((s, i) => (
                 <span key={i} className="skill-chip">
@@ -181,8 +181,10 @@ const Profile = () => {
                 </span>
               ))}
             </div>
+
           </Card>
         </div>
+
 
         {/* RIGHT */}
         <div className="space-y-5">
@@ -190,9 +192,7 @@ const Profile = () => {
             <div className="grid grid-cols-2 gap-4">
               {platforms.map((p, i) => (
                 <div key={i} className="score-card">
-                  <div className="text-2xl text-teal-400 mb-1">
-                    {p.icon}
-                  </div>
+                  <div className="text-2xl text-teal-400 mb-1">{p.icon}</div>
                   <p className="font-mono">{p.name}</p>
                   <p className="text-sm text-slate-400 font-mono">
                     score = {p.score}
@@ -206,30 +206,33 @@ const Profile = () => {
               hint: solve_more_problems()
             </p>
           </Card>
-
-          <Card title="certifications">
+          <Card title="academic_profile">
+            {/* certifications */}
+            <h4 className="font-mono text-teal-400">certifications</h4>
             <p className="text-sm text-slate-400 font-mono">
               none_found →{" "}
               <span className="text-teal-400 cursor-pointer">
                 start_certification()
               </span>
             </p>
-          </Card>
 
-          <Card title="education">
+            <hr className="my-4 border-teal-500/30" />
+
+            {/* education */}
+            <h4 className="font-mono text-teal-400">education</h4>
             {education.map((e, i) => (
-              <div key={i} className="border-l border-teal-400/60 pl-3 mb-3">
+              <div key={i} className="border-l border-teal-400/60 pl-3 mb-4">
                 <p className="font-mono text-white">{e.degree}</p>
                 <p className="text-sm text-slate-400 font-mono">
                   {e.institution}
                 </p>
-                <p className="text-xs text-slate-500 font-mono">
-                  {e.year}
-                </p>
+                <p className="text-xs text-slate-500 font-mono">{e.year}</p>
               </div>
             ))}
           </Card>
+
         </div>
+
       </motion.div>
 
       {/* LOCAL STYLES */}
