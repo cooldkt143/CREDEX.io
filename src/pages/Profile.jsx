@@ -33,7 +33,7 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
-/* Shared Card Style (HOME + PROFILE) */
+/* Shared Card Style */
 const card =
   "bg-black/60 border border-teal-400/20 rounded-2xl backdrop-blur-md shadow-[0_0_20px_rgba(20,184,166,0.08)] hover:shadow-[0_0_32px_rgba(20,184,166,0.18)] transition";
 
@@ -45,14 +45,7 @@ const platforms = [
   { icon: <FaLinkedin />, name: "linkedin", score: 610 },
 ];
 
-const skills = [
-  "javascript",
-  "react",
-  "node",
-  "html",
-  "css",
-  "tailwind",
-];
+const skills = ["javascript", "react", "node", "html", "css", "tailwind"];
 
 const education = [
   {
@@ -86,118 +79,118 @@ const Profile = () => {
     >
       <Header />
 
-      {/* TOP GRID */}
-      <motion.div
-        variants={stagger}
-        className="grid lg:grid-cols-3 gap-5 relative z-10 items-stretch"
-      >
-
-        {/* PROFILE CARD */}
-        <motion.div
-          variants={fadeUp}
-          className={`${card} p-6 flex flex-col gap-1 h-full lg:col-span-2`}
-        >
-
-          {/* Top user info */}
-          <div className="flex gap-4 items-center">
-            <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
-              S
-            </div>
-
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-white font-mono">
-                simran_patra
-              </h2>
-              <p className="text-sm text-slate-400 font-mono">
-                @patra_simran_92
-              </p>
-
-              <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
-                <HiTrendingUp className="text-teal-400" />
-                rank = 15
-              </div>
-
-              <div className="flex flex-wrap gap-2 mt-2">
-                <Badge icon={<FaStar />} text="github_star" />
-                <Badge icon={<FaTrophy />} text="hackerrank_expert" />
-              </div>
-            </div>
-
-            {/* Complete Profile Section on the right */}
-            <div className="flex flex-col items-end">
-              <motion.div
-                animate={{
-                  boxShadow: [
-                    "0 0 12px rgba(20,184,166,0.4)",
-                    "0 0 26px rgba(20,184,166,0.7)",
-                    "0 0 12px rgba(20,184,166,0.4)",
-                  ],
-                }}
-                transition={{ duration: 2.4, repeat: Infinity }}
-                className="w-20 h-20 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono mt-2 text-xl"
-              >
-                0%
-              </motion.div>
-
-              <button className="mt-2 px-3 py-1 rounded-lg bg-teal-400 text-black font-mono hover:bg-teal-300 transition shadow-[0_0_12px_rgba(20,184,166,0.5)]">
-                completeProfile()
-              </button>
-
-            </div>
-          </div>
-        </motion.div>
-
-      </motion.div>
-
-      {/* MAIN GRID */}
+      {/* MAIN 2-COLUMN GRID */}
       <motion.div
         variants={stagger}
         className="grid lg:grid-cols-2 gap-5 relative z-10"
       >
-        {/* LEFT */}
+        {/* ====== LEFT COLUMN ====== */}
         <div className="space-y-5">
+
+          {/* PROFILE CARD */}
+          <motion.div variants={fadeUp} className={`${card} p-6`}>
+            <div className="flex gap-4 items-center">
+              <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
+                S
+              </div>
+
+              <div className="flex-1">
+                <h2 className="text-lg font-semibold text-white font-mono">
+                  simran_patra
+                </h2>
+                <p className="text-sm text-slate-400 font-mono">
+                  @patra_simran_92
+                </p>
+
+                <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
+                  <HiTrendingUp className="text-teal-400" />
+                  rank = 15
+                </div>
+
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <Badge icon={<FaStar />} text="github_star" />
+                  <Badge icon={<FaTrophy />} text="hackerrank_expert" />
+                </div>
+              </div>
+
+              <div className="flex flex-col items-end">
+                <motion.div
+                  animate={{
+                    boxShadow: [
+                      "0 0 12px rgba(20,184,166,0.4)",
+                      "0 0 26px rgba(20,184,166,0.7)",
+                      "0 0 12px rgba(20,184,166,0.4)",
+                    ],
+                  }}
+                  transition={{ duration: 2.4, repeat: Infinity }}
+                  className="w-20 h-20 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono mt-2 text-xl"
+                >
+                  0%
+                </motion.div>
+
+                <button className="mt-2 px-3 py-1 rounded-lg bg-teal-300 text-black font-mono hover:bg-teal-300 transition shadow-[0_0_12px_rgba(20,184,166,0.5)]">
+                  completeProfile()
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* PERSONAL DETAILS CARD */}
           <Card title="profile_details">
-            {/* personal_info */}
-            <h4 className="font-mono text-teal-400 mt-2">personal_info</h4>
+            {/* Personal Info */}
+            <h4 className="font-mono text-teal-400 mt-4 mb-2">personal_info</h4>
+
             <InfoRow icon={<HiOutlineMail />} text="email_verified" />
             <InfoRow icon={<HiOutlinePhone />} text="phone = null" />
-            <InfoRow icon={<HiOutlineLocationMarker />} text='location = "IN"' />
+            <InfoRow
+              icon={<HiOutlineLocationMarker />}
+              text='location = "IN"'
+            />
 
-            {/* resume */}
-            <hr className="my-3 border-teal-500/30" />
-            <h4 className="font-mono text-teal-400">resume</h4>
-            <p className="text-sm text-slate-400 font-mono">resume_not_found</p>
-            <button className="mt-2 flex items-center gap-2 text-teal-400 font-mono">
+            <hr className="my-4 border-teal-500/30" />
+
+            {/* Resume */}
+            <h4 className="font-mono text-teal-400 mt-4 mb-2">resume</h4>
+            <p className="text-sm text-slate-400 font-mono mb-2">
+              resume_not_found
+            </p>
+            <button className="flex items-center gap-2 text-teal-400 font-mono hover:text-teal-300 transition">
               <HiOutlineDocumentAdd /> upload_resume()
             </button>
 
-            {/* tech_stack */}
-            <hr className="my-3 border-teal-500/30" />
-            <h4 className="font-mono text-teal-400">tech_stack</h4>
-            <div className="flex flex-wrap gap-2">
+            <hr className="my-4 border-teal-500/30" />
+
+            {/* Tech Stack */}
+            <h4 className="font-mono text-teal-400 mt-4 mb-2">tech_stack</h4>
+            <div className="flex flex-wrap gap-3 mt-2">
               {skills.map((s, i) => (
                 <span key={i} className="skill-chip">
                   {s}
                 </span>
               ))}
             </div>
-
           </Card>
+
         </div>
 
-
-        {/* RIGHT */}
+        {/* ====== RIGHT COLUMN ====== */}
         <div className="space-y-5">
           <Card title="platform_scores">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-5">
               {platforms.map((p, i) => (
-                <div key={i} className="score-card">
-                  <div className="text-2xl text-teal-400 mb-1">{p.icon}</div>
-                  <p className="font-mono">{p.name}</p>
-                  <p className="text-sm text-slate-400 font-mono">
-                    score = {p.score}
+                <motion.div
+                  key={i}
+                  whileHover={{ scale: 1.04 }}
+                  className="platform-card"
+                >
+                  <div className="platform-icon">{p.icon}</div>
+
+                  <p className="platform-name">{p.name}</p>
+
+                  <p className="platform-score">
+                    score = <span className="text-teal-400">{p.score}</span>
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -206,8 +199,8 @@ const Profile = () => {
               hint: solve_more_problems()
             </p>
           </Card>
+
           <Card title="academic_profile">
-            {/* certifications */}
             <h4 className="font-mono text-teal-400">certifications</h4>
             <p className="text-sm text-slate-400 font-mono">
               none_found →{" "}
@@ -218,7 +211,6 @@ const Profile = () => {
 
             <hr className="my-4 border-teal-500/30" />
 
-            {/* education */}
             <h4 className="font-mono text-teal-400">education</h4>
             {education.map((e, i) => (
               <div key={i} className="border-l border-teal-400/60 pl-3 mb-4">
@@ -230,33 +222,13 @@ const Profile = () => {
               </div>
             ))}
           </Card>
-
         </div>
-
       </motion.div>
-
-      {/* LOCAL STYLES */}
-      <style>{`
-        .skill-chip {
-          padding: 0.3rem 0.7rem;
-          border-radius: 999px;
-          background: rgba(20,184,166,0.15);
-          color: #5eead4;
-          font-size: 0.75rem;
-          font-family: monospace;
-        }
-        .score-card {
-          padding: 1rem;
-          border-radius: 1rem;
-          background: rgba(20,184,166,0.1);
-          font-family: monospace;
-        }
-      `}</style>
     </motion.div>
   );
 };
 
-/* Reusable Components */
+/* Components */
 const Card = ({ title, children }) => (
   <motion.div variants={fadeUp} className={`${card} p-5`}>
     <h3 className="font-mono text-teal-400 mb-3">{title}</h3>
@@ -268,9 +240,7 @@ const InfoRow = ({ icon, text }) => (
   <div className="flex items-center gap-3 text-sm text-slate-400 font-mono mt-2">
     <span className="text-teal-400">{icon}</span>
     {text}
-    <span className="ml-auto text-teal-400 cursor-pointer">
-      update()
-    </span>
+    <span className="ml-auto text-teal-400 cursor-pointer">update()</span>
   </div>
 );
 
