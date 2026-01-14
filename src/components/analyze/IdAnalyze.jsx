@@ -20,15 +20,18 @@ const steps = [
 ];
 
 const ANALYZE_DURATION = 2400;
+const API_URL = "http://localhost:8000/idanalyze/analyze";
 
 const IdAnalyze = () => {
   const [platformId, setPlatformId] = useState("");
   const [selectedPlatform, setSelectedPlatform] = useState("-Select-");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analyzed, setAnalyzed] = useState(false);
   const [typedText, setTypedText] = useState("");
   const [progress, setProgress] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
+
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const isValidPlatform = selectedPlatform !== "-Select-";
   const canAnalyze =
@@ -36,43 +39,43 @@ const IdAnalyze = () => {
 
   useEffect(() => {
     setPlatformId("");
-    setAnalyzed(false);
+    setResult(null);
+    setError(null);
   }, [selectedPlatform]);
 
+  /* Typing animation */
   useEffect(() => {
     if (!isAnalyzing) return;
 
-    let index = -1;
+    let index = 0;
     const text = `Analyzing ${platformId} on ${selectedPlatform}...`;
     setTypedText("");
 
     const interval = setInterval(() => {
       setTypedText((prev) => prev + text[index]);
       index++;
-      if (index === text.length) clearInterval(interval);
+      if (index >= text.length) clearInterval(interval);
     }, 60);
 
     return () => clearInterval(interval);
   }, [isAnalyzing, platformId, selectedPlatform]);
 
+  /* Progress + steps */
   useEffect(() => {
     if (!isAnalyzing) return;
 
     setProgress(0);
     setActiveStep(0);
 
-    const progressStepTime = ANALYZE_DURATION / 100;
-    const stepTime = ANALYZE_DURATION / steps.length;
-
     const progressInterval = setInterval(() => {
       setProgress((p) => (p < 100 ? p + 1 : 100));
-    }, progressStepTime);
+    }, ANALYZE_DURATION / 100);
 
     const stepInterval = setInterval(() => {
       setActiveStep((s) =>
         s < steps.length - 1 ? s + 1 : s
       );
-    }, stepTime);
+    }, ANALYZE_DURATION / steps.length);
 
     return () => {
       clearInterval(progressInterval);
@@ -80,16 +83,38 @@ const IdAnalyze = () => {
     };
   }, [isAnalyzing]);
 
-  const handleAnalyze = () => {
+  /* API call */
+  const handleAnalyze = async () => {
     if (!canAnalyze) return;
 
     setIsAnalyzing(true);
-    setAnalyzed(false);
+    setResult(null);
+    setError(null);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform: selectedPlatform,
+          profile_id: platformId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Analysis failed");
+      }
+
+      const data = await response.json();
+
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        setResult(data);
+      }, ANALYZE_DURATION);
+    } catch (err) {
       setIsAnalyzing(false);
-      setAnalyzed(true);
-    }, ANALYZE_DURATION);
+      setError("Unable to analyze this profile right now.");
+    }
   };
 
   return (
@@ -148,20 +173,34 @@ const IdAnalyze = () => {
               </button>
             </div>
 
-            {analyzed && (
-              <motion.p
+            {/* RESULT */}
+            {result && (
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mt-4 text-teal-400"
+                className="mt-6 border-t border-teal-400/20 pt-4"
               >
-                ✅ Analysis complete for {platformId} on {selectedPlatform}
-              </motion.p>
+                <p className="text-teal-400 mb-2">
+                  Developer Score: <span className="text-white">{result.score}</span>
+                </p>
+
+                <p className="text-gray-400 mb-2">Improvement Tips</p>
+                <ul className="list-disc list-inside text-gray-300 space-y-1">
+                  {result.insights.map((tip, i) => (
+                    <li key={i}>{tip}</li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+
+            {error && (
+              <p className="text-red-400 mt-4">{error}</p>
             )}
           </div>
         </div>
       )}
 
-      {/* CENTERED ANALYZING OVERLAY */}
+      {/* ANALYZING OVERLAY */}
       <AnimatePresence>
         {isAnalyzing && (
           <motion.div
