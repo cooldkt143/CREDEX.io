@@ -5,23 +5,21 @@ import { UploadCloud, CheckCircle } from "lucide-react";
 const ATSChecker = () => {
   const [file, setFile] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
-  const [jobDescription, setJobDescription] = useState("");
-  const [jobType, setJobType] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [customRole, setCustomRole] = useState("");
-
+  const [jobType, setJobType] = useState("");
+  const [isOther, setIsOther] = useState(false);
+  const [jobDescription, setJobDescription] = useState("");
+  const [selectedJob, setSelectedJob] = useState("");
 
   const inputRef = useRef(null);
 
   const handleFile = (selectedFile) => {
     if (!selectedFile) return;
-
     if (selectedFile.type !== "application/pdf") {
       alert("Please upload a PDF file");
       return;
     }
-
     setFile(selectedFile);
   };
 
@@ -35,7 +33,6 @@ const ATSChecker = () => {
       alert("Please upload your resume");
       return;
     }
-
     if (!jobType && !jobDescription.trim()) {
       alert("Please select a role or add a job description");
       return;
@@ -43,21 +40,15 @@ const ATSChecker = () => {
 
     const formData = new FormData();
     formData.append("resume", file);
-    formData.append(
-      "job_description",
-      jobDescription.trim() || jobType
-    );
+    formData.append("job_description", jobDescription.trim() || jobType);
 
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "http://localhost:8000/api/resume/check",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("http://localhost:8000/api/resume/check", {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await response.json();
 
@@ -70,6 +61,12 @@ const ATSChecker = () => {
       alert("Failed to connect to backend");
     } finally {
       setLoading(false);
+
+      // Only clear selection after submit
+      setJobType("");
+      setIsOther(false);
+      setJobDescription("");
+      setSelectedJob("");
     }
   };
 
@@ -91,8 +88,7 @@ const ATSChecker = () => {
   return (
     <div
       className="relative min-h-screen flex flex-col justify-between bg-black text-white
-      bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.15),_transparent_80%)]
-      before:absolute
+      bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.15),_transparent_80%)] before:absolute
       before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),
       linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]
       before:bg-[size:40px_40px] before:opacity-20"
@@ -118,11 +114,7 @@ const ATSChecker = () => {
           onDrop={handleDrop}
           className={`border rounded-lg p-6 bg-slate-900/40 flex flex-col
           items-center justify-center gap-4 transition
-          ${
-            isDragging
-              ? "border-teal-400 bg-slate-900/70"
-              : "border-slate-800"
-          }`}
+          ${isDragging ? "border-teal-400 bg-slate-900/70" : "border-slate-800"}`}
         >
           <UploadCloud size={40} className="text-teal-400" />
 
@@ -163,14 +155,13 @@ const ATSChecker = () => {
             </div>
           )}
         </div>
-        
-        {/* Job Preference */}
-        <div className="space-y-4">
 
-          {/* Predefined Roles */}
+        {/* Job Preference */}
+        <div className="space-y-6">
+          {/* Role Selection */}
           <div>
-            <p className="text-slate-400 font-mono text-xs mb-2">
-              Select a predefined role (optional)
+            <p className="text-slate-400 font-mono text-xs uppercase tracking-wide mb-2">
+              Select Job Role
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -178,17 +169,22 @@ const ATSChecker = () => {
                 "Full Stack Developer",
                 "Data Analyst",
                 "Software Developer",
+                "Other",
               ].map((job) => (
                 <button
                   key={job}
-                  onClick={() => setJobType(job)}
-                  className={`px-4 py-2 rounded-md text-xs font-mono
-                  border transition
-                  ${
-                    jobType === job
-                      ? "border-teal-400 bg-teal-500/20 text-teal-400"
-                      : "border-slate-700 bg-slate-950 text-slate-400 hover:bg-slate-800"
-                  }`}
+                  onClick={() => {
+                    setSelectedJob(job);
+                    setIsOther(job === "Other");
+                    setJobType(job === "Other" ? "" : job);
+                  }}
+                  className={`
+          px-5 py-2 text-sm font-mono rounded-lg transition-all duration-200 border
+          ${selectedJob === job
+                      ? "bg-teal-500/10 text-teal-400 border-teal-500 shadow-md"
+                      : "bg-transparent text-slate-300 border-teal-500/30 hover:bg-teal-500/10 hover:text-teal-400"
+                    }
+        `}
                 >
                   {job}
                 </button>
@@ -196,20 +192,34 @@ const ATSChecker = () => {
             </div>
           </div>
 
-          {/* Custom Job Description */}
-          <div>
-            <p className="text-slate-400 font-mono text-xs mb-2">
-              Or paste a custom job description (optional)
-            </p>
+          {/* Custom Role Input */}
+          {isOther && (
+            <div className="space-y-2">
+              <label className="text-slate-400 font-mono text-xs uppercase tracking-wide">
+                Custom Role
+              </label>
+              <input
+                type="text"
+                value={jobType}
+                onChange={(e) => setJobType(e.target.value)}
+                className="w-full bg-slate-900 text-slate-200 border border-slate-700 rounded-md px-4 py-2 text-sm font-mono transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                placeholder="Type job role..."
+              />
+            </div>
+          )}
+
+          {/* Job Description */}
+          <div className="space-y-2">
+            <label className="text-slate-400 font-mono text-xs uppercase tracking-wide">
+              Job Description (optional)
+            </label>
 
             <textarea
-              rows="6"
+              rows={jobDescription ? 4 : 1}
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              className="w-full bg-slate-950 text-slate-200
-              border border-slate-800 rounded-md p-3
-              font-mono text-sm focus:outline-none"
-              placeholder="Paste job description here..."
+              className="w-full bg-slate-900 text-slate-200 border border-slate-700 rounded-md px-4 py-2 text-sm font-mono resize-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              placeholder="Paste job description here (optional)..."
             />
           </div>
         </div>
@@ -232,7 +242,6 @@ const ATSChecker = () => {
               <CheckCircle size={16} />
               Analysis Results
             </h2>
-
             <p className="text-slate-300 font-mono text-sm">
               Your resume scored{" "}
               <span className="text-teal-400 font-bold">
@@ -240,12 +249,10 @@ const ATSChecker = () => {
               </span>{" "}
               for ATS compatibility.
             </p>
-
             <div>
               <p className="text-slate-400 font-mono text-xs mb-1">
                 Keywords matched
               </p>
-
               <div className="flex flex-wrap gap-2">
                 {analysisResult.keywords.map((kw, idx) => (
                   <span
@@ -259,12 +266,10 @@ const ATSChecker = () => {
                 ))}
               </div>
             </div>
-
             <div>
               <p className="text-slate-400 font-mono text-xs mb-1">
                 Missing Keywords
               </p>
-
               <ul className="list-disc list-inside text-slate-300
               font-mono text-sm space-y-1">
                 {analysisResult.suggestions.map((s, idx) => (
