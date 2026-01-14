@@ -9,6 +9,8 @@ const ATSChecker = () => {
   const [jobType, setJobType] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [customRole, setCustomRole] = useState("");
+
 
   const inputRef = useRef(null);
 
@@ -116,11 +118,18 @@ const ATSChecker = () => {
           onDrop={handleDrop}
           className={`border rounded-lg p-6 bg-slate-900/40 flex flex-col
           items-center justify-center gap-4 transition
+<<<<<<< HEAD
           ${
             isDragging
               ? "border-teal-400 bg-slate-900/70"
               : "border-slate-800"
           }`}
+=======
+          ${isDragging
+              ? "border-teal-400 bg-slate-900/70"
+              : "border-slate-800"
+            }`}
+>>>>>>> 94ba011fd13b85b488ffae13e84c39621780416d
         >
           <UploadCloud size={40} className="text-teal-400" />
 
@@ -162,6 +171,7 @@ const ATSChecker = () => {
           )}
         </div>
 
+<<<<<<< HEAD
         {/* Job Preference */}
         <div className="space-y-4">
 
@@ -193,6 +203,78 @@ const ATSChecker = () => {
               ))}
             </div>
           </div>
+=======
+        {/* Job Toggle */}
+        <div className="flex gap-2 bg-slate-800 rounded-md p-1 border border-slate-700">
+          {["Predefined Roles", "Custom Job Description"].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => {
+                const isCustom = tab === "Custom Job Description";
+                setShowCustomJD(isCustom);
+                setJobType(isCustom ? "Custom Job Description" : "");
+              }}
+              className={`flex-1 text-center text-xs font-mono py-2 rounded-md transition
+        ${(tab === "Custom Job Description" && showCustomJD) ||
+                  (tab === "Predefined Roles" && !showCustomJD)
+                  ? "bg-teal-500/20 text-teal-400"
+                  : "text-slate-400 hover:bg-slate-700"
+                }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Predefined Roles */}
+        {!showCustomJD && (
+          <div className="mt-3 space-y-3">
+            <div className="flex flex-wrap gap-3">
+              {["Full Stack Developer", "Data Analyst", "Software Developer", "Other"].map((job) => (
+                <button
+                  key={job}
+                  onClick={() => {
+                    setJobType(job);
+                    if (job !== "Other") setCustomRole("");
+                  }}
+                  className={`px-4 py-2 rounded-md text-xs font-mono border transition
+            ${jobType === job
+                      ? "border-teal-400 bg-teal-500/20 text-teal-400"
+                      : "border-slate-700 bg-slate-950 text-slate-400 hover:bg-slate-800"
+                    }`}
+                >
+                  {job}
+                </button>
+              ))}
+            </div>
+
+            {/* Show input only when "Other" is selected */}
+            {jobType === "Other" && (
+              <input
+                type="text"
+                value={customRole}
+                onChange={(e) => setCustomRole(e.target.value)}
+                placeholder="Enter your job role..."
+                className="w-full bg-slate-950 text-slate-200 border border-slate-800
+    rounded-md p-3 font-mono text-sm focus:outline-none"
+              />
+            )}
+
+          </div>
+        )}
+
+
+        {/* Custom Textarea */}
+        {showCustomJD && (
+          <textarea
+            rows="6"
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
+            className="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-md p-3 font-mono text-sm focus:outline-none mt-3"
+            placeholder="Paste job description here..."
+          />
+        )}
+>>>>>>> 94ba011fd13b85b488ffae13e84c39621780416d
 
           {/* Custom Job Description */}
           <div>
