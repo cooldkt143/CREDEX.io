@@ -17,13 +17,13 @@ const steps = [
   },
   {
     id: 2,
-    title: "Template_Selection",
-    hint: "Choose a resume template to define layout and style"
+    title: "Edit_Details",
+    hint: "Review and refine personal info, experience, skills, and projects"
   },
   {
     id: 3,
-    title: "Edit_Details",
-    hint: "Review and refine personal info, experience, skills, and projects"
+    title: "Template_Selection",
+    hint: "Choose a resume template to define layout and style"
   },
   {
     id: 4,
@@ -54,9 +54,9 @@ const ResumeBuilder = () => {
       case 1:
         return <ResumeSource />;
       case 2:
-        return <Template onChooseTemplate={() => setCurrentStep(4)} />;
-      case 3:
         return <EditDetails />;
+      case 3:
+        return <Template onChooseTemplate={() => setCurrentStep(4)} />;
       case 4:
         return <Preview />;
       default:
