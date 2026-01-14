@@ -6,7 +6,7 @@ import {
   onAuthStateChanged
 } from "firebase/auth";
 
-import { auth, googleProvider, githubProvider, linkedinProvider } from "../firebase";
+import { auth, googleProvider, githubProvider, linkedinProvider, addOrUpdateUser } from "../firebase";
 
 import googleIcon from "../assets/icon/google.png";
 import githubIcon from "../assets/icon/github.png";
@@ -15,6 +15,7 @@ import linkedinIcon from "../assets/icon/linkedin.png";
 const Signup = () => {
   const navigate = useNavigate();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,7 +35,16 @@ const Signup = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Create Firestore document
+      await addOrUpdateUser({
+        uid: user.uid,
+        displayName: name,
+        email: user.email
+      });
+
       navigate("/home");
     } catch (err) {
       alert(err.message);
@@ -43,7 +53,12 @@ const Signup = () => {
 
   const handleSocialSignup = async (provider) => {
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Create Firestore document if not exists
+      await addOrUpdateUser(user);
+
       navigate("/home");
     } catch (err) {
       alert(err.message);
@@ -75,6 +90,8 @@ const Signup = () => {
             type="text"
             placeholder="your_name"
             className="w-full bg-black/50 text-teal-300 px-3 py-2 rounded-md border border-teal-400/30 focus:outline-none focus:border-teal-400 placeholder:text-gray-600 text-sm transition"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
@@ -85,6 +102,8 @@ const Signup = () => {
             type="email"
             placeholder="dev@email.com"
             className="w-full bg-black/50 text-teal-300 px-3 py-2 rounded-md border border-teal-400/30 focus:outline-none focus:border-teal-400 placeholder:text-gray-600 text-sm transition"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -95,6 +114,8 @@ const Signup = () => {
             type="password"
             placeholder="••••••••"
             className="w-full bg-black/50 text-teal-300 px-3 py-2 rounded-md border border-teal-400/30 focus:outline-none focus:border-teal-400 placeholder:text-gray-600 text-sm transition"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
@@ -105,6 +126,8 @@ const Signup = () => {
             type="password"
             placeholder="••••••••"
             className="w-full bg-black/50 text-teal-300 px-3 py-2 rounded-md border border-teal-400/30 focus:outline-none focus:border-teal-400 placeholder:text-gray-600 text-sm transition"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
 
@@ -116,15 +139,15 @@ const Signup = () => {
         </button>
 
         <div className="flex gap-3 justify-center">
-          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
+          <button onClick={() => handleSocialSignup(googleProvider)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={googleIcon} alt="Google" className="w-5 h-5" />
             <span className="text-sm text-gray-300">Google</span>
           </button>
-          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
+          <button onClick={() => handleSocialSignup(linkedinProvider)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={linkedinIcon} alt="LinkedIn" className="w-5 h-5" />
             <span className="text-sm text-gray-300">LinkedIn</span>
           </button>
-          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
+          <button onClick={() => handleSocialSignup(githubProvider)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-black/40 border border-gray-700 hover:border-teal-400 transition hover:translate-y-[-1px]">
             <img src={githubIcon} alt="GitHub" className="w-5 h-5" />
             <span className="text-sm text-gray-300">GitHub</span>
           </button>

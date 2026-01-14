@@ -6,7 +6,7 @@ import {
   onAuthStateChanged
 } from "firebase/auth";
 
-import { auth, googleProvider, githubProvider, linkedinProvider } from "../firebase";
+import { auth, googleProvider, githubProvider, linkedinProvider, addOrUpdateUser } from "../firebase";
 
 import googleIcon from "../assets/icon/google.png";
 import githubIcon from "../assets/icon/github.png";
@@ -28,7 +28,11 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+
+      // Create or update Firestore document for this user
+      await addOrUpdateUser(result.user);
+
       navigate("/home");
     } catch (err) {
       alert(err.message);
@@ -37,7 +41,11 @@ const Login = () => {
 
   const socialLogin = async (provider) => {
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+
+      // Create or update Firestore document for social login user
+      await addOrUpdateUser(result.user);
+
       navigate("/home");
     } catch (err) {
       alert(err.message);
@@ -66,6 +74,8 @@ const Login = () => {
             type="text"
             placeholder="username"
             className="w-full bg-black/50 text-teal-300 px-3 py-2 rounded-md border border-teal-400/30 focus:outline-none focus:border-teal-400 placeholder:text-gray-600 text-sm transition"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -76,6 +86,8 @@ const Login = () => {
             type="password"
             placeholder="••••••••"
             className="w-full bg-black/50 text-teal-300 px-3 py-2 rounded-md border border-teal-400/30 focus:outline-none focus:border-teal-400 placeholder:text-gray-600 text-sm transition"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 

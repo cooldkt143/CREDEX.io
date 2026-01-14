@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 import logo from "../assets/images/credex.io_logo.png";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const auth = getAuth();
 
-  // close dropdown on outside click
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -16,8 +18,20 @@ const Header = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setOpen(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <>
@@ -29,10 +43,10 @@ const Header = () => {
       >
         <div className="w-full px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
           
-          {/* Left */}
+          {/* Left Section */}
           <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* Back Arrow */}
+            {/* Back Button */}
             <button
               onClick={() => navigate(-1)}
               className="w-8 h-8 flex items-center justify-center
@@ -54,7 +68,7 @@ const Header = () => {
             </span>
           </div>
 
-          {/* Right */}
+          {/* Right Section */}
           <div className="flex items-center gap-4">
             <span className="hidden sm:block font-mono text-gray-300">
               welcome, Back <span className="text-teal-400">Coder!!</span>
@@ -62,7 +76,6 @@ const Header = () => {
 
             <div className="hidden sm:block h-4 w-px bg-teal-400/70" />
 
-            {/* Profile + Menu */}
             <div className="flex items-center gap-4 relative">
               
               {/* Profile Avatar */}
@@ -79,7 +92,7 @@ const Header = () => {
                 />
               </button>
 
-              {/* Google Menu Icon */}
+              {/* Menu Button */}
               <button
                 onClick={() => setOpen((prev) => !prev)}
                 className="w-8 h-8 flex items-center justify-center
@@ -94,7 +107,7 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Dropdown */}
+      {/* Dropdown Menu */}
       {open && (
         <div
           ref={dropdownRef}
@@ -114,51 +127,52 @@ const Header = () => {
             Profile
           </button>
 
-          <button 
+          <button
             onClick={() => {
               navigate("/leaderboard");
               setOpen(false);
             }}
-          className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
+            className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition"
+          >
             Leaderboard
           </button>
 
-          <button 
+          <button
             onClick={() => {
               navigate("/resume");
               setOpen(false);
             }}
-          className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
+            className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition"
+          >
             Resume & ATS
           </button>
 
-          <button 
+          <button
             onClick={() => {
               navigate("/roadmap-builder");
               setOpen(false);
             }}
-          className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
+            className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition"
+          >
             RoadMap Builder
           </button>
 
-
-          <button 
+          <button
             onClick={() => {
               navigate("/settings");
               setOpen(false);
             }}
-          className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition">
+            className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition"
+          >
             Settings
           </button>
 
           <div className="h-px bg-teal-400/20 my-1" />
 
-          <button 
-            onClick={() => {
-              navigate("/");
-              setOpen(false);
-            }}
-          className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-400/10 transition">
+          <button
+            onClick={handleLogout}
+            className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-400/10 transition"
+          >
             Logout
           </button>
         </div>

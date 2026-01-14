@@ -7,7 +7,6 @@ const ATSChecker = () => {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [jobDescription, setJobDescription] = useState("");
   const [jobType, setJobType] = useState("");
-  const [showCustomJD, setShowCustomJD] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -15,10 +14,12 @@ const ATSChecker = () => {
 
   const handleFile = (selectedFile) => {
     if (!selectedFile) return;
+
     if (selectedFile.type !== "application/pdf") {
       alert("Please upload a PDF file");
       return;
     }
+
     setFile(selectedFile);
   };
 
@@ -28,21 +29,33 @@ const ATSChecker = () => {
   };
 
   const analyzeFile = async () => {
-    if (!file || (!jobType && !jobDescription)) {
-      alert("Please upload resume and select a job preference");
+    if (!file) {
+      alert("Please upload your resume");
+      return;
+    }
+
+    if (!jobType && !jobDescription.trim()) {
+      alert("Please select a role or add a job description");
       return;
     }
 
     const formData = new FormData();
     formData.append("resume", file);
-    formData.append("job_description", showCustomJD ? jobDescription : jobType);
+    formData.append(
+      "job_description",
+      jobDescription.trim() || jobType
+    );
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8000/api/resume/check", {
-        method: "POST",
-        body: formData,
-      });
+
+      const response = await fetch(
+        "http://localhost:8000/api/resume/check",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
@@ -103,12 +116,14 @@ const ATSChecker = () => {
           onDrop={handleDrop}
           className={`border rounded-lg p-6 bg-slate-900/40 flex flex-col
           items-center justify-center gap-4 transition
-          ${isDragging
-            ? "border-teal-400 bg-slate-900/70"
-            : "border-slate-800"
+          ${
+            isDragging
+              ? "border-teal-400 bg-slate-900/70"
+              : "border-slate-800"
           }`}
         >
           <UploadCloud size={40} className="text-teal-400" />
+
           <p className="text-slate-300 font-mono text-sm">
             Drag and drop your PDF here or click below
           </p>
@@ -132,8 +147,11 @@ const ATSChecker = () => {
           </label>
 
           {file && (
-            <div className="mt-4 flex items-center gap-3 bg-slate-950
-            px-4 py-2 rounded-md border border-slate-800 w-full justify-between">
+            <div
+              className="mt-4 flex items-center gap-3 bg-slate-950
+              px-4 py-2 rounded-md border border-slate-800
+              w-full justify-between"
+            >
               <span className="text-slate-200 font-mono text-sm">
                 {file.name}
               </span>
@@ -144,60 +162,55 @@ const ATSChecker = () => {
           )}
         </div>
 
-        {/* Job Toggle */}
-<div className="flex gap-2 bg-slate-800 rounded-md p-1 border border-slate-700">
-  {["Predefined Roles", "Custom Job Description"].map((tab) => (
-    <button
-      key={tab}
-      onClick={() => {
-        const isCustom = tab === "Custom Job Description";
-        setShowCustomJD(isCustom);
-        setJobType(isCustom ? "Custom Job Description" : "");
-      }}
-      className={`flex-1 text-center text-xs font-mono py-2 rounded-md transition
-        ${
-          (tab === "Custom Job Description" && showCustomJD) ||
-          (tab === "Predefined Roles" && !showCustomJD)
-            ? "bg-teal-500/20 text-teal-400"
-            : "text-slate-400 hover:bg-slate-700"
-        }`}
-    >
-      {tab}
-    </button>
-  ))}
-</div>
+        {/* Job Preference */}
+        <div className="space-y-4">
 
-{/* Predefined Roles */}
-{!showCustomJD && (
-  <div className="flex flex-wrap gap-3 mt-3">
-    {["Full Stack Developer", "Data Analyst", "Software Developer"].map((job) => (
-      <button
-        key={job}
-        onClick={() => setJobType(job)}
-        className={`px-4 py-2 rounded-md text-xs font-mono border transition
-          ${
-            jobType === job
-              ? "border-teal-400 bg-teal-500/20 text-teal-400"
-              : "border-slate-700 bg-slate-950 text-slate-400 hover:bg-slate-800"
-          }`}
-      >
-        {job}
-      </button>
-    ))}
-  </div>
-)}
+          {/* Predefined Roles */}
+          <div>
+            <p className="text-slate-400 font-mono text-xs mb-2">
+              Select a predefined role (optional)
+            </p>
 
-{/* Custom Textarea */}
-{showCustomJD && (
-  <textarea
-    rows="6"
-    value={jobDescription}
-    onChange={(e) => setJobDescription(e.target.value)}
-    className="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-md p-3 font-mono text-sm focus:outline-none mt-3"
-    placeholder="Paste job description here..."
-  />
-)}
+            <div className="flex flex-wrap gap-3">
+              {[
+                "Full Stack Developer",
+                "Data Analyst",
+                "Software Developer",
+              ].map((job) => (
+                <button
+                  key={job}
+                  onClick={() => setJobType(job)}
+                  className={`px-4 py-2 rounded-md text-xs font-mono
+                  border transition
+                  ${
+                    jobType === job
+                      ? "border-teal-400 bg-teal-500/20 text-teal-400"
+                      : "border-slate-700 bg-slate-950 text-slate-400 hover:bg-slate-800"
+                  }`}
+                >
+                  {job}
+                </button>
+              ))}
+            </div>
+          </div>
 
+          {/* Custom Job Description */}
+          <div>
+            <p className="text-slate-400 font-mono text-xs mb-2">
+              Or paste a custom job description (optional)
+            </p>
+
+            <textarea
+              rows="6"
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+              className="w-full bg-slate-950 text-slate-200
+              border border-slate-800 rounded-md p-3
+              font-mono text-sm focus:outline-none"
+              placeholder="Paste job description here..."
+            />
+          </div>
+        </div>
 
         {/* Analyze */}
         <button
@@ -230,12 +243,14 @@ const ATSChecker = () => {
               <p className="text-slate-400 font-mono text-xs mb-1">
                 Keywords matched
               </p>
+
               <div className="flex flex-wrap gap-2">
                 {analysisResult.keywords.map((kw, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-1 text-teal-400 text-xs font-mono
-                    rounded-md border border-slate-700 bg-slate-950"
+                    className="px-2 py-1 text-teal-400 text-xs
+                    font-mono rounded-md border border-slate-700
+                    bg-slate-950"
                   >
                     {kw}
                   </span>
@@ -247,7 +262,9 @@ const ATSChecker = () => {
               <p className="text-slate-400 font-mono text-xs mb-1">
                 Missing Keywords
               </p>
-              <ul className="list-disc list-inside text-slate-300 font-mono text-sm space-y-1">
+
+              <ul className="list-disc list-inside text-slate-300
+              font-mono text-sm space-y-1">
                 {analysisResult.suggestions.map((s, idx) => (
                   <li key={idx}>{s}</li>
                 ))}
@@ -257,7 +274,9 @@ const ATSChecker = () => {
         )}
       </div>
 
-      <footer className="fixed bottom-0 left-0 right-0 border-t bg-black border-slate-800 p-4 text-center text-slate-500 text-xs font-mono">
+      <footer className="fixed bottom-0 left-0 right-0 border-t
+      bg-black border-slate-800 p-4 text-center
+      text-slate-500 text-xs font-mono">
         © 2026 ATS Checker • Built with React & FastAPI
       </footer>
     </div>
