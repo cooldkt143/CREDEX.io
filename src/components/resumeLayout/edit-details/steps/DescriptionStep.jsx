@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
-const DescriptionStep = () => {
-  const [text, setText] = useState("");
+const DescriptionStep = ({ resumeData, setResumeData }) => {
+  const description = resumeData.description || "";
   const maxChars = 300;
+
+  const updateText = (value) => {
+    setResumeData({
+      ...resumeData,
+      description: value
+    });
+  };
 
   return (
     <>
@@ -22,20 +29,20 @@ const DescriptionStep = () => {
           </span>
           <span
             className={`font-mono text-xs ${
-              text.length > maxChars
+              description.length > maxChars
                 ? "text-red-400"
                 : "text-slate-500"
             }`}
           >
-            {text.length}/{maxChars}
+            {description.length}/{maxChars}
           </span>
         </div>
 
         {/* Textarea */}
         <textarea
           rows="6"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          value={description}
+          onChange={(e) => updateText(e.target.value)}
           placeholder={`For example :- Frontend developer with experience in React, Tailwind, and building scalable UI systems...`}
           className="w-full resize-none bg-transparent text-slate-200 font-mono text-sm
           focus:outline-none leading-relaxed"
@@ -44,7 +51,7 @@ const DescriptionStep = () => {
         {/* Footer hint */}
         <div className="mt-3 flex items-center justify-between text-xs font-mono text-slate-500">
           <span>// Keep it concise and ATS friendly</span>
-          <span>{text.length > maxChars && "limit exceeded"}</span>
+          <span>{description.length > maxChars && "limit exceeded"}</span>
         </div>
       </div>
     </>

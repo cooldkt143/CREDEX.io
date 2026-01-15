@@ -1,7 +1,37 @@
 import React from "react";
 import { Upload, FilePlus } from "lucide-react";
+import axios from "axios";
 
-const ResumeSource = ({ onCreate, onUpload }) => {
+const ResumeSource = ({ onCreate, onResumeParsed }) => {
+  // Handle file upload
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await axios.post(
+        "http://127.0.0.1:8000/resume-builder/upload",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      const { resume_json, id } = res.data;
+
+      // STEP 3 verification
+      console.log("Parsed contacts:", resume_json.contacts);
+
+      if (onResumeParsed) {
+        onResumeParsed(resume_json, id);
+      }
+    } catch (err) {
+      console.error("Resume upload failed:", err);
+      alert("Failed to upload resume. Please try again.");
+    }
+  };
+
   return (
     <div className="space-y-6 p-5 sm:p-10">
       {/* Heading */}
@@ -44,7 +74,7 @@ const ResumeSource = ({ onCreate, onUpload }) => {
             type="file"
             accept=".pdf,.doc,.docx"
             className="hidden"
-            onChange={onUpload}
+            onChange={handleUpload}
           />
           <div className="flex items-center gap-3 mb-3">
             <Upload className="text-teal-400" size={20} />

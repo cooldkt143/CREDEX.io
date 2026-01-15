@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Plus, Check, Briefcase } from "lucide-react";
 
-const ExperienceStep = () => {
-  const [experiences, setExperiences] = useState([]);
+const ExperienceStep = ({ resumeData, setResumeData }) => {
+  const experiences = resumeData.experiences || [];
+
   const [showAdd, setShowAdd] = useState(false);
 
   const [jobTitle, setJobTitle] = useState("");
@@ -19,19 +20,21 @@ const ExperienceStep = () => {
   const addExperience = () => {
     if (!jobTitle || !employer || !startMonth || !startYear) return;
 
-    setExperiences([
-      ...experiences,
-      {
-        jobTitle,
-        employer,
-        city,
-        country,
-        start: `${startMonth} ${startYear}`,
-        end: currentlyWorking
-          ? "Present"
-          : `${endMonth} ${endYear}`,
-      },
-    ]);
+    const newExp = {
+      jobTitle,
+      employer,
+      city,
+      country,
+      start: `${startMonth} ${startYear}`,
+      end: currentlyWorking
+        ? "Present"
+        : `${endMonth} ${endYear}`,
+    };
+
+    setResumeData({
+      ...resumeData,
+      experiences: [...experiences, newExp],
+    });
 
     setJobTitle("");
     setEmployer("");

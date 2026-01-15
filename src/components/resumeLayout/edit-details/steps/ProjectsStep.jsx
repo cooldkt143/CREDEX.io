@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Plus, Check, FolderGit2, Trophy } from "lucide-react";
 
-const ProjectsStep = () => {
-  const [projects, setProjects] = useState([]);
-  const [achievements, setAchievements] = useState([]);
+const ProjectsStep = ({ resumeData, setResumeData }) => {
+  const projects = resumeData.projects || [];
+  const achievements = resumeData.achievements || [];
 
   const [showProjectAdd, setShowProjectAdd] = useState(false);
   const [showAchievementAdd, setShowAchievementAdd] = useState(false);
@@ -20,15 +20,17 @@ const ProjectsStep = () => {
   const addProject = () => {
     if (!projectTitle) return;
 
-    setProjects([
-      ...projects,
-      {
-        title: projectTitle,
-        publicLink,
-        githubLink,
-        description: projectDesc,
-      },
-    ]);
+    const newProject = {
+      title: projectTitle,
+      publicLink,
+      githubLink,
+      description: projectDesc,
+    };
+
+    setResumeData({
+      ...resumeData,
+      projects: [...projects, newProject],
+    });
 
     setProjectTitle("");
     setPublicLink("");
@@ -40,15 +42,17 @@ const ProjectsStep = () => {
   const addAchievement = () => {
     if (!achievementDesc || !achYear) return;
 
-    setAchievements([
-      ...achievements,
-      {
-        description: achievementDesc,
-        timeline: achMonth
-          ? `${achMonth} ${achYear}`
-          : achYear,
-      },
-    ]);
+    const newAchievement = {
+      description: achievementDesc,
+      timeline: achMonth
+        ? `${achMonth} ${achYear}`
+        : achYear,
+    };
+
+    setResumeData({
+      ...resumeData,
+      achievements: [...achievements, newAchievement],
+    });
 
     setAchievementDesc("");
     setAchMonth("");

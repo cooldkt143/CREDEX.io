@@ -1,6 +1,18 @@
 import React from "react";
 
-const HeaderStep = () => {
+const HeaderStep = ({ resumeData, setResumeData }) => {
+  const header = resumeData.header || {};
+
+  const update = (key, value) => {
+    setResumeData({
+      ...resumeData,
+      header: {
+        ...header,
+        [key]: value,
+      },
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Title */}
@@ -13,7 +25,7 @@ const HeaderStep = () => {
         </p>
       </div>
 
-      {/* Name Section */}
+      {/* Identity Section */}
       <div className="space-y-3">
         <p className="text-slate-500 font-mono text-xs uppercase tracking-wide">
           Identity
@@ -23,10 +35,15 @@ const HeaderStep = () => {
           <input
             className="input"
             placeholder="First Name"
+            value={header.firstName || ""}
+            onChange={(e) => update("firstName", e.target.value)}
           />
+
           <input
             className="input"
             placeholder="Surname"
+            value={header.lastName || ""}
+            onChange={(e) => update("lastName", e.target.value)}
           />
         </div>
       </div>
@@ -41,14 +58,22 @@ const HeaderStep = () => {
           <input
             className="input"
             placeholder="City"
+            value={header.city || ""}
+            onChange={(e) => update("city", e.target.value)}
           />
+
           <input
             className="input"
             placeholder="Country"
+            value={header.country || ""}
+            onChange={(e) => update("country", e.target.value)}
           />
+
           <input
             className="input"
             placeholder="Pincode"
+            value={header.pincode || ""}
+            onChange={(e) => update("pincode", e.target.value)}
           />
         </div>
       </div>
@@ -62,6 +87,8 @@ const HeaderStep = () => {
         <input
           className="input"
           placeholder="Job Role or Professional Title"
+          value={header.role || ""}
+          onChange={(e) => update("role", e.target.value)}
         />
       </div>
     </div>

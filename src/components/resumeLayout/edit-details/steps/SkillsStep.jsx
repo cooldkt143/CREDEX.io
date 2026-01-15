@@ -3,40 +3,56 @@ import { Plus, X, Code, Languages } from "lucide-react";
 
 const proficiencyLevels = ["select_level", "Basic", "Intermediate", "Fluent", "Native"];
 
-const SkillsStep = () => {
+const SkillsStep = ({ resumeData, setResumeData }) => {
+  const skills = resumeData.skills || [];
+  const languages = resumeData.languages || [];
+
   const [skillInput, setSkillInput] = useState("");
-  const [skills, setSkills] = useState([]);
 
   const [langName, setLangName] = useState("");
   const [langLevel, setLangLevel] = useState("select_level");
-  const [languages, setLanguages] = useState([]);
 
   const addSkill = () => {
-    if (!skillInput.trim()) return;
-    if (skills.includes(skillInput.trim())) return;
+    const trimmed = skillInput.trim();
+    if (!trimmed) return;
+    if (skills.includes(trimmed)) return;
 
-    setSkills([...skills, skillInput.trim()]);
+    setResumeData({
+      ...resumeData,
+      skills: [...skills, trimmed],
+    });
+
     setSkillInput("");
   };
 
   const removeSkill = (skill) => {
-    setSkills(skills.filter((s) => s !== skill));
+    setResumeData({
+      ...resumeData,
+      skills: skills.filter((s) => s !== skill),
+    });
   };
 
   const addLanguage = () => {
-    if (!langName.trim()) return;
+    const nameTrimmed = langName.trim();
+    if (!nameTrimmed) return;
 
-    setLanguages([
-      ...languages,
-      { name: langName.trim(), level: langLevel },
-    ]);
+    setResumeData({
+      ...resumeData,
+      languages: [
+        ...languages,
+        { name: nameTrimmed, level: langLevel },
+      ],
+    });
 
     setLangName("");
-    setLangLevel("Intermediate");
+    setLangLevel("select_level");
   };
 
   const removeLanguage = (name) => {
-    setLanguages(languages.filter((l) => l.name !== name));
+    setResumeData({
+      ...resumeData,
+      languages: languages.filter((l) => l.name !== name),
+    });
   };
 
   return (

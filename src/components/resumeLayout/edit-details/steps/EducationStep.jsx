@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Plus, Check, GraduationCap } from "lucide-react";
 
-const EducationStep = () => {
-  const [educations, setEducations] = useState([]);
-  const [showAdd, setShowAdd] = useState(false);
+const EducationStep = ({ resumeData, setResumeData }) => {
+  const educations = resumeData.educations || [];
 
+  const [showAdd, setShowAdd] = useState(false);
   const [degree, setDegree] = useState("");
   const [institute, setInstitute] = useState("");
   const [address, setAddress] = useState("");
@@ -15,17 +15,20 @@ const EducationStep = () => {
   const addEducation = () => {
     if (!degree || !institute || !startYear) return;
 
-    setEducations([
-      ...educations,
-      {
-        degree,
-        institute,
-        address,
-        startYear,
-        endYear: currentlyStudying ? "Present" : endYear,
-      },
-    ]);
+    const newEdu = {
+      degree,
+      institute,
+      address,
+      startYear,
+      endYear: currentlyStudying ? "Present" : endYear,
+    };
 
+    setResumeData({
+      ...resumeData,
+      educations: [...educations, newEdu],
+    });
+
+    // reset
     setDegree("");
     setInstitute("");
     setAddress("");
