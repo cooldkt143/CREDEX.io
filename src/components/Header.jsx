@@ -1,10 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import logo from "../assets/images/credex.io_logo.png";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+  );
+  const [displayName, setDisplayName] = useState("Coder");
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const auth = getAuth();
@@ -16,11 +21,24 @@ const Header = () => {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Listen to Firebase auth state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setProfileImage(user.photoURL || null);
+        setDisplayName(user.displayName || "Coder");
+      } else {
+        setProfileImage(null);
+        setDisplayName("Coder");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
 
   // Logout handler
   const handleLogout = async () => {
@@ -42,10 +60,8 @@ const Header = () => {
         border-b border-teal-400/40"
       >
         <div className="w-full px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          
           {/* Left Section */}
           <div className="flex items-center gap-2 sm:gap-3">
-            
             {/* Back Button */}
             <button
               onClick={() => navigate(-1)}
@@ -77,17 +93,20 @@ const Header = () => {
             <div className="hidden sm:block h-4 w-px bg-teal-400/70" />
 
             <div className="flex items-center gap-4 relative">
-              
               {/* Profile Avatar */}
               <button
                 onClick={() => navigate("/profile")}
                 className="focus:outline-none"
               >
                 <img
-                  src="#"
+                  src={
+                    profileImage ||
+                    `https://ui-avatars.com/api/?name=${displayName}&background=0f172a&color=5eead4`
+                  }
                   alt="Profile"
                   className="w-9 h-9 sm:w-11 sm:h-11 rounded-full
                   border border-teal-400
+                  object-cover
                   shadow-[0_0_12px_rgba(45,212,191,0.7)]"
                 />
               </button>

@@ -32,11 +32,11 @@ PLATFORMS = {
 }
 
 SCORE_LIMITS = {
-    "max_score": 100,
+    "max_score": 1000,
     "github": {
-        "followers": 30,
-        "stars": 40,
-        "repos": 30,
+        "followers": 300,
+        "stars": 400,
+        "repos": 300,
     },
 }
 

@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/Header";
 import IdAnalyze from "../components/analyze/IdAnalyze";
 import { motion } from "framer-motion";
+import Tips from "../components/analyze/tips";
 
 const PlatformAnalyze = () => {
   return (
@@ -15,7 +16,7 @@ const PlatformAnalyze = () => {
       before:bg-[size:40px_40px] before:opacity-20"
     >
       {/* Header must be above overlay */}
-      <div className="relative z-20">
+      <div>
         <Header />
       </div>
 
@@ -40,6 +41,9 @@ const PlatformAnalyze = () => {
         </motion.p>
 
         <IdAnalyze />
+        <div className="mt-10">
+          <Tips />
+        </div>
       </div>
     </div>
   );

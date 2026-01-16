@@ -48,7 +48,7 @@ const IdAnalyze = () => {
     if (!isAnalyzing) return;
 
     let index = 0;
-    const text = `Analyzing ${platformId} on ${selectedPlatform}...`;
+    const text = ` Analyzing ${platformId} on ${selectedPlatform}...`;
     setTypedText("");
 
     const interval = setInterval(() => {
@@ -158,6 +158,11 @@ const IdAnalyze = () => {
                 }`}
                 value={platformId}
                 onChange={(e) => setPlatformId(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && canAnalyze) {
+                    handleAnalyze();
+                  }
+                }}
               />
 
               <button
