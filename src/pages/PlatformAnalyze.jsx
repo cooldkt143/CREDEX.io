@@ -1,33 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import IdAnalyze from "../components/analyze/IdAnalyze";
 import { motion } from "framer-motion";
 import Tips from "../components/analyze/tips";
 
 const PlatformAnalyze = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div
       className="relative min-h-screen overflow-x-hidden bg-black text-white
-      bg-[radial-gradient(circle_at_center,_rgba(20,184,166,0.15),_transparent_100%)]
+      bg-[radial-gradient(circle_at_center,_rgba(20,184,166,0.15),_transparent_150%)]
       before:absolute before:inset-0
       before:pointer-events-none
       before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),
                  linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]
       before:bg-[size:40px_40px] before:opacity-20"
     >
-      {/* Header must be above overlay */}
-      <div>
-        <Header />
-      </div>
+      <Header />
 
-      {/* Main content */}
       <div className="relative z-10 pt-24 px-4 sm:px-6 md:px-10">
-        {/* Page title */}
         <h1 className="text-center text-3xl sm:text-4xl font-bold text-gray-300 font-mono drop-shadow-[0_0_18px_rgba(45,212,191,0.4)]">
           Platform ID Analyzer
         </h1>
 
-        {/* Coding-style description */}
         <motion.p
           className="mt-4 text-center text-teal-400 font-mono text-sm sm:text-base max-w-2xl mx-auto pl-6 pr-6"
           initial={{ opacity: 0, x: -20 }}

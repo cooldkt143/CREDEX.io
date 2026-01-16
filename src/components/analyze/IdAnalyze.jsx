@@ -113,7 +113,7 @@ const IdAnalyze = () => {
       }, ANALYZE_DURATION);
     } catch (err) {
       setIsAnalyzing(false);
-      setError("Unable to analyze this profile right now.");
+      setError("Unable to analyze this profile right now. Please Check Your Profile ID Again!!!");
     }
   };
 
@@ -185,8 +185,8 @@ const IdAnalyze = () => {
                 animate={{ opacity: 1 }}
                 className="mt-6 border-t border-teal-400/20 pt-4"
               >
-                <p className="text-teal-400 mb-2">
-                  Developer Score: <span className="text-white">{result.score}</span>
+                <p className="text-teal-400 mb-2 text-lg">
+                  Developer Score: <span className="text-white font-bold">{result.score}</span>
                 </p>
 
                 <p className="text-gray-400 mb-2">Improvement Tips</p>

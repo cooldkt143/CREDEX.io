@@ -55,6 +55,13 @@ const steps = [
 const tips = () => {
   return (
     <div className="w-full bg-black py-20 px-4 font-mono text-gray-300">
+      <h1 className="text-center text-3xl font-semibold text-teal-400 mb-3">
+        Platform Guide
+      </h1>
+      <p className="text-center text-gray-400 max-w-2xl mx-auto mb-16">
+        Follow these steps to understand how your profile is analyzed, how the score is calculated,
+        and what you can improve to build a stronger developer presence.
+      </p>
       <div className="max-w-6xl mx-auto space-y-24">
         {steps.map((step) => (
           <motion.div
@@ -67,48 +74,61 @@ const tips = () => {
             {/* CENTER LAYOUT */}
             {step.layout === "center" && (
               <div className="flex flex-col items-center text-center">
+                <h3 className="text-teal-400 text-xl mb-6">
+                  {step.id}. {step.title}
+                </h3>
                 <img
                   src={step.image}
                   alt={step.title}
                   className="rounded-lg border border-teal-400/30 mb-6 max-w-6xl w-full"
                 />
-                <h3 className="text-teal-400 text-xl mb-2">
-                  {step.id}. {step.title}
-                </h3>
                 <p className="text-gray-400 max-w-xl">{step.text}</p>
+                <div className="w-full flex justify-center mt-10">
+                  <div className="h-px w-3/4 bg-teal-400/30" />
+                </div>
               </div>
             )}
 
             {/* LEFT IMAGE */}
             {step.layout === "left" && (
-              <div className="flex flex-col md:flex-row items-center gap-10">
-                <img
-                  src={step.image}
-                  alt={step.title}
-                  className="rounded-lg border border-teal-400/30 max-w-lg w-full "
-                />
-                <div>
-                  <h3 className="text-teal-400 text-xl mb-2">
-                    {step.id}. {step.title}
-                  </h3>
-                  <p className="text-gray-400">{step.text}</p>
+              <div className="text-center"> 
+                <div className="flex flex-col md:flex-row items-center sm:text-left gap-10">
+                  <img
+                    src={step.image}
+                    alt={step.title}
+                    className="rounded-lg border border-teal-400/30 max-w-lg w-full "
+                  />
+                  <div>
+                    <h3 className="text-teal-400 text-xl mb-2">
+                      {step.id}. {step.title}
+                    </h3>
+                    <p className="text-gray-400">{step.text}</p>
+                  </div>
+                </div>
+                <div className="w-full flex justify-center mt-10">
+                  <div className="h-px w-3/4 bg-teal-400/30" />
                 </div>
               </div>
             )}
 
             {/* RIGHT IMAGE */}
             {step.layout === "right" && (
-              <div className="flex flex-col md:flex-row-reverse items-center gap-10">
-                <img
-                  src={step.image}
-                  alt={step.title}
-                  className="rounded-lg border border-teal-400/30 max-w-xl w-full"
-                />
-                <div>
-                  <h3 className="text-teal-400 text-xl mb-2">
-                    {step.id}. {step.title}
-                  </h3>
-                  <p className="text-gray-400">{step.text}</p>
+              <div className="text-center">
+                <div className="flex flex-col md:flex-row-reverse items-center sm:text-left gap-10">
+                  <img
+                    src={step.image}
+                    alt={step.title}
+                    className="rounded-lg border border-teal-400/30 max-w-xl w-full"
+                  />
+                  <div>
+                    <h3 className="text-teal-400 text-xl mb-2">
+                      {step.id}. {step.title}
+                    </h3>
+                    <p className="text-gray-400">{step.text}</p>
+                  </div>
+                </div>
+                <div className="w-full flex justify-center mt-10">
+                  <div className="h-px w-3/4 bg-teal-400/30" />
                 </div>
               </div>
             )}
