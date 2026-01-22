@@ -1,42 +1,107 @@
-def calculate_credex_score(data, github_data=None, linkedin_data=None, skills=None):
-    """
-    Calculate the Credex score based on real data:
-    Total score is now out of 1000.
-    """
-    score = 0
+def calculate_credex_score(
+    data,
+    github_data=None,
+    linkedin_data=None,
+    resume_data=None
+):
+    total_score = 0
 
-    # Experience points (was max 40/100, now scale to 200/1000)
+    # ---------------- Experience (max 200) ----------------
     exp_map = {
-        "Student": 100,
-        "Fresher": 150,
-        "1–3 Years": 250,
-        "3+ Years": 400
+        "Student": 80,
+        "Fresher": 120,
+        "1–3 Years": 160,
+        "3+ Years": 200
     }
-    score += exp_map.get(data.experience, 100)
+    total_score += exp_map.get(data.experience, 80)
 
-    # GitHub data (was 15 + bonus 10 = max 25, now scale to max 250)
+    # ---------------- Resume (max 500) ----------------
+    resume_score = 0
+    if resume_data:
+        # Contact + Identity (50)
+        if resume_data.get("email"):
+            resume_score += 20
+        if resume_data.get("phone"):
+            resume_score += 20
+        if resume_data.get("name") and resume_data["name"] != "Unknown":
+            resume_score += 10
+
+        # Skills (100)
+        resume_score += min(len(resume_data.get("skills", [])) * 15, 100)
+
+        # Resume Projects (150)
+        resume_score += min(len(resume_data.get("projects", [])) * 50, 150)
+
+        # Achievements (100)
+        resume_score += min(len(resume_data.get("achievements", [])) * 50, 100)
+
+        # Work Experience (200)
+        resume_score += min(len(resume_data.get("experience", [])) * 100, 200)
+
+        # Education (100)
+        resume_score += min(len(resume_data.get("education", [])) * 50, 100)
+
+        # Completeness bonus (100)
+        completeness = 0
+        for key in ["skills", "projects", "achievements", "experience", "education"]:
+            if resume_data.get(key):
+                completeness += 20
+
+        resume_score += completeness
+
+    total_score += min(resume_score, 500)
+
+    # ---------------- Credex Projects (max 150) ----------------
+    project_score = 0
+    projects = getattr(data, "projects", [])
+
+    for project in projects:
+        name = project.get("name")
+        repo = project.get("repo")
+        live = project.get("live")
+
+        # Only count valid projects
+        if not name:
+            continue
+
+        # Base score for a real project
+        project_score += 30
+
+        # GitHub repo bonus
+        if repo:
+            project_score += 20
+
+        # Live / deployed bonus
+        if live:
+            project_score += 20
+
+    total_score += min(project_score, 150)
+
+    # ---------------- GitHub (max 250) ----------------
+    github_score = 0
     if github_data and github_data.get("repos", 0) > 0:
-        score += 150  # base for having GitHub
-        score += min(github_data.get("stars", 0) * 5, 100)  # bonus for stars
-        # Optionally add bonus for forks
-        score += min(github_data.get("forks", 0) * 2, 50)  # max 50
-    # Max possible from GitHub ~300
+        github_score += min(github_data.get("followers", 0) * 3, 60)
+        github_score += min(github_data.get("follower_following_ratio", 0) * 15, 40)
+        github_score += min(github_data.get("profile_completeness_score", 0) * 10, 40)
 
-    # LinkedIn data (was max 20, now scale to 200)
+        github_score += min(github_data.get("public_repos", 0) * 3, 50)
+        github_score += min(github_data.get("account_age_years", 0) * 8, 40)
+
+        github_score += min(github_data.get("total_stars", 0) * 1.5, 60)
+        github_score += min(github_data.get("total_forks", 0) * 2, 40)
+
+        github_score += min(len(github_data.get("primary_languages", [])) * 15, 30)
+
+    total_score += min(github_score, 250)
+
+    # ---------------- LinkedIn (max 200) ----------------
+    linkedin_score = 0
     if linkedin_data and linkedin_data.get("positions"):
-        score += 100  # base for LinkedIn
+        linkedin_score += 100
         total_exp = sum(p.get("years", 0) for p in linkedin_data["positions"])
-        score += min(total_exp * 20, 100)  # max 100 extra for years of experience
-    # Max possible from LinkedIn ~200
+        linkedin_score += min(total_exp * 20, 100)
 
-    # Projects (was max 25, now scale to 150)
-    if data.projects:
-        project_score = min(len(data.projects) * 50, 150)  # 50 points per project, max 150
-        score += project_score
+    total_score += min(linkedin_score, 200)
 
-    # Resume skills (was max 10, now scale to 100)
-    if skills:
-        score += min(len(skills) * 10, 100)  # 10 points per skill, max 100
-
-    # Total maximum ~1000
-    return min(score, 1000)
+    # ---------------- Final Cap ----------------
+    return min(total_score, 1000)

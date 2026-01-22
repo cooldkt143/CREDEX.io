@@ -47,7 +47,7 @@ def generate_insights(platform: str, profile: dict) -> list[str]:
 
         if profile.get("repos_with_license", 0) < 2:
             tips.append("Add open source licenses to your projects to make them easier to reuse and contribute to")
-
+  
         # 6. Tech depth
         if len(profile.get("primary_languages", [])) < 2:
             tips.append("Strengthen expertise in at least two primary languages to show technical depth")
@@ -154,7 +154,7 @@ def generate_insights(platform: str, profile: dict) -> list[str]:
         if not profile.get("summary_present"):
             tips.append("Add a concise summary explaining what you do, what you are learning, and what you are aiming for")
 
-        experience_count = profile.get("experience_count") or 0
+        experience_count = profile.get("experience_count", 0)
 
         if experience_count == 0:
             tips.append("Add internships, freelance work, or personal projects as experience entries")
@@ -164,7 +164,7 @@ def generate_insights(platform: str, profile: dict) -> list[str]:
         if not profile.get("project_links_present"):
             tips.append("Link GitHub projects or live demos to show real proof of your work")
 
-        skills = profile.get("skills_count") or 0
+        skills = profile.get("skills_count", 0)
         if skills < 5:
             tips.append("Add relevant technical and professional skills to strengthen keyword matching")
 

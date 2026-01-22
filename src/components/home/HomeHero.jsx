@@ -6,7 +6,7 @@ const HomeHero = () => {
   return (
     <section 
       id="home"
-      className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 text-center"
+      className="relative z-10 flex flex-col items-center justify-center px-4 pt-40 text-center mb-20 sm:mb-0"
     >
       {/* Terminal badge */}
       <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-black/50 px-4 py-1 font-mono text-sm text-teal-400">

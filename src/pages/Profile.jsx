@@ -67,7 +67,7 @@ const Profile = () => {
       animate="visible"
       variants={fadeUp}
       className="
-        relative min-h-screen pt-20 px-5 sm:px-10 space-y-6
+        relative min-h-screen pt-20 px-5 sm:px-10 space-y-2
         bg-[#05080F] text-slate-200 overflow-hidden
         bg-[radial-gradient(circle_at_top,_rgba(20,184,166,0.14),_transparent_105%)]
         before:absolute before:inset-0
@@ -82,27 +82,27 @@ const Profile = () => {
       {/* MAIN 2-COLUMN GRID */}
       <motion.div
         variants={stagger}
-        className="grid lg:grid-cols-2 gap-5 relative z-10"
+        className="grid md:grid-cols-2 gap-5 relative z-10"
       >
         {/* ====== LEFT COLUMN ====== */}
         <div className="space-y-5">
 
           {/* PROFILE CARD */}
-          <motion.div variants={fadeUp} className={`${card} p-6`}>
+          <motion.div variants={fadeUp} className={`${card} p-6 w-full`}>
             <div className="flex gap-4 items-center">
               <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
                 S
               </div>
 
               <div className="flex-1">
-                <h2 className="text-lg font-semibold text-white font-mono">
+                <h2 className="text-base sm:text-lg font-semibold text-white font-mono">
                   simran_patra
                 </h2>
-                <p className="text-sm text-slate-400 font-mono">
+                <p className="text-xs sm:text-sm text-slate-400 font-mono">
                   @patra_simran_92
                 </p>
 
-                <div className="flex items-center gap-2 mt-2 text-sm text-slate-400 font-mono">
+                <div className="flex items-center gap-2 mt-2 text-xs sm:text-sm text-slate-400 font-mono">
                   <HiTrendingUp className="text-teal-400" />
                   rank = 15
                 </div>
@@ -123,7 +123,7 @@ const Profile = () => {
                     ],
                   }}
                   transition={{ duration: 2.4, repeat: Infinity }}
-                  className="w-20 h-20 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono mt-2 text-xl"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-teal-400 flex items-center justify-center text-teal-400 font-mono mt-2 text-xl"
                 >
                   0%
                 </motion.div>
@@ -170,7 +170,6 @@ const Profile = () => {
               ))}
             </div>
           </Card>
-
         </div>
 
         {/* ====== RIGHT COLUMN ====== */}
@@ -230,7 +229,7 @@ const Profile = () => {
 
 /* Components */
 const Card = ({ title, children }) => (
-  <motion.div variants={fadeUp} className={`${card} p-5`}>
+  <motion.div variants={fadeUp} className={`${card} p-5 w-full`}>
     <h3 className="font-mono text-teal-400 mb-3">{title}</h3>
     {children}
   </motion.div>

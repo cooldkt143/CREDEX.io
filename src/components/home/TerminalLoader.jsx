@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const lines = [
-  "booting core modules...",
-  "loading skill graph...",
-  "verifying proofs...",
-  "system ready",
+  " booting core modules...",
+  " loading skill graph...",
+  " verifying proofs...",
+  " system ready",
 ];
 
 const TerminalLoader = () => {

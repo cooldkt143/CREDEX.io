@@ -114,16 +114,20 @@ def generate_score(platform: str, profile: dict) -> int:
 
         # 1. Profile completeness & trust (400)
         if profile.get("profile_visible"):
-            score += 150
+            score += 100
+
+        if profile.get("data_quality"):
+            score += 50
+
         if profile.get("profile_photo_present"):
             score += 50
         if profile.get("headline_present"):
             score += 100
         if profile.get("summary_present"):
-            score += 100
+            score += 150
 
         # 2. Career clarity & depth (300)
-        experience_count = profile.get("experience_count") or 0
+        experience_count = profile.get("experience_count", 0)
         score += min(experience_count * 60, 180)
 
         if profile.get("education_present"):
@@ -136,7 +140,7 @@ def generate_score(platform: str, profile: dict) -> int:
         if profile.get("project_links_present"):
             score += 120
 
-        skills = profile.get("skills_count") or 0
+        skills = profile.get("skills_count", 0)
         score += min(skills * 10, 80)
 
         # 4. Activity & visibility (100)

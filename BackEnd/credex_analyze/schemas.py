@@ -11,16 +11,22 @@ class Project(BaseModel):
 class PlatformProfile(BaseModel):
     username: Optional[str] = None
     link: Optional[str] = None
+    
+    
+class Project(BaseModel):
+    name: str | None = None
+    repo: str | None = None
+    live: str | None = None
 
 
 class CredexAnalyzeRequest(BaseModel):
     fullName: str
     experience: str
-    github: PlatformProfile
-    linkedin: PlatformProfile
-    projects: List[Project]
-    otherPlatforms: Optional[list] = []
-    resume_text: Optional[str] = None
+    github: dict
+    linkedin: dict
+    projects: list[Project] = []
+    otherPlatforms: list = []
+    resume_text: str | None = None
 
 
 class CredexAnalyzeResponse(BaseModel):
