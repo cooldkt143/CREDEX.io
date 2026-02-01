@@ -9,8 +9,8 @@ class Project(BaseModel):
 
 
 class PlatformProfile(BaseModel):
-    username: Optional[str] = None
-    link: Optional[str] = None
+    username: str | None = None
+    link: str | None = None
     
     
 class Project(BaseModel):
@@ -22,11 +22,11 @@ class Project(BaseModel):
 class CredexAnalyzeRequest(BaseModel):
     fullName: str
     experience: str
-    github: dict
-    linkedin: dict
+    github: PlatformProfile | None = None
+    linkedin: PlatformProfile | None = None
     projects: list[Project] = []
     otherPlatforms: list = []
-    resume_text: str | None = None
+    resume_text: str | None = None 
 
 
 class CredexAnalyzeResponse(BaseModel):

@@ -6,7 +6,7 @@ def calculate_credex_score(
 ):
     total_score = 0
 
-    # ---------------- Experience (max 200) ----------------
+    # Experience (max 200)
     exp_map = {
         "Student": 80,
         "Fresher": 120,
@@ -15,7 +15,7 @@ def calculate_credex_score(
     }
     total_score += exp_map.get(data.experience, 80)
 
-    # ---------------- Resume (max 500) ----------------
+    # Resume (max 500)
     resume_score = 0
     if resume_data:
         # Contact + Identity (50)
@@ -51,14 +51,14 @@ def calculate_credex_score(
 
     total_score += min(resume_score, 500)
 
-    # ---------------- Credex Projects (max 150) ----------------
+    # Credex Projects (max 150)
     project_score = 0
     projects = getattr(data, "projects", [])
 
     for project in projects:
-        name = project.get("name")
-        repo = project.get("repo")
-        live = project.get("live")
+        name = project.name
+        repo = project.repo
+        live = project.live
 
         # Only count valid projects
         if not name:
@@ -77,7 +77,7 @@ def calculate_credex_score(
 
     total_score += min(project_score, 150)
 
-    # ---------------- GitHub (max 250) ----------------
+    # GitHub (max 250)
     github_score = 0
     if github_data and github_data.get("repos", 0) > 0:
         github_score += min(github_data.get("followers", 0) * 3, 60)
@@ -94,7 +94,7 @@ def calculate_credex_score(
 
     total_score += min(github_score, 250)
 
-    # ---------------- LinkedIn (max 200) ----------------
+    # LinkedIn (max 200)
     linkedin_score = 0
     if linkedin_data and linkedin_data.get("positions"):
         linkedin_score += 100
@@ -103,5 +103,5 @@ def calculate_credex_score(
 
     total_score += min(linkedin_score, 200)
 
-    # ---------------- Final Cap ----------------
+    # Final Cap
     return min(total_score, 1000)

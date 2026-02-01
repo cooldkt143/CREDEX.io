@@ -303,8 +303,12 @@ const CredexCard = ({ name, score, level }) => {
       backgroundColor: null,
     });
 
+    const safeName = (name || "Anonymous-Developer")
+      .trim()
+      .replace(/\s+/g, "-");
+
     const link = document.createElement("a");
-    link.download = "Credex-Score-Card.png";
+    link.download = `${safeName}-Credex-Score-Card.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
   };
