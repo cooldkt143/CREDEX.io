@@ -17,6 +17,9 @@ import {
 } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import Header from "../components/Header";
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 
 /* Animations */
 const fadeUp = {
@@ -61,6 +64,16 @@ const education = [
 ];
 
 const Profile = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsub();
+  }, []);
+
   return (
     <motion.div
       initial="hidden"
@@ -90,16 +103,26 @@ const Profile = () => {
           {/* PROFILE CARD */}
           <motion.div variants={fadeUp} className={`${card} p-6 w-full`}>
             <div className="flex gap-4 items-center">
-              <div className="w-14 h-14 rounded-full border border-teal-400 text-teal-400 flex items-center justify-center font-mono text-lg shadow-[0_0_12px_rgba(20,184,166,0.6)]">
-                S
+              <div className="w-14 h-14 rounded-full border border-teal-400 overflow-hidden flex items-center justify-center shadow-[0_0_12px_rgba(20,184,166,0.6)]">
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt="profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-teal-400 font-mono text-lg">
+                    {user?.displayName?.charAt(0).toUpperCase() || "U"}
+                  </span>
+                )}
               </div>
 
               <div className="flex-1">
                 <h2 className="text-base sm:text-lg font-semibold text-white font-mono">
-                  simran_patra
+                  {user?.displayName || "Anonymous User"}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-400 font-mono">
-                  @patra_simran_92
+                  {generateHandle(user)}
                 </p>
 
                 <div className="flex items-center gap-2 mt-2 text-xs sm:text-sm text-slate-400 font-mono">
@@ -225,6 +248,20 @@ const Profile = () => {
       </motion.div>
     </motion.div>
   );
+};
+
+const generateHandle = (user) => {
+  if (!user) return "@user";
+
+  if (user.email) {
+    const nameFromEmail = user.email.split("@")[0];
+    return `@${nameFromEmail.toLowerCase()}`;
+  }
+
+  const base =
+    user.displayName?.replace(/\s+/g, "").toLowerCase() || "user";
+  const random = Math.floor(100 + Math.random() * 900); // 3-digit
+  return `@${base}${random}`;
 };
 
 /* Components */
