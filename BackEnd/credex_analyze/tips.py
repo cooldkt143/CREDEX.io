@@ -1,77 +1,155 @@
-def generate_insights(score: int):
+import os
+import json
+import re
+import requests
+from dotenv import load_dotenv
 
-    if score >= 850:
-        return {
-            "level": "Elite Developer",
-            "description": "Strong real-world signals across projects, platforms, and professional presence.",
-            "strengths": [
-                "Consistent high-quality project work",
-                "Strong GitHub and platform visibility",
-                "Well-rounded and credible developer profile",
-                "Clear problem-solving and execution ability",
-            ],
-            "tips": [
-                "Mentor juniors through open communities or college clubs",
-                "Write technical blogs explaining design decisions and trade-offs",
-                "Contribute to large or well-known open-source projects",
-                "Lead a project or feature end-to-end and document the impact",
-                "Add performance, scale, or user metrics to your projects",
-                "Speak at meetups, hackathons, or technical events when possible",
-            ],
-        }
+load_dotenv()
 
-    if score >= 700:
-        return {
-            "level": "Advanced Developer",
-            "description": "Solid experience with growing credibility and visibility.",
-            "strengths": [
-                "Multiple practical and deployed projects",
-                "Active development and learning habits",
-                "Good understanding of core technologies",
-                "Improving professional presence",
-            ],
-            "tips": [
-                "Deploy all major projects with proper error handling",
-                "Improve GitHub READMEs with screenshots, demos, and setup steps",
-                "Refactor older projects to improve code quality and structure",
-                "Show project impact clearly on LinkedIn and your portfolio",
-                "Start contributing small fixes to open-source repositories",
-                "Prepare one project as a strong interview case study",
-            ],
-        }
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+MODEL = "openai/gpt-3.5-turbo"
 
-    if score >= 500:
-        return {
-            "level": "Growing Professional",
-            "description": "Good foundation with clear progress and improvement opportunities.",
-            "strengths": [
-                "Hands-on project experience",
-                "Basic platform presence established",
-                "Willingness to explore different technologies",
-            ],
-            "tips": [
-                "Build complete end-to-end projects with authentication and CRUD",
-                "Maintain a consistent GitHub contribution rhythm",
-                "Focus on clean folder structure and readable code",
-                "Add short project explanations and demo videos",
-                "Strengthen one core stack instead of trying many tools",
-                "Participate in hackathons or coding challenges regularly",
-            ],
-        }
+def generate_insights(
+    total_score: int,
+    experience_score: int = 0,
+    resume_score: int = 0,
+    project_score: int = 0,
+    github_score: int = 0,
+    linkedin_score: int = 0,
+):
 
+    if not OPENROUTER_API_KEY:
+        raise Exception("OPENROUTER_API_KEY is missing.")
+
+    level = _calculate_level(total_score)
+
+    prompt = f"""
+You are a strict technical career evaluator.
+
+Total Score: {total_score}/1000
+Level: {level}
+
+Breakdown:
+Experience: {experience_score}/200
+Resume: {resume_score}/500
+Projects: {project_score}/150
+GitHub: {github_score}/250
+LinkedIn: {linkedin_score}/200
+
+Return ONLY valid JSON in this format:
+
+{{
+  "description": "Short 2-3 sentence evaluation.",
+  "strengths": ["s1","s2","s3","s4"],
+  "tips": ["t1","t2","t3","t4","t5","t6"]
+}}
+"""
+
+    for attempt in range(2):
+        try:
+            response = requests.post(
+                OPENROUTER_URL,
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": MODEL,
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You must return strictly valid JSON. No explanations.",
+                        },
+                        {"role": "user", "content": prompt},
+                    ],
+                    "temperature": 0.4,
+                },
+                timeout=40,
+            )
+
+            if response.status_code != 200:
+                raise Exception(response.text)
+
+            result = response.json()
+            raw_content = result["choices"][0]["message"]["content"]
+
+            # Remove markdown fences
+            cleaned = raw_content.replace("```json", "").replace("```", "").strip()
+
+            # Extract JSON safely
+            match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+
+            if not match:
+                raise Exception("No valid JSON found in response.")
+
+            json_string = match.group(0)
+            parsed = json.loads(json_string)
+
+            # Basic structure validation
+            if not (
+                isinstance(parsed.get("description"), str)
+                and isinstance(parsed.get("strengths"), list)
+                and isinstance(parsed.get("tips"), list)
+            ):
+                raise Exception("Invalid JSON structure returned by AI.")
+
+            # Normalize strengths and tips
+            strengths = parsed["strengths"][:4]
+            tips = parsed["tips"][:6]
+
+            # Pad if too short
+            while len(strengths) < 4:
+                strengths.append("Developing technical consistency")
+
+            while len(tips) < 6:
+                tips.append("Continue building depth and practical exposure")
+
+            return {
+                "level": level,
+                "description": parsed["description"],
+                "strengths": strengths,
+                "tips": tips,
+            }
+
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed:", str(e))
+
+            if attempt == 1:
+                # Fallback safe response instead of crashing backend
+                return {
+                    "level": level,
+                    "description": f"{level} with growing potential. Continue strengthening practical execution and technical depth.",
+                    "strengths": [
+                        "Foundational technical knowledge",
+                        "Growing professional presence",
+                        "Active learning mindset",
+                        "Career development awareness",
+                    ],
+                    "tips": [
+                        "Build more production-level projects",
+                        "Improve resume impact with quantified results",
+                        "Increase GitHub contribution consistency",
+                        "Strengthen problem-solving depth",
+                        "Enhance system design understanding",
+                        "Expand professional network strategically",
+                    ],
+                }
+
+    # Should never reach here
     return {
-        "level": "Early Stage Developer",
-        "description": "You are building momentum. Focus on consistency and fundamentals.",
-        "strengths": [
-            "Willingness to learn and experiment",
-            "Early exposure to development tools",
-        ],
-        "tips": [
-            "Build 2 to 3 small but complete projects from scratch",
-            "Practice fundamentals like JavaScript, Python, or DSA regularly",
-            "Push code frequently to GitHub, even for learning projects",
-            "Follow one structured learning roadmap instead of random tutorials",
-            "Create a clean LinkedIn and GitHub profile with basic details",
-            "Document what you learn in simple README files",
-        ],
+        "level": level,
+        "description": "Evaluation completed.",
+        "strengths": [],
+        "tips": [],
     }
+
+def _calculate_level(score: int) -> str:
+    if score >= 800:
+        return "Elite Developer"
+    elif score >= 650:
+        return "Advanced Developer"
+    elif score >= 450:
+        return "Growing Professional"
+    else:
+        return "Early Stage Developer"
