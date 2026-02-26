@@ -1,10 +1,15 @@
 import requests
+from datetime import datetime
 
 BASE_HEADERS = {
     "Accept": "application/vnd.github+json"
 }
 
+
 def fetch_github_stats(username: str):
+    if not username:
+        return {}
+
     user_url = f"https://api.github.com/users/{username}"
     repos_url = f"https://api.github.com/users/{username}/repos?per_page=100"
 
@@ -17,7 +22,9 @@ def fetch_github_stats(username: str):
     user_data = user_resp.json()
     repos_data = repos_resp.json() if repos_resp.status_code == 200 else []
 
-    # --- Aggregate repo level stats ---
+    # -----------------------------------
+    # Aggregate repository statistics
+    # -----------------------------------
     total_stars = sum(repo.get("stargazers_count", 0) for repo in repos_data)
     total_forks = sum(repo.get("forks_count", 0) for repo in repos_data)
     total_watchers = sum(repo.get("watchers_count", 0) for repo in repos_data)
@@ -27,7 +34,40 @@ def fetch_github_stats(username: str):
         if repo.get("language"):
             languages.add(repo["language"])
 
-    # --- Extract useful variables ---
+    # -----------------------------------
+    # Followers ratio
+    # -----------------------------------
+    followers = user_data.get("followers", 0)
+    following = user_data.get("following", 1) or 1  # prevent division by zero
+    follower_following_ratio = followers / following
+
+    # -----------------------------------
+    # Profile completeness score (0 to 1)
+    # -----------------------------------
+    profile_fields = [
+        user_data.get("name"),
+        user_data.get("bio"),
+        user_data.get("company"),
+        user_data.get("location"),
+        user_data.get("blog")
+    ]
+
+    filled_fields = sum(1 for field in profile_fields if field)
+    profile_completeness_score = filled_fields / len(profile_fields)
+
+    # -----------------------------------
+    # Account age in years
+    # -----------------------------------
+    created_at = user_data.get("created_at")
+    account_age_years = 0
+
+    if created_at:
+        created_date = datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+        account_age_years = (datetime.utcnow() - created_date).days / 365
+
+    # -----------------------------------
+    # Return structured data
+    # -----------------------------------
     return {
         # Profile info
         "username": user_data.get("login"),
@@ -38,19 +78,22 @@ def fetch_github_stats(username: str):
         "blog": user_data.get("blog"),
 
         # Activity & reputation
-        "followers": user_data.get("followers", 0),
+        "followers": followers,
         "following": user_data.get("following", 0),
         "public_repos": user_data.get("public_repos", 0),
         "public_gists": user_data.get("public_gists", 0),
 
         # Repo metrics
-        "repo_count": len(repos_data),
+        "repos": len(repos_data),
         "total_stars": total_stars,
         "total_forks": total_forks,
         "total_watchers": total_watchers,
 
-        # Tech stack
-        "languages": list(languages),
+        # Computed metrics
+        "follower_following_ratio": follower_following_ratio,
+        "profile_completeness_score": profile_completeness_score,
+        "account_age_years": account_age_years,
+        "primary_languages": list(languages),
 
         # Dates
         "account_created_at": user_data.get("created_at"),
