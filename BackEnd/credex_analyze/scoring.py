@@ -25,28 +25,67 @@ def calculate_credex_score(
     # -----------------------------
     resume_score = 0
 
+    def calculate_resume_quality_score(extracted_data):
+        """Base quality score out of 100"""
+        if not extracted_data:
+            return 0
+        print("------------Resume score pattern------------")
+        score = 0
+
+        # Contact information (20 points)
+        if extracted_data.get("name") and extracted_data["name"] != "Unknown":
+            score += 5
+        if extracted_data.get("email"):
+            score += 5
+        if extracted_data.get("phone"):
+            score += 5
+        if extracted_data.get("linkedin") or extracted_data.get("github"):
+            score += 5
+        print("Contact Info Score:", score)
+
+        # Skills (25 points)
+        skills_count = len(extracted_data.get("skills", []))
+        if skills_count >= 10:
+            score += 25
+        elif skills_count >= 5:
+            score += 15
+        elif skills_count >= 1:
+            score += 5
+        print("Skills Score:", score)
+
+        # Projects (20 points)
+        projects_count = len(extracted_data.get("projects", []))
+        if projects_count >= 3:
+            score += 20
+        elif projects_count >= 2:
+            score += 15
+        elif projects_count >= 1:
+            score += 10
+        print("Projects Score:", score)
+
+        # Education (15 points)
+        if extracted_data.get("education"):
+            score += 15
+        print("Education Score:", score)
+
+        # Experience (20 points)
+        experience = extracted_data.get("experience", [])
+        if len(experience) >= 2:
+            score += 20
+        elif len(experience) >= 1:
+            score += 10
+        print("Experience Score:", score)
+
+        return min(score, 100)
+
     if resume_data:
-        if resume_data.get("email"):
-            resume_score += 20
-        if resume_data.get("phone"):
-            resume_score += 20
-        if resume_data.get("name") and resume_data["name"] != "Unknown":
-            resume_score += 10
+        base_quality_score = calculate_resume_quality_score(resume_data)
 
-        resume_score += min(len(resume_data.get("skills", [])) * 15, 100)
-        resume_score += min(len(resume_data.get("projects", [])) * 50, 150)
-        resume_score += min(len(resume_data.get("achievements", [])) * 50, 100)
-        resume_score += min(len(resume_data.get("experience", [])) * 100, 200)
-        resume_score += min(len(resume_data.get("education", [])) * 50, 100)
+        # Scale 100 → 500
+        scaled_quality_score = (base_quality_score / 100) * 500
 
-        completeness = 0
-        for key in ["skills", "projects", "achievements", "experience", "education"]:
-            if resume_data.get(key):
-                completeness += 20
+        resume_score = int(min(scaled_quality_score, 500))
 
-        resume_score += completeness
-
-    resume_score = min(resume_score, 500)
     total_score += resume_score
     print("Resume Score:", resume_score)
 

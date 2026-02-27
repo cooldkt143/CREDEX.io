@@ -1,6 +1,139 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+/* ============================== */
+/* 🍕 Pizza Pie Component */
+/* ============================== */
+
+const PizzaPieChart = () => {
+  const size = 220;
+  const radius = size / 2;
+  const gapAngle = 4;
+
+  const data = [
+    {
+      label: "Profile Strength",
+      value: 90,
+      description: "Measures how complete your profile is.",
+      color: "#0f766e",
+    },
+    {
+      label: "Repositories",
+      value: 100,
+      description: "Represents quality and number of repositories.",
+      color: "#164e63",
+    },
+    {
+      label: "Popularity",
+      value: 79,
+      description: "Shows followers, stars and engagement.",
+      color: "#4c1d95",
+    },
+    {
+      label: "Activity & Growth",
+      value: 50,
+      description: "Tracks contribution consistency.",
+      color: "#9d174d",
+    },
+  ];
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const [active, setActive] = useState(null);
+
+  const polarToCartesian = (cx, cy, r, angle) => {
+    const rad = (angle - 90) * (Math.PI / 180);
+    return {
+      x: cx + r * Math.cos(rad),
+      y: cy + r * Math.sin(rad),
+    };
+  };
+
+  const describeSlice = (startAngle, endAngle) => {
+    const start = polarToCartesian(radius, radius, radius, endAngle);
+    const end = polarToCartesian(radius, radius, radius, startAngle);
+    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+
+    return `
+      M ${radius} ${radius}
+      L ${start.x} ${start.y}
+      A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
+      Z
+    `;
+  };
+
+  let currentAngle = 0;
+
+  return (
+    <div className="flex flex-col items-center">
+      <svg width={size} height={size}>
+        {data.map((slice, index) => {
+          const sliceAngle =
+            (slice.value / total) * (360 - gapAngle * data.length);
+
+          const startAngle = currentAngle;
+          const endAngle = currentAngle + sliceAngle;
+
+          const pathData = describeSlice(startAngle, endAngle);
+
+          const midAngle = startAngle + sliceAngle / 2;
+          const labelPos = polarToCartesian(
+            radius,
+            radius,
+            radius * 0.6,
+            midAngle
+          );
+
+          currentAngle = endAngle + gapAngle;
+
+          return (
+            <g
+              key={index}
+              onMouseEnter={() => setActive(slice)}
+              onMouseLeave={() => setActive(null)}
+              style={{ cursor: "pointer" }}
+            >
+              <path
+                d={pathData}
+                fill={slice.color}
+                stroke="#0b0f14"
+                strokeWidth="2"
+              />
+
+              <text
+                x={labelPos.x}
+                y={labelPos.y}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="white"
+                fontSize="13"
+                fontWeight="bold"
+              >
+                {slice.value}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="mt-3 bg-[#0b0f14] border border-teal-400/30 rounded-md p-3 w-56 text-xs"
+          >
+            <p className="text-teal-400 font-semibold mb-1">
+              {active.label} — {active.value}
+            </p>
+            <p className="text-gray-300">{active.description}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const platforms = [
   "-Select-",
   "GitHub",
@@ -179,24 +312,39 @@ const IdAnalyze = () => {
             </div>
 
             {/* RESULT */}
-            {result && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-6 border-t border-teal-400/20 pt-4"
-              >
-                <p className="text-teal-400 mb-2 text-lg">
-                  Developer Score: <span className="text-white font-bold">{result.score}</span>
-                </p>
+  {result && (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    className="mt-6 border-t border-teal-400/20 pt-4"
+  >
+    <p className="text-teal-400 mb-4 text-lg">
+      Developer Score:{" "}
+      <span className="text-white font-bold">{result.score}</span>
+    </p>
 
-                <p className="text-gray-400 mb-2">Improvement Tips</p>
-                <ul className="list-disc list-inside text-gray-300 space-y-1">
-                  {result.insights.map((tip, i) => (
-                    <li key={i}>{tip}</li>
-                  ))}
-                </ul>
-              </motion.div>
-            )}
+    {/* Side-by-side layout */}
+    <div className="flex flex-col md:flex-row gap-8">
+
+      {/* 🍕 Pizza Chart (Left Side) */}
+      <div className="flex-shrink-0">
+        <PizzaPieChart />
+      </div>
+
+      {/* 📋 Tips (Right Side) */}
+      <div className="flex-1">
+        <p className="text-gray-400 mb-2">Improvement Tips</p>
+        <ul className="list-disc list-inside text-gray-300 space-y-1">
+          {result.insights.map((tip, i) => (
+            <li key={i}>{tip}</li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+  </motion.div>
+)}
+
 
             {error && (
               <p className="text-red-400 mt-4">{error}</p>

@@ -11,6 +11,9 @@ import {
 import html2canvas from "html2canvas";
 import Header from "../components/Header";
 
+import CredexBg from "../assets/images/credexCard-bg.png"; // background for score card
+import CredexLogo from "../assets/images/credex.io_logo.png";  // logo
+
 const API_URL = "http://localhost:8000/credex/analyze";
 
 const CredexAnalyze = () => {
@@ -295,12 +298,13 @@ const PlatformInput = ({ icon, platform, platformData, handlePlatformChange }) =
 );
 
 /* ---------- CREDEX SCORE CARD ---------- */
-const CredexCard = ({ name, score, level }) => {
+const CredexCard = ({ name, score }) => {
   const downloadCard = async () => {
-    const element = document.getElementById("credex-card");
+    const element = document.getElementById("credex-card-wrapper");
     const canvas = await html2canvas(element, {
       scale: 2,
-      backgroundColor: null,
+      backgroundColor: "rgba(0,0,0,0)",
+      useCORS: true,
     });
 
     const safeName = (name || "Anonymous-Developer")
@@ -314,36 +318,80 @@ const CredexCard = ({ name, score, level }) => {
   };
 
   return (
-    <div className="mt-12 text-center">
+    <div className="mt-12 flex flex-col items-center">
+
+      {/* CARD WRAPPER */}
       <div
-        id="credex-card"
-        className="max-w-md mx-auto rounded-2xl p-8 text-white
-        border border-[#2AF2D0]/40 mb-6
-        bg-gradient-to-br from-[#020d0c] to-black
-        shadow-[0_0_40px_rgba(42,242,208,0.2)]"
+        id="credex-card-wrapper"
+        className="rounded-[24px] overflow-hidden border border-[#2AF2D0]/40 shadow-[0_0_80px_rgba(42,242,208,0.3)]"
       >
-        <h2 className="text-sm uppercase tracking-widest text-gray-400">
-          Credex Developer Score
-        </h2>
-        <p className="text-3xl font-bold text-[#2AF2D0] mt-4">{score}</p>
-        <p className="mt-2 text-sm text-gray-300">{level}</p>
-        <div className="h-px bg-[#2AF2D0]/30 my-6" />
-        <p className="text-lg font-semibold">{name || "Anonymous Developer"}</p>
-        <p className="text-xs text-gray-400 mt-1">Verified by Credex</p>
+
+        {/* CARD CONTENT */}
+        <div
+          id="credex-card"
+          className="relative w-[640px] h-[360px] flex flex-col justify-between p-8 bg-black"
+          style={{
+            backgroundImage: `url(${CredexBg})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+
+          {/* HEADER SECTION */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <img
+                src={CredexLogo}
+                className="w-12 h-12 rounded-full border border-[#2AF2D0]/50"
+                alt="Credex Logo"
+              />
+              <span className="font-mono text-sm tracking-widest text-[#2AF2D0]">
+                {"<CREDEX.IO/>"}
+              </span>
+            </div>
+
+            {/* OPTIONAL RIGHT BADGE ICON / BALANCER */}
+            <div className="text-[#2AF2D0] text-sm font-mono">
+              {/* could add a small subtle icon here */}
+            </div>
+          </div>
+
+          {/* MAIN INFO – LEFT ALIGNED */}
+          <div className="flex flex-col items-start space-y-2">
+            <h1 className="text-3xl font-bold text-left text-[#2AF2D0]">
+              {name || "Anonymous Developer"}
+            </h1>
+            <p className="text-2xl font-semibold text-left text-[#2AF2D0]">
+              Credex Score: <span className="font-bold">{score || 0}</span>
+            </p>
+          </div>
+
+          {/* CERTIFIED TAG */}
+          <div className="absolute right-8 top-1/3 px-6 py-2 border border-[#2AF2D0] rounded-lg text-sm font-mono text-[#2AF2D0]
+            shadow-[0_0_8px_rgba(42,242,208,0.7),0_0_16px_rgba(42,242,208,0.4)]
+            backdrop-blur-md bg-black/30">
+            <span className="block text-center">&lt;CREDEX CERTIFIED</span>
+            <span className="block text-center">DEVELOPER/&gt;</span>
+          </div>
+
+          {/* FOOTER */}
+          <div className="flex justify-between text-xs text-gray-300">
+            <span>Verified by CREDEX.io</span>
+            <span>Issued Date: 2024-10-26</span>
+          </div>
+
+        </div>
       </div>
 
-      <div className="flex justify-center mt-10">
-        <button
-          onClick={downloadCard}
-          className="px-8 py-3 border border-[#2AF2D0] 
-            text-[#2AF2D0] rounded-xl hover:bg-[#2AF2D0] 
-            hover:text-black transition shadow-[0_0_25px_rgba(42,242,208,0.2)]
-            flex items-center justify-center gap-2"
-        >
-          <FaDownload className="text-sm" />
-          Download Score Card
-        </button>
-      </div>
+      {/* DOWNLOAD BUTTON */}
+      <button
+        onClick={downloadCard}
+        className="mt-8 px-8 py-3 border border-[#2AF2D0] text-[#2AF2D0] rounded-xl 
+          hover:bg-[#2AF2D0] hover:text-black transition font-medium"
+      >
+        Download Score Card
+      </button>
     </div>
   );
 };
