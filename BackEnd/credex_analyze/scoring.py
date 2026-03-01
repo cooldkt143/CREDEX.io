@@ -24,12 +24,11 @@ def calculate_credex_score(
     # 2. Resume Score (Max 500)
     # -----------------------------
     resume_score = 0
-
+    
     def calculate_resume_quality_score(extracted_data):
-        """Base quality score out of 100"""
         if not extracted_data:
             return 0
-        print("------------Resume score pattern------------")
+
         score = 0
 
         # Contact information (20 points)
@@ -41,7 +40,6 @@ def calculate_credex_score(
             score += 5
         if extracted_data.get("linkedin") or extracted_data.get("github"):
             score += 5
-        print("Contact Info Score:", score)
 
         # Skills (25 points)
         skills_count = len(extracted_data.get("skills", []))
@@ -51,43 +49,38 @@ def calculate_credex_score(
             score += 15
         elif skills_count >= 1:
             score += 5
-        print("Skills Score:", score)
 
         # Projects (20 points)
-        projects_count = len(extracted_data.get("projects", []))
+        projects_count = extracted_data.get("projects", 0)
         if projects_count >= 3:
             score += 20
         elif projects_count >= 2:
             score += 15
         elif projects_count >= 1:
             score += 10
-        print("Projects Score:", score)
 
         # Education (15 points)
-        if extracted_data.get("education"):
+        education_count = extracted_data.get("education", 0)
+        if education_count >= 1:
             score += 15
-        print("Education Score:", score)
 
         # Experience (20 points)
-        experience = extracted_data.get("experience", [])
-        if len(experience) >= 2:
+        experience_count = extracted_data.get("experience", 0)
+        if experience_count >= 2:
             score += 20
-        elif len(experience) >= 1:
+        elif experience_count >= 1:
             score += 10
-        print("Experience Score:", score)
 
         return min(score, 100)
 
     if resume_data:
         base_quality_score = calculate_resume_quality_score(resume_data)
 
-        # Scale 100 → 500
-        scaled_quality_score = (base_quality_score / 100) * 500
-
-        resume_score = int(min(scaled_quality_score, 500))
+        # Scale from 0–100 to 0–500
+        resume_score = int((base_quality_score / 100) * 500)
 
     total_score += resume_score
-    print("Resume Score:", resume_score)
+    print("Resume Score (Scaled to 500):", resume_score)
 
     # -----------------------------
     # 3. Projects (Max 150)
@@ -111,7 +104,7 @@ def calculate_credex_score(
     total_score += project_score
     print("Project Score:", project_score)
 
-    # -----------------------------
+    # -----------------------------    
     # 4. GitHub Score (Max 250)
     # -----------------------------
     github_score = 0
@@ -142,9 +135,10 @@ def calculate_credex_score(
 
     linkedin_score = min(linkedin_score, 200)
     total_score += linkedin_score
-
-    final_score = min(total_score, 1000)
     print("LinkedIn Score:", linkedin_score)
+
+    # Final Score (Max 1000)
+    final_score = min(total_score, 1000)
     print("Total Score:", final_score)
 
     return {

@@ -1,9 +1,11 @@
 from pydantic import BaseModel
+from pydantic import BaseModel
 from typing import List, Optional
+from fastapi import UploadFile, File, Form
 
 
 class Project(BaseModel):
-    name: str
+    name: Optional[str] = None
     repo: Optional[str] = None
     live: Optional[str] = None
 

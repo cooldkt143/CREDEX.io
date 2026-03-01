@@ -1,139 +1,406 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ============================== */
-/* 🍕 Pizza Pie Component */
-/* ============================== */
-
-const PizzaPieChart = () => {
+const PizzaPieChart = ({ platform, profile }) => {
   const size = 220;
   const radius = size / 2;
   const gapAngle = 4;
+  const [active, setActive] = React.useState(null);
 
-  const data = [
+  if (!profile) return null;
+
+  const normalizedPlatform = platform?.toLowerCase();
+
+  let profileStrength = 0;
+  let repositories = 0;
+  let popularity = 0;
+  let activity = 0;
+
+  /* ================= GITHUB ================= */
+  if (normalizedPlatform === "github") {
+
+    profileStrength =
+      Math.min((profile.followers || 0) * 3, 100) +
+      Math.min((profile.follower_following_ratio || 0) * 20, 50) +
+      Math.min((profile.profile_completeness_score || 0) * 10, 50);
+
+    repositories =
+      Math.min((profile.public_repos || 0) * 4, 120) +
+      Math.min((profile.account_age_years || 0) * 8, 80);
+
+    popularity =
+      Math.min((profile.total_stars || 0) * 1.5, 180) +
+      Math.min((profile.avg_stars_per_repo || 0) * 10, 60) +
+      Math.min((profile.total_forks || 0) * 2, 60);
+
+    activity =
+      Math.min((profile.repos_with_readme || 0) * 8, 100) +
+      Math.min((profile.repos_with_license || 0) * 8, 100) +
+      Math.min((profile.primary_languages || []).length * 25, 75) +
+      Math.min((profile.avg_forks_per_repo || 0) * 10, 25);
+  }
+
+  /* ================= HACKERRANK ================= */
+  else if (normalizedPlatform === "hackerrank") {
+
+    if (profile.profile_visible) profileStrength += 120;
+    if (profile.username) profileStrength += 50;
+    if (profile.profile_completed) profileStrength += 30;
+
+    const badges = profile.badge_count_estimated || 0;
+    if (badges >= 1) repositories += 80;
+    if (badges >= 5) repositories += 100;
+    if (badges >= 10) repositories += 120;
+
+    const certs = profile.certification_count || 0;
+    popularity += Math.min(certs * 120, 240);
+    if (certs > 0 && profile.certifications_verified) popularity += 60;
+
+    if (profile.recent_activity_30_days) activity += 100;
+    if (profile.new_badge_recent) activity += 50;
+    if (profile.first_certification_recent) activity += 50;
+  }
+
+  /* ================= GEEKSFORGEEKS ================= */
+  else if (normalizedPlatform === "geeksforgeeks") {
+
+    if (profile.profile_visible) profileStrength += 150;
+    if (profile.username) profileStrength += 50;
+
+    const problems = profile.problems_solved || 0;
+    repositories += Math.min(problems * 4, 300);
+    if (problems >= 100) repositories += 50;
+    if (problems >= 300) repositories += 50;
+
+    const articles = profile.articles_contributed || 0;
+    popularity += Math.min(articles * 40, 200);
+
+    if (profile.recent_activity_30_days) activity += 200;
+  }
+
+  /* ================= UNSTOP ================= */
+  else if (normalizedPlatform === "unstop") {
+
+    if (profile.profile_visible) profileStrength += 200;
+    if (profile.username) profileStrength += 100;
+
+    if (profile.has_activity) repositories += 150;
+    const count = profile.participation_count_estimated || 0;
+    repositories += Math.min(count * 80, 250);
+
+    if (profile.resume_visible) popularity += 150;
+
+    const types = profile.participation_types || {};
+    if (types.hackathon) activity += 50;
+    if (types.hiring_challenge) activity += 50;
+  }
+
+  /* ================= LINKEDIN ================= */
+  else if (normalizedPlatform === "linkedin") {
+
+    if (profile.profile_visible) profileStrength += 100;
+    if (profile.data_quality) profileStrength += 50;
+    if (profile.profile_photo_present) profileStrength += 50;
+    if (profile.headline_present) profileStrength += 100;
+    if (profile.summary_present) profileStrength += 150;
+
+    const exp = profile.experience_count || 0;
+    repositories += Math.min(exp * 60, 180);
+    if (profile.education_present) repositories += 60;
+    if (exp >= 2) repositories += 60;
+
+    if (profile.project_links_present) popularity += 120;
+    const skills = profile.skills_count || 0;
+    popularity += Math.min(skills * 10, 80);
+
+    if (profile.recent_activity_30_days) activity += 100;
+  }
+
+ let data = [];
+
+/* ================= GITHUB ================= */
+if (normalizedPlatform === "github") {
+  data = [
     {
-      label: "Profile Strength",
-      value: 90,
-      description: "Measures how complete your profile is.",
+      label: "Followers & Profile",
+      value: profileStrength,
+      description:
+        "Followers, follower ratio & profile completeness score.",
       color: "#0f766e",
     },
     {
-      label: "Repositories",
-      value: 100,
-      description: "Represents quality and number of repositories.",
+      label: "Repositories & Age",
+      value: repositories,
+      description:
+        "Public repositories count & account age contribution.",
       color: "#164e63",
     },
     {
-      label: "Popularity",
-      value: 79,
-      description: "Shows followers, stars and engagement.",
+      label: "Stars & Forks",
+      value: popularity,
+      description:
+        "Total stars, forks & average repo engagement.",
       color: "#4c1d95",
     },
     {
-      label: "Activity & Growth",
-      value: 50,
-      description: "Tracks contribution consistency.",
+      label: "Readme & Languages",
+      value: activity,
+      description:
+        "Readme presence, license usage & language diversity.",
       color: "#9d174d",
     },
   ];
+}
 
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-  const [active, setActive] = useState(null);
+/* ================= HACKERRANK ================= */
+else if (normalizedPlatform === "hackerrank") {
+  data = [
+    {
+      label: "Profile Trust",
+      value: profileStrength,
+      description:
+        "Profile visibility, username & completion status.",
+      color: "#0f766e",
+    },
+    {
+      label: "Badges",
+      value: repositories,
+      description:
+        "Badge milestones (1+, 5+, 10+) achievements.",
+      color: "#9d174d",
+    },
+    {
+      label: "Certifications",
+      value: popularity,
+      description:
+        "Certification count & verification proof.",
+      color: "#4c1d95",
+    },
+    {
+      label: "Recent Activity",
+      value: activity,
+      description:
+        "Recent submissions & new achievements.",
+      color: "#164e63",
+    },
+  ];
+}
 
-  const polarToCartesian = (cx, cy, r, angle) => {
-    const rad = (angle - 90) * (Math.PI / 180);
-    return {
-      x: cx + r * Math.cos(rad),
-      y: cy + r * Math.sin(rad),
-    };
-  };
+/* ================= GEEKSFORGEEKS ================= */
+else if (normalizedPlatform === "geeksforgeeks") {
 
-  const describeSlice = (startAngle, endAngle) => {
-    const start = polarToCartesian(radius, radius, radius, endAngle);
-    const end = polarToCartesian(radius, radius, radius, startAngle);
-    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+  let profileRaw = 0;
+  if (profile.profile_visible) profileRaw += 150;
+  if (profile.username) profileRaw += 50;
 
-    return `
-      M ${radius} ${radius}
-      L ${start.x} ${start.y}
-      A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
-      Z
-    `;
-  };
+  let problemRaw = 0;
+  const problems = profile.problems_solved || 0;
+  problemRaw += Math.min(problems * 4, 300);
+  if (problems >= 100) problemRaw += 50;
+  if (problems >= 300) problemRaw += 50;
 
-  let currentAngle = 0;
-
-  return (
-    <div className="flex flex-col items-center">
-      <svg width={size} height={size}>
-        {data.map((slice, index) => {
-          const sliceAngle =
-            (slice.value / total) * (360 - gapAngle * data.length);
-
-          const startAngle = currentAngle;
-          const endAngle = currentAngle + sliceAngle;
-
-          const pathData = describeSlice(startAngle, endAngle);
-
-          const midAngle = startAngle + sliceAngle / 2;
-          const labelPos = polarToCartesian(
-            radius,
-            radius,
-            radius * 0.6,
-            midAngle
-          );
-
-          currentAngle = endAngle + gapAngle;
-
-          return (
-            <g
-              key={index}
-              onMouseEnter={() => setActive(slice)}
-              onMouseLeave={() => setActive(null)}
-              style={{ cursor: "pointer" }}
-            >
-              <path
-                d={pathData}
-                fill={slice.color}
-                stroke="#0b0f14"
-                strokeWidth="2"
-              />
-
-              <text
-                x={labelPos.x}
-                y={labelPos.y}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="white"
-                fontSize="13"
-                fontWeight="bold"
-              >
-                {slice.value}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="mt-3 bg-[#0b0f14] border border-teal-400/30 rounded-md p-3 w-56 text-xs"
-          >
-            <p className="text-teal-400 font-semibold mb-1">
-              {active.label} — {active.value}
-            </p>
-            <p className="text-gray-300">{active.description}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+  let articleRaw = Math.min(
+    (profile.articles_contributed || 0) * 40,
+    200
   );
+
+  let activityRaw = profile.recent_activity_30_days ? 200 : 0;
+
+  // DO NOT convert to 100%
+  // Keep real raw values like backend
+
+  data = [
+    {
+      label: "Profile Presence",
+      value: profileRaw,
+      description: "Profile visibility & username authenticity.",
+      color: "#0f766e",
+    },
+    {
+      label: "Problems Solved",
+      value: problemRaw,
+      description: "Total problems solved & milestone bonuses.",
+      color: "#164e63",
+    },
+    {
+      label: "Articles",
+      value: articleRaw,
+      description: "Knowledge sharing through contributions.",
+      color: "#4c1d95",
+    },
+    {
+      label: "Consistency",
+      value: activityRaw,
+      description: "Recent coding activity.",
+      color: "#9d174d",
+    },
+  ];
+}
+/* ================= UNSTOP ================= */
+else if (normalizedPlatform === "unstop") {
+  data = [
+    {
+      label: "Profile Visibility",
+      value: profileStrength,
+      description:
+        "Profile presence & identity verification.",
+      color: "#0f766e",
+    },
+    {
+      label: "Participation",
+      value: repositories,
+      description:
+        "Hackathon & challenge participation exposure.",
+      color: "#164e63",
+    },
+    {
+      label: "Resume Strength",
+      value: popularity,
+      description:
+        "Resume visibility & career readiness.",
+      color: "#4c1d95",
+    },
+    {
+      label: "Event Types",
+      value: activity,
+      description:
+        "Hackathons & hiring challenge involvement.",
+      color: "#9d174d",
+    },
+  ];
+}
+
+/* ================= LINKEDIN ================= */
+else if (normalizedPlatform === "linkedin") {
+  data = [
+    {
+      label: "Profile Completeness",
+      value: profileStrength,
+      description:
+        "Headline, summary, photo & data quality.",
+      color: "#0f766e",
+    },
+    {
+      label: "Experience Depth",
+      value: repositories,
+      description:
+        "Experience count & education presence.",
+      color: "#164e63",
+    },
+    {
+      label: "Skills & Projects",
+      value: popularity,
+      description:
+        "Project links & endorsed skills.",
+      color: "#4c1d95",
+    },
+    {
+      label: "Activity",
+      value: activity,
+      description:
+        "Recent posting & professional engagement.",
+      color: "#9d174d",
+    },
+  ];
+}
+  if (!data || data.length === 0) return null;
+
+// 🔹 Minimum visible slice size for zero values
+const MIN_VISIBLE = 5;
+
+// Create visual-only values
+const visualData = data.map((slice) => ({
+  ...slice,
+  visualValue: slice.value === 0 ? MIN_VISIBLE : slice.value,
+}));
+
+const total =
+  visualData.reduce((sum, item) => sum + item.visualValue, 0) || 1;
+
+const polarToCartesian = (cx, cy, r, angle) => {
+  const rad = (angle - 90) * (Math.PI / 180);
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 };
 
+const describeSlice = (startAngle, endAngle) => {
+  const start = polarToCartesian(radius, radius, radius, endAngle);
+  const end = polarToCartesian(radius, radius, radius, startAngle);
+  const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+
+  return `
+    M ${radius} ${radius}
+    L ${start.x} ${start.y}
+    A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
+    Z
+  `;
+};
+
+let currentAngle = 0;
+
+return (
+  <div className="flex flex-col items-center">
+    <svg width={size} height={size}>
+      {visualData.map((slice, index) => {
+        const sliceAngle =
+          (slice.visualValue / total) *
+          (360 - gapAngle * visualData.length);
+
+        const startAngle = currentAngle;
+        const endAngle = currentAngle + sliceAngle;
+        const pathData = describeSlice(startAngle, endAngle);
+
+        const midAngle = startAngle + sliceAngle / 2;
+        const labelPos = polarToCartesian(
+          radius,
+          radius,
+          radius * 0.6,
+          midAngle
+        );
+
+        currentAngle = endAngle + gapAngle;
+
+        return (
+          <g
+            key={index}
+            onMouseEnter={() => setActive(data[index])}
+            onMouseLeave={() => setActive(null)}
+            style={{ cursor: "pointer" }}
+          >
+            <path
+              d={pathData}
+              fill={slice.color}
+              stroke="#0b0f14"
+              strokeWidth="2"
+            />
+
+            {/* Show REAL value */}
+            <text
+              x={labelPos.x}
+              y={labelPos.y}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fill="white"
+              fontSize="12"
+              fontWeight="bold"
+            >
+              {Math.round(data[index].value)}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+
+    {active && (
+      <div className="mt-3 bg-[#0b0f14] border border-teal-400/30 rounded-md p-3 w-60 text-xs">
+        <p className="text-teal-400 font-semibold mb-1">
+          {active.label} — {Math.round(active.value)}
+        </p>
+        <p className="text-gray-300">{active.description}</p>
+      </div>
+    )}
+  </div>
+);
+};
 const platforms = [
   "-Select-",
   "GitHub",
@@ -312,7 +579,7 @@ const IdAnalyze = () => {
             </div>
 
             {/* RESULT */}
-  {result && (
+{result && (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -323,15 +590,17 @@ const IdAnalyze = () => {
       <span className="text-white font-bold">{result.score}</span>
     </p>
 
-    {/* Side-by-side layout */}
     <div className="flex flex-col md:flex-row gap-8">
 
-      {/* 🍕 Pizza Chart (Left Side) */}
+      {/* 🍕 Pizza Chart */}
       <div className="flex-shrink-0">
-        <PizzaPieChart />
+        <PizzaPieChart 
+          platform={selectedPlatform}
+          profile={result.profile}
+        />
       </div>
 
-      {/* 📋 Tips (Right Side) */}
+      {/* 📋 Tips */}
       <div className="flex-1">
         <p className="text-gray-400 mb-2">Improvement Tips</p>
         <ul className="list-disc list-inside text-gray-300 space-y-1">
@@ -344,8 +613,6 @@ const IdAnalyze = () => {
     </div>
   </motion.div>
 )}
-
-
             {error && (
               <p className="text-red-400 mt-4">{error}</p>
             )}

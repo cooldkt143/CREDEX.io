@@ -72,21 +72,27 @@ const CredexAnalyze = () => {
     setLoading(true);
     setShowCertificate(false);
 
-    const payload = {
-      fullName: form.fullName,
-      experience: form.experience,
-      github: form.github,
-      linkedin: form.linkedin,
-      projects,
-      otherPlatforms,
-      resume_text: form.resume ? form.resume.name : null,
-    };
+    const formData = new FormData();
+
+    formData.append("fullName", form.fullName);
+    formData.append("experience", form.experience);
+
+    if (form.github?.link) {
+      formData.append("github_link", form.github.link);
+    }
+
+    if (form.linkedin?.link) {
+      formData.append("linkedin_link", form.linkedin.link);
+    }
+
+    if (form.resume) {
+      formData.append("resume_file", form.resume); // THIS IS THE FIX
+    }
 
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const data = await res.json();
