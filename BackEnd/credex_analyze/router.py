@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from typing import Optional
+import json
 from .service import analyze_profile
 
 router = APIRouter()
@@ -10,6 +11,7 @@ async def credex_analyze(
     experience: str = Form(...),
     github_link: Optional[str] = Form(None),
     linkedin_link: Optional[str] = Form(None),
+    projects: Optional[str] = Form(None),   # ✅ ADD THIS
     resume_file: Optional[UploadFile] = File(None),
 ):
     class Payload:
@@ -19,7 +21,7 @@ async def credex_analyze(
     payload.fullName = fullName
     payload.experience = experience
 
-    # Simulate github object
+    # GitHub
     class GitHub:
         pass
 
@@ -27,7 +29,7 @@ async def credex_analyze(
     github_obj.link = github_link
     payload.github = github_obj
 
-    # Simulate linkedin object
+    # LinkedIn
     class LinkedIn:
         pass
 
@@ -36,7 +38,16 @@ async def credex_analyze(
     payload.linkedin = linkedin_obj
 
     payload.resume_file = resume_file
-    payload.projects = []
+
+    # ✅ Parse projects properly
+    if projects:
+        try:
+            payload.projects = json.loads(projects)
+        except:
+            payload.projects = []
+    else:
+        payload.projects = []
+
     payload.otherPlatforms = []
 
     return analyze_profile(payload)

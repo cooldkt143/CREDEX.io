@@ -86,8 +86,10 @@ const CredexAnalyze = () => {
     }
 
     if (form.resume) {
-      formData.append("resume_file", form.resume); // THIS IS THE FIX
+      formData.append("resume_file", form.resume);
     }
+
+    formData.append("projects", JSON.stringify(projects));
 
     try {
       const res = await fetch(API_URL, {
