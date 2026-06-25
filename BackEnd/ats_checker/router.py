@@ -21,13 +21,15 @@ router = APIRouter()
 async def check_resume(
     resume: UploadFile = File(...),
     job_role: str = Form(""),
-    job_description: str = Form("")
+    job_description: str = Form(""),
+    mode: str = Form("resume")
 ):
 
     try:
 
         if (
-            not job_description
+            mode == "job"
+            and not job_description
             and job_role
         ):
             job_description = (
@@ -39,7 +41,8 @@ async def check_resume(
 
         result = await analyze_resume(
             resume,
-            job_description
+            job_description,
+            mode
         )
 
         return {
