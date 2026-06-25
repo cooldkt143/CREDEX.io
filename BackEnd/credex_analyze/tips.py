@@ -31,8 +31,8 @@ Total Score: {total_score}/1000
 Level: {level}
 
 Breakdown:
-Experience: {experience_score}/200
-Resume: {resume_score}/500
+Experience: {experience_score}/100
+Resume: {resume_score}/300
 Projects: {project_score}/150
 GitHub: {github_score}/250
 LinkedIn: {linkedin_score}/200

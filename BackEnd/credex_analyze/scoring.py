@@ -15,6 +15,7 @@ def calculate_credex_score(
         "Student": 20,
         "Fresher": 40,
         "1–3 Years": 70,
+        "1-3 Years": 70,
         "3+ Years": 100
     }
 

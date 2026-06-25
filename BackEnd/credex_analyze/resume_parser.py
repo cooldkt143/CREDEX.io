@@ -68,18 +68,51 @@ def extract_github(text):
 # -------------------------------
 
 COMMON_SKILLS = [
-    "python", "java", "c++", "javascript", "react", "node",
-    "django", "flask", "mysql", "mongodb", "html", "css",
-    "git", "docker", "aws", "machine learning", "deep learning",
-    "data analysis", "sql"
+    # Languages
+    "python", "java", "c++", "c#", "c", "javascript", "typescript", "go", "golang", "rust", "ruby", "php", "swift", "kotlin", "scala", "r", "solidity", "dart", "shell", "bash",
+    # Frontend
+    "react", "angular", "vue", "svelte", "next.js", "nextjs", "nuxt", "gatsby", "html", "css", "sass", "tailwind", "bootstrap", "redux", "jquery", "flutter", "react native",
+    # Backend & Frameworks
+    "node", "nodejs", "express", "django", "flask", "fastapi", "spring", "spring boot", "laravel", "asp.net", "nest.js", "nestjs", "rails", "graphql", "rest api", "microservices",
+    # Databases
+    "sql", "mysql", "postgresql", "postgres", "sqlite", "mongodb", "redis", "cassandra", "oracle", "mariadb", "elasticsearch", "firebase", "dynamodb",
+    # DevOps, Cloud & Tools
+    "git", "docker", "kubernetes", "k8s", "aws", "azure", "gcp", "google cloud", "ci/cd", "jenkins", "github actions", "terraform", "ansible", "linux", "nginx", "heroku",
+    # Machine Learning & Data
+    "machine learning", "deep learning", "nlp", "computer vision", "pytorch", "tensorflow", "keras", "scikit-learn", "pandas", "numpy", "data analysis", "spark", "hadoop"
 ]
 
 def extract_skills(text):
     found = []
     text_lower = text.lower()
+    
+    def has_skill(txt, sk):
+        if len(sk) <= 3:
+            # Match short skills with custom boundary regex to avoid substring matching (e.g. 'c' matching 'education')
+            escaped = re.escape(sk)
+            pattern = rf"(?:^|[^a-zA-Z0-9#\+]){escaped}(?:$|[^a-zA-Z0-9#\+])"
+            return bool(re.search(pattern, txt))
+        else:
+            return sk in txt
+
     for skill in COMMON_SKILLS:
-        if skill in text_lower:
-            found.append(skill)
+        if has_skill(text_lower, skill):
+            # Normalize display for specific aliases/variations
+            if skill == "golang":
+                found.append("go")
+            elif skill == "nodejs":
+                found.append("node")
+            elif skill == "nextjs":
+                found.append("next.js")
+            elif skill == "nestjs":
+                found.append("nest.js")
+            elif skill == "postgres":
+                found.append("postgresql")
+            elif skill == "k8s":
+                found.append("kubernetes")
+            else:
+                found.append(skill)
+                
     return list(set(found))
 
 
@@ -102,17 +135,41 @@ def count_education_entries(education_text):
     if not education_text:
         return 0
 
-    # Split by double newlines (separate blocks)
-    blocks = [block.strip() for block in education_text.split("\n\n") if block.strip()]
+    lines = [line.strip() for line in education_text.split("\n") if line.strip()]
+    
+    # 1. Look for specific degree keywords (each represents an entry)
+    degree_keywords = [
+        r"\bb\.?\s?tech\b", r"\bm\.?\s?tech\b", r"\bb\.?\s?s\b", r"\bm\.?\s?s\b",
+        r"\bbachelor\b", r"\bmaster\b", r"\bph\.?d\b", r"\bdiploma\b", r"\bdegree\b"
+    ]
+    
+    degree_count = 0
+    for line in lines:
+        if any(re.search(kw, line.lower()) for kw in degree_keywords):
+            degree_count += 1
+            
+    if degree_count > 0:
+        return degree_count
 
-    # Count only meaningful blocks (at least 2 lines)
+    # 2. Fallback to university/college keywords if no degree keywords matched
+    institution_keywords = [r"\buniversity\b", r"\bcollege\b", r"\bschool\b", r"\binstitute\b"]
+    inst_count = 0
+    for line in lines:
+        if any(re.search(kw, line.lower()) for kw in institution_keywords):
+            inst_count += 1
+            
+    if inst_count > 0:
+        return inst_count
+
+    # 3. Fallback to double newline blocks
+    blocks = [block.strip() for block in education_text.split("\n\n") if block.strip()]
     count = 0
     for block in blocks:
-        lines = [l for l in block.split("\n") if l.strip()]
-        if len(lines) >= 2:
+        block_lines = [l for l in block.split("\n") if l.strip()]
+        if len(block_lines) >= 2:
             count += 1
 
-    return count
+    return count if count > 0 else (1 if lines else 0)
 
 
 # -------------------------------
@@ -122,15 +179,35 @@ def count_projects(project_text):
     if not project_text:
         return 0
 
+    # Let's split by blocks first
     blocks = [block.strip() for block in project_text.split("\n\n") if block.strip()]
+    
+    # If there are multiple blocks, count how many have bullets or look like projects
+    if len(blocks) > 1:
+        count = sum(1 for block in blocks if any(bullet in block for bullet in ("•", "-", "*", "✅")))
+        if count > 0:
+            return count
+        return len(blocks)
 
-    count = 0
-    for block in blocks:
-        # A project usually has bullet points
-        if "•" in block or "-" in block:
-            count += 1
+    # If there's only one block, let's analyze the lines
+    lines = [line.strip() for line in project_text.split("\n") if line.strip()]
+    
+    # Check if lines look like separate projects (e.g. starting with bullets and containing colons or project keywords)
+    bullet_projects = 0
+    for line in lines:
+        if line.startswith(("•", "-", "*", "✅")):
+            if ":" in line or any(kw in line.lower() for kw in ["project", "app", "system", "platform", "website", "tool"]):
+                bullet_projects += 1
+                
+    if bullet_projects > 0:
+        return bullet_projects
+        
+    # Fallback to estimation based on bullet count if they exist
+    bullet_count = sum(1 for line in lines if line.startswith(("•", "-", "*", "✅")))
+    if bullet_count > 0:
+        return max(1, round(bullet_count / 3))
 
-    return count
+    return 1 if lines else 0
 
 
 # -------------------------------
@@ -140,16 +217,27 @@ def count_experience_entries(experience_text):
     if not experience_text:
         return 0
 
-    # Split into blocks
-    blocks = [block.strip() for block in experience_text.split("\n\n") if block.strip()]
+    lines = [line.strip() for line in experience_text.split("\n") if line.strip()]
+    
+    # 1. Count date ranges (most reliable indicator of separate jobs)
+    range_pattern = r"\b(?:19|20)\d{2}\s*[-–—]\s*(?:(?:19|20)\d{2}|present|current|now)\b"
+    count = sum(1 for line in lines if re.search(range_pattern, line.lower()))
+    if count > 0:
+        return count
 
-    count = 0
+    # 2. Count lines with single years if no ranges found
+    year_pattern = r"\b(19|20)\d{2}\b"
+    count = sum(1 for line in lines if re.search(year_pattern, line))
+    if count > 0:
+        return count
+
+    # 3. Fallback to double-newline blocks containing year pattern
+    blocks = [block.strip() for block in experience_text.split("\n\n") if block.strip()]
     for block in blocks:
-        # Check if block contains a year pattern like 2023 or 2023-2025
-        if re.search(r"\b(19|20)\d{2}\b", block):
+        if re.search(year_pattern, block):
             count += 1
 
-    return count
+    return count if count > 0 else (1 if lines else 0)
 
 
 # -------------------------------
