@@ -6,6 +6,8 @@ from resume_builder.router import router as resume_builder_router
 from idanalyze.router import router as idanalyze_router
 from ats_checker.router import router as ats_router
 from credex_analyze.router import router as credex_router
+from roadmap_builder.router import router as roadmap_router
+
 
 app = FastAPI(title="CREDEX Backend")
 
@@ -49,6 +51,13 @@ app.include_router(
     prefix="/api/ats",
     tags=["ATS Checker"]
 )
+
+app.include_router(
+    roadmap_router,
+    prefix="/api/roadmap",
+    tags=["Roadmap Builder"]
+)
+
 
 @app.get("/")
 def root():

@@ -15,15 +15,78 @@
   background-image: radial-gradient(circle at top, rgba(20, 184, 166, 0.15), transparent 80%);
 }
 
-/* Hide scrollbar globally */
-::-webkit-scrollbar {
+/* Hide scrollbar globally for html/body to keep viewport clean */
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;
 }
 
-html, body {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For IE and Edge */
+/* Custom premium scrollbar for local scrollable containers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 0px;
+  display: block !important;
 }
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(20, 184, 166, 0.4);
+  border-radius: 4px;
+  border: 1px solid rgba(20, 184, 166, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 184, 166, 0.6);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(20, 184, 166, 0.4) rgba(0, 0, 0, 0.2) !important;
+  -ms-overflow-style: auto !important;
+  overflow-x: hidden !important;
+}
+/* Thin horizontal scrollbar with transparent background and teal thumb for month tabs */
+.overflow-x-auto.border-b.border-zinc-800::-webkit-scrollbar {
+  height: 4px !important;
+  width: 0px !important;
+  display: block !important;
+}
+
+.overflow-x-auto.border-b.border-zinc-800::-webkit-scrollbar-track {
+  background: transparent !important;
+  border-radius: 2px !important;
+}
+
+.overflow-x-auto.border-b.border-zinc-800::-webkit-scrollbar-thumb {
+  background: rgba(20, 184, 166, 0.5) !important;
+  border-radius: 2px !important;
+}
+
+.overflow-x-auto.border-b.border-zinc-800::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 184, 166, 0.8) !important;
+}
+
+.overflow-x-auto.border-b.border-zinc-800 {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(20, 184, 166, 0.5) transparent !important;
+  -ms-overflow-style: auto !important;
+}
+
+/* Remove horizontal scrollbar from the weekly roadmap container */
+.space-y-8.mt-6 {
+  overflow-x: hidden !important;
+}
+
+
+
+
 .input {
   @apply w-full rounded-md bg-slate-900 border border-slate-700
   px-3 py-2 text-sm text-slate-200
