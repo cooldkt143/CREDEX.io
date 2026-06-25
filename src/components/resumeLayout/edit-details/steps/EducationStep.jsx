@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Plus, Check, GraduationCap } from "lucide-react";
+import { Plus, Check, GraduationCap, Pencil, Trash2 } from "lucide-react";
 
 const EducationStep = ({ resumeData, setResumeData }) => {
-  const educations = resumeData.educations || [];
+  const educations = resumeData.education || [];
 
   const [showAdd, setShowAdd] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
+  
   const [degree, setDegree] = useState("");
   const [institute, setInstitute] = useState("");
   const [address, setAddress] = useState("");
@@ -12,10 +14,10 @@ const EducationStep = ({ resumeData, setResumeData }) => {
   const [endYear, setEndYear] = useState("");
   const [currentlyStudying, setCurrentlyStudying] = useState(false);
 
-  const addEducation = () => {
+  const saveEducation = () => {
     if (!degree || !institute || !startYear) return;
 
-    const newEdu = {
+    const entry = {
       degree,
       institute,
       address,
@@ -23,9 +25,16 @@ const EducationStep = ({ resumeData, setResumeData }) => {
       endYear: currentlyStudying ? "Present" : endYear,
     };
 
+    let updatedList;
+    if (editingIndex !== null) {
+      updatedList = educations.map((item, idx) => idx === editingIndex ? entry : item);
+    } else {
+      updatedList = [...educations, entry];
+    }
+
     setResumeData({
       ...resumeData,
-      educations: [...educations, newEdu],
+      education: updatedList,
     });
 
     // reset
@@ -35,7 +44,49 @@ const EducationStep = ({ resumeData, setResumeData }) => {
     setStartYear("");
     setEndYear("");
     setCurrentlyStudying(false);
+    setEditingIndex(null);
     setShowAdd(false);
+  };
+
+  const startEdit = (index) => {
+    const item = educations[index];
+    setDegree(item.degree || "");
+    setInstitute(item.institute || "");
+    setAddress(item.address || "");
+    setStartYear(item.startYear || "");
+    if (item.endYear === "Present") {
+      setCurrentlyStudying(true);
+      setEndYear("");
+    } else {
+      setCurrentlyStudying(false);
+      setEndYear(item.endYear || "");
+    }
+    setEditingIndex(index);
+    setShowAdd(true);
+  };
+
+  const cancelEdit = () => {
+    setDegree("");
+    setInstitute("");
+    setAddress("");
+    setStartYear("");
+    setEndYear("");
+    setCurrentlyStudying(false);
+    setEditingIndex(null);
+    setShowAdd(false);
+  };
+
+  const deleteEducation = (index) => {
+    const updatedList = educations.filter((_, idx) => idx !== index);
+    setResumeData({
+      ...resumeData,
+      education: updatedList,
+    });
+    if (editingIndex === index) {
+      cancelEdit();
+    } else if (editingIndex !== null && editingIndex > index) {
+      setEditingIndex(editingIndex - 1);
+    }
   };
 
   return (
@@ -58,7 +109,7 @@ const EducationStep = ({ resumeData, setResumeData }) => {
 
           {!showAdd && (
             <button
-              onClick={() => setShowAdd(true)}
+              onClick={() => { setShowAdd(true); setEditingIndex(null); }}
               className="flex items-center gap-1 text-teal-400 text-xs font-mono hover:text-teal-300"
             >
               <Plus size={14} />
@@ -119,15 +170,27 @@ const EducationStep = ({ resumeData, setResumeData }) => {
               </label>
             </div>
 
-            <button
-              onClick={addEducation}
-              className="w-full h-8 flex items-center justify-center gap-1 rounded-md
-              border border-teal-500/30 bg-teal-500/10
-              text-teal-400 text-sm font-mono hover:bg-teal-500/20"
-            >
-              <Check size={14} />
-              save_entry
-            </button>
+            <div className="flex gap-2">
+              {editingIndex !== null && (
+                <button
+                  onClick={cancelEdit}
+                  className="w-1/2 h-8 flex items-center justify-center gap-1 rounded-md
+                  border border-slate-700 bg-slate-800/50
+                  text-slate-300 text-sm font-mono hover:bg-slate-800"
+                >
+                  cancel
+                </button>
+              )}
+              <button
+                onClick={saveEducation}
+                className={`h-8 flex items-center justify-center gap-1 rounded-md border text-sm font-mono
+                  ${editingIndex !== null ? "w-1/2 border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20" 
+                                           : "w-full border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20"}`}
+              >
+                <Check size={14} />
+                {editingIndex !== null ? "update_entry" : "save_entry"}
+              </button>
+            </div>
           </div>
         )}
 
@@ -148,9 +211,27 @@ const EducationStep = ({ resumeData, setResumeData }) => {
                       {edu.address && ` • ${edu.address}`}
                     </p>
                   </div>
-                  <span className="text-teal-400 font-mono text-xs">
-                    {edu.startYear} — {edu.endYear}
-                  </span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-teal-400 font-mono text-xs">
+                      {edu.startYear} — {edu.endYear}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => startEdit(index)}
+                        className="text-slate-400 hover:text-teal-400 transition"
+                        title="Edit"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => deleteEducation(index)}
+                        className="text-slate-400 hover:text-red-400 transition"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}

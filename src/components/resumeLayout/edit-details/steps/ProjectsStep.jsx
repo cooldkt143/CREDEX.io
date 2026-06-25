@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Check, FolderGit2, Trophy } from "lucide-react";
+import { Plus, Check, FolderGit2, Trophy, Pencil, Trash2 } from "lucide-react";
 
 const ProjectsStep = ({ resumeData, setResumeData }) => {
   const projects = resumeData.projects || [];
@@ -7,6 +7,9 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
 
   const [showProjectAdd, setShowProjectAdd] = useState(false);
   const [showAchievementAdd, setShowAchievementAdd] = useState(false);
+  
+  const [editingProjectIndex, setEditingProjectIndex] = useState(null);
+  const [editingAchievementIndex, setEditingAchievementIndex] = useState(null);
 
   const [projectTitle, setProjectTitle] = useState("");
   const [publicLink, setPublicLink] = useState("");
@@ -17,47 +20,131 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
   const [achMonth, setAchMonth] = useState("");
   const [achYear, setAchYear] = useState("");
 
-  const addProject = () => {
+  const saveProject = () => {
     if (!projectTitle) return;
 
-    const newProject = {
+    const entry = {
       title: projectTitle,
       publicLink,
       githubLink,
       description: projectDesc,
     };
 
+    let updatedList;
+    if (editingProjectIndex !== null) {
+      updatedList = projects.map((item, idx) => idx === editingProjectIndex ? entry : item);
+    } else {
+      updatedList = [...projects, entry];
+    }
+
     setResumeData({
       ...resumeData,
-      projects: [...projects, newProject],
+      projects: updatedList,
     });
 
     setProjectTitle("");
     setPublicLink("");
     setGithubLink("");
     setProjectDesc("");
+    setEditingProjectIndex(null);
     setShowProjectAdd(false);
   };
 
-  const addAchievement = () => {
+  const startEditProject = (index) => {
+    const item = projects[index];
+    setProjectTitle(item.title || "");
+    setPublicLink(item.publicLink || "");
+    setGithubLink(item.githubLink || "");
+    setProjectDesc(item.description || "");
+    setEditingProjectIndex(index);
+    setShowProjectAdd(true);
+  };
+
+  const cancelEditProject = () => {
+    setProjectTitle("");
+    setPublicLink("");
+    setGithubLink("");
+    setProjectDesc("");
+    setEditingProjectIndex(null);
+    setShowProjectAdd(false);
+  };
+
+  const deleteProject = (index) => {
+    const updatedList = projects.filter((_, idx) => idx !== index);
+    setResumeData({
+      ...resumeData,
+      projects: updatedList,
+    });
+    if (editingProjectIndex === index) {
+      cancelEditProject();
+    } else if (editingProjectIndex !== null && editingProjectIndex > index) {
+      setEditingProjectIndex(editingProjectIndex - 1);
+    }
+  };
+
+  const saveAchievement = () => {
     if (!achievementDesc || !achYear) return;
 
-    const newAchievement = {
+    const entry = {
       description: achievementDesc,
       timeline: achMonth
-        ? `${achMonth} ${achYear}`
+        ? `${achMonth} ${achYear}`.trim()
         : achYear,
     };
 
+    let updatedList;
+    if (editingAchievementIndex !== null) {
+      updatedList = achievements.map((item, idx) => idx === editingAchievementIndex ? entry : item);
+    } else {
+      updatedList = [...achievements, entry];
+    }
+
     setResumeData({
       ...resumeData,
-      achievements: [...achievements, newAchievement],
+      achievements: updatedList,
     });
 
     setAchievementDesc("");
     setAchMonth("");
     setAchYear("");
+    setEditingAchievementIndex(null);
     setShowAchievementAdd(false);
+  };
+
+  const startEditAchievement = (index) => {
+    const item = achievements[index];
+    setAchievementDesc(item.description || "");
+    const parts = item.timeline ? item.timeline.split(" ") : [];
+    if (parts.length > 1) {
+      setAchMonth(parts[0]);
+      setAchYear(parts.slice(1).join(" "));
+    } else {
+      setAchMonth("");
+      setAchYear(item.timeline || "");
+    }
+    setEditingAchievementIndex(index);
+    setShowAchievementAdd(true);
+  };
+
+  const cancelEditAchievement = () => {
+    setAchievementDesc("");
+    setAchMonth("");
+    setAchYear("");
+    setEditingAchievementIndex(null);
+    setShowAchievementAdd(false);
+  };
+
+  const deleteAchievement = (index) => {
+    const updatedList = achievements.filter((_, idx) => idx !== index);
+    setResumeData({
+      ...resumeData,
+      achievements: updatedList,
+    });
+    if (editingAchievementIndex === index) {
+      cancelEditAchievement();
+    } else if (editingAchievementIndex !== null && editingAchievementIndex > index) {
+      setEditingAchievementIndex(editingAchievementIndex - 1);
+    }
   };
 
   return (
@@ -81,7 +168,7 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
 
           {!showProjectAdd && (
             <button
-              onClick={() => setShowProjectAdd(true)}
+              onClick={() => { setShowProjectAdd(true); setEditingProjectIndex(null); }}
               className="flex items-center gap-1 text-teal-400 text-xs font-mono hover:text-teal-300"
             >
               <Plus size={14} />
@@ -122,15 +209,27 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
               onChange={(e) => setProjectDesc(e.target.value)}
             />
 
-            <button
-              onClick={addProject}
-              className="w-full h-8 flex items-center justify-center gap-1 rounded-md
-              border border-teal-500/30 bg-teal-500/10
-              text-teal-400 text-sm font-mono hover:bg-teal-500/20"
-            >
-              <Check size={14} />
-              save_project
-            </button>
+            <div className="flex gap-2">
+              {editingProjectIndex !== null && (
+                <button
+                  onClick={cancelEditProject}
+                  className="w-1/2 h-8 flex items-center justify-center gap-1 rounded-md
+                  border border-slate-700 bg-slate-800/50
+                  text-slate-300 text-sm font-mono hover:bg-slate-800"
+                >
+                  cancel
+                </button>
+              )}
+              <button
+                onClick={saveProject}
+                className={`h-8 flex items-center justify-center gap-1 rounded-md border text-sm font-mono
+                  ${editingProjectIndex !== null ? "w-1/2 border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20" 
+                                                 : "w-full border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20"}`}
+              >
+                <Check size={14} />
+                {editingProjectIndex !== null ? "update_project" : "save_project"}
+              </button>
+            </div>
           </div>
         )}
 
@@ -142,7 +241,7 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
                 className="rounded-md border border-slate-800 bg-slate-950 p-3"
               >
                 <div className="flex justify-between items-start">
-                  <div className="space-y-1">
+                  <div className="space-y-1 flex-1">
                     <p className="text-slate-200 font-mono text-sm">
                       {project.title}
                     </p>
@@ -172,6 +271,22 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
                       )}
                     </div>
                   </div>
+                  <div className="flex gap-2 ml-4">
+                    <button
+                      onClick={() => startEditProject(index)}
+                      className="text-slate-400 hover:text-teal-400 transition"
+                      title="Edit"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                    <button
+                      onClick={() => deleteProject(index)}
+                      className="text-slate-400 hover:text-red-400 transition"
+                      title="Delete"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -195,7 +310,7 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
 
           {!showAchievementAdd && (
             <button
-              onClick={() => setShowAchievementAdd(true)}
+              onClick={() => { setShowAchievementAdd(true); setEditingAchievementIndex(null); }}
               className="flex items-center gap-1 text-teal-400 text-xs font-mono hover:text-teal-300"
             >
               <Plus size={14} />
@@ -229,15 +344,27 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
               />
             </div>
 
-            <button
-              onClick={addAchievement}
-              className="w-full h-8 flex items-center justify-center gap-1 rounded-md
-              border border-teal-500/30 bg-teal-500/10
-              text-teal-400 text-sm font-mono hover:bg-teal-500/20"
-            >
-              <Check size={14} />
-              save_achievement
-            </button>
+            <div className="flex gap-2">
+              {editingAchievementIndex !== null && (
+                <button
+                  onClick={cancelEditAchievement}
+                  className="w-1/2 h-8 flex items-center justify-center gap-1 rounded-md
+                  border border-slate-700 bg-slate-800/50
+                  text-slate-300 text-sm font-mono hover:bg-slate-800"
+                >
+                  cancel
+                </button>
+              )}
+              <button
+                onClick={saveAchievement}
+                className={`h-8 flex items-center justify-center gap-1 rounded-md border text-sm font-mono
+                  ${editingAchievementIndex !== null ? "w-1/2 border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20" 
+                                                     : "w-full border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20"}`}
+              >
+                <Check size={14} />
+                {editingAchievementIndex !== null ? "update_achievement" : "save_achievement"}
+              </button>
+            </div>
           </div>
         )}
 
@@ -249,12 +376,30 @@ const ProjectsStep = ({ resumeData, setResumeData }) => {
                 className="rounded-md border border-slate-800 bg-slate-950 p-3"
               >
                 <div className="flex justify-between items-start">
-                  <p className="text-slate-200 font-mono text-sm">
+                  <p className="text-slate-200 font-mono text-sm flex-1">
                     {ach.description}
                   </p>
-                  <span className="text-teal-400 font-mono text-xs">
-                    {ach.timeline}
-                  </span>
+                  <div className="flex items-center gap-4 ml-4">
+                    <span className="text-teal-400 font-mono text-xs">
+                      {ach.timeline}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => startEditAchievement(index)}
+                        className="text-slate-400 hover:text-teal-400 transition"
+                        title="Edit"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => deleteAchievement(index)}
+                        className="text-slate-400 hover:text-red-400 transition"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}

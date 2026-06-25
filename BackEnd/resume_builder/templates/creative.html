@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ header.firstName }} {{ header.lastName }} Resume</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #334155;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #115e59;
+            margin-bottom: 20px;
+        }
+        .header-cell {
+            padding: 20px;
+            color: #ffffff;
+        }
+        .header-name {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 0;
+        }
+        .header-role {
+            font-size: 14px;
+            color: #ccfbf1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+        .main-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .left-col {
+            width: 33%;
+            background-color: #f8fafc;
+            padding: 15px;
+            vertical-align: top;
+            border-radius: 4px;
+        }
+        .right-col {
+            width: 67%;
+            padding-left: 20px;
+            vertical-align: top;
+        }
+        h2 {
+            font-size: 14px;
+            color: #115e59;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 3px;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 2px;
+        }
+        .contact-item {
+            font-size: 11px;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        .contact-label {
+            font-weight: bold;
+            color: #0f172a;
+            display: block;
+        }
+        .skill-tag {
+            display: inline-block;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            padding: 4px 8px;
+            font-size: 11px;
+            margin-bottom: 6px;
+            margin-right: 4px;
+            border-radius: 3px;
+        }
+        .section-item {
+            margin-bottom: 15px;
+        }
+        .item-title {
+            font-weight: bold;
+            font-size: 13px;
+            color: #0f172a;
+        }
+        .item-subtitle {
+            font-style: italic;
+            font-size: 11px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+        p {
+            margin: 3px 0;
+            font-size: 11px;
+            color: #334155;
+        }
+    </style>
+</head>
+<body>
+
+    <table class="header-table">
+        <tr>
+            <td class="header-cell">
+                <div class="header-name">{{ header.firstName }} {{ header.lastName }}</div>
+                {% if header.role %}
+                <div class="header-role">{{ header.role }}</div>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <table class="main-table">
+        <tr>
+            <!-- Left Sidebar Column -->
+            <td class="left-col">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Contact</div>
+                    {% if header.city or header.country %}
+                    <div class="contact-item">
+                        <span class="contact-label">Location</span>
+                        {{ header.city }}{% if header.city and header.country %}, {% endif %}{{ header.country }}
+                    </div>
+                    {% endif %}
+                    {% if contacts.email %}
+                    <div class="contact-item">
+                        <span class="contact-label">Email</span>
+                        {{ contacts.email }}
+                    </div>
+                    {% endif %}
+                    {% if contacts.phone %}
+                    <div class="contact-item">
+                        <span class="contact-label">Phone</span>
+                        {{ contacts.phone }}
+                    </div>
+                    {% endif %}
+                    {% if contacts.links %}
+                    <div class="contact-item">
+                        <span class="contact-label">Links</span>
+                        {% for link in contacts.links %}
+                        <div style="font-size: 10px; word-break: break-all;">{{ link.url }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if skills.skills and skills.skills|length > 0 %}
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Skills</div>
+                    {% for skill in skills.skills %}
+                    <div class="skill-tag">{{ skill }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </td>
+
+            <!-- Right Content Column -->
+            <td class="right-col">
+                {% if summary %}
+                <h2>Profile</h2>
+                <p style="margin-bottom: 20px;">{{ summary }}</p>
+                {% endif %}
+
+                {% if experience and experience|length > 0 %}
+                <h2>Work Experience</h2>
+                {% for exp in experience %}
+                <div class="section-item">
+                    <div class="item-title">{{ exp.jobTitle }}</div>
+                    <div class="item-subtitle">{{ exp.employer }} | {{ exp.start }} - {{ exp.end }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if education and education|length > 0 %}
+                <h2>Education</h2>
+                {% for edu in education %}
+                <div class="section-item">
+                    <div class="item-title">{{ edu.degree }}</div>
+                    <div class="item-subtitle">{{ edu.institute }} | {{ edu.startYear }} - {{ edu.endYear }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if projects and projects|length > 0 %}
+                <h2>Key Projects</h2>
+                {% for proj in projects %}
+                <div class="section-item">
+                    <div class="item-title">{{ proj.title }}</div>
+                    <p>{{ proj.description }}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

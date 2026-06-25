@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ header.firstName }} {{ header.lastName }} Resume</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            line-height: 1.4;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin: 0 0 5px 0;
+            color: #0f172a;
+        }
+        .role {
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .contact-info {
+            font-size: 11px;
+            color: #64748b;
+        }
+        h2 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 3px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+        .section-item {
+            margin-bottom: 12px;
+        }
+        .item-header {
+            display: table;
+            width: 100%;
+        }
+        .item-title {
+            display: table-cell;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: left;
+            color: #334155;
+        }
+        .item-date {
+            display: table-cell;
+            text-align: right;
+            font-size: 11px;
+            color: #64748b;
+        }
+        .item-subtitle {
+            font-size: 11px;
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 3px;
+        }
+        p {
+            margin: 3px 0;
+            font-size: 11px;
+            color: #334155;
+        }
+        .skills-container {
+            font-size: 11px;
+            color: #334155;
+        }
+        .skills-label {
+            font-weight: bold;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>{{ header.firstName }} {{ header.lastName }}</h1>
+        {% if header.role %}
+        <div class="role">{{ header.role }}</div>
+        {% endif %}
+        <div class="contact-info">
+            {% if header.city or header.country %}{{ header.city }}{% if header.city and header.country %}, {% endif %}{{ header.country }}{% if contacts.email or contacts.phone or contacts.links %} | {% endif %}{% endif %}
+            {% if contacts.email %}{{ contacts.email }}{% if contacts.phone or contacts.links %} | {% endif %}{% endif %}
+            {% if contacts.phone %}{{ contacts.phone }}{% if contacts.links %} | {% endif %}{% endif %}
+            {% if contacts.links %}
+                {% for link in contacts.links %}
+                    {{ link.url }}{% if not loop.last %} | {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if summary %}
+    <h2>Professional Summary</h2>
+    <p>{{ summary }}</p>
+    {% endif %}
+
+    {% if experience and experience|length > 0 %}
+    <h2>Experience</h2>
+    {% for exp in experience %}
+    <div class="section-item">
+        <div class="item-header">
+            <div class="item-title">{{ exp.jobTitle }} at {{ exp.employer }}</div>
+            <div class="item-date">{{ exp.start }} - {{ exp.end }}</div>
+        </div>
+        {% if exp.city or exp.country %}
+        <div class="item-subtitle">{% if exp.city or exp.country %}{{ exp.city }}{% if exp.city and exp.country %}, {% endif %}{{ exp.country }}{% endif %}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if education and education|length > 0 %}
+    <h2>Education</h2>
+    {% for edu in education %}
+    <div class="section-item">
+        <div class="item-header">
+            <div class="item-title">{{ edu.degree }}</div>
+            <div class="item-date">{{ edu.startYear }} - {{ edu.endYear }}</div>
+        </div>
+        <div class="item-subtitle">{{ edu.institute }}{% if edu.address %}, {{ edu.address }}{% endif %}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if projects and projects|length > 0 %}
+    <h2>Projects</h2>
+    {% for proj in projects %}
+    <div class="section-item">
+        <div class="item-header">
+            <div class="item-title">{{ proj.title }}</div>
+        </div>
+        <p>{{ proj.description }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if skills.skills and skills.skills|length > 0 %}
+    <h2>Skills</h2>
+    <div class="skills-container">
+        <span class="skills-label">Core Skills:</span>
+        {% for skill in skills.skills %}
+        {{ skill }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</body>
+</html>

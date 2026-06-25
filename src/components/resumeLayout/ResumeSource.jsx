@@ -2,11 +2,13 @@ import React from "react";
 import { Upload, FilePlus } from "lucide-react";
 import axios from "axios";
 
-const ResumeSource = ({ onCreate, onResumeParsed }) => {
+const ResumeSource = ({ onCreate, onUploadStart, onUploadComplete, onUploadError }) => {
   // Handle file upload
   const handleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (onUploadStart) onUploadStart();
 
     const formData = new FormData();
     formData.append("file", file);
@@ -20,15 +22,13 @@ const ResumeSource = ({ onCreate, onResumeParsed }) => {
 
       const { resume_json, id } = res.data;
 
-      // STEP 3 verification
-      console.log("Parsed contacts:", resume_json.contacts);
-
-      if (onResumeParsed) {
-        onResumeParsed(resume_json, id);
+      if (onUploadComplete) {
+        onUploadComplete(resume_json, id);
       }
     } catch (err) {
       console.error("Resume upload failed:", err);
       alert("Failed to upload resume. Please try again.");
+      if (onUploadError) onUploadError();
     }
   };
 

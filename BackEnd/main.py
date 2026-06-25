@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes.resume import router as resume_router
-from app.api.routes.resume_builder import router as resume_builder_router
+from resume_builder.router import router as resume_builder_router
 from idanalyze.router import router as idanalyze_router
 from ats_checker.router import router as ats_router
 from credex_analyze.router import router as credex_router

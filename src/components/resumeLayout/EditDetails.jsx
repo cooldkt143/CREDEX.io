@@ -27,9 +27,8 @@ const emptyResume = {
   achievements: []
 };
 
-const EditDetails = ({ initialData }) => {
+const EditDetails = ({ resumeData, setResumeData }) => {
   const [activeStep, setActiveStep] = useState(1);
-  const [resumeData, setResumeData] = useState(initialData || emptyResume);
 
   return (
     <div className="flex bg-gray-950 border border-gray-800 rounded-xl p-5">

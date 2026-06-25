@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Plus, Check, Briefcase } from "lucide-react";
+import { Plus, Check, Briefcase, Pencil, Trash2 } from "lucide-react";
 
 const ExperienceStep = ({ resumeData, setResumeData }) => {
-  const experiences = resumeData.experiences || [];
+  const experiences = resumeData.experience || [];
 
   const [showAdd, setShowAdd] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   const [jobTitle, setJobTitle] = useState("");
   const [employer, setEmployer] = useState("");
@@ -17,25 +18,33 @@ const ExperienceStep = ({ resumeData, setResumeData }) => {
   const [endYear, setEndYear] = useState("");
   const [currentlyWorking, setCurrentlyWorking] = useState(false);
 
-  const addExperience = () => {
+  const saveExperience = () => {
     if (!jobTitle || !employer || !startMonth || !startYear) return;
 
-    const newExp = {
+    const entry = {
       jobTitle,
       employer,
       city,
       country,
-      start: `${startMonth} ${startYear}`,
+      start: `${startMonth} ${startYear}`.trim(),
       end: currentlyWorking
         ? "Present"
-        : `${endMonth} ${endYear}`,
+        : `${endMonth} ${endYear}`.trim(),
     };
+
+    let updatedList;
+    if (editingIndex !== null) {
+      updatedList = experiences.map((item, idx) => idx === editingIndex ? entry : item);
+    } else {
+      updatedList = [...experiences, entry];
+    }
 
     setResumeData({
       ...resumeData,
-      experiences: [...experiences, newExp],
+      experience: updatedList,
     });
 
+    // reset
     setJobTitle("");
     setEmployer("");
     setCity("");
@@ -45,7 +54,71 @@ const ExperienceStep = ({ resumeData, setResumeData }) => {
     setEndMonth("");
     setEndYear("");
     setCurrentlyWorking(false);
+    setEditingIndex(null);
     setShowAdd(false);
+  };
+
+  const startEdit = (index) => {
+    const item = experiences[index];
+    setJobTitle(item.jobTitle || "");
+    setEmployer(item.employer || "");
+    setCity(item.city || "");
+    setCountry(item.country || "");
+
+    const startParts = item.start ? item.start.split(" ") : [];
+    if (startParts.length > 1) {
+      setStartMonth(startParts[0]);
+      setStartYear(startParts.slice(1).join(" "));
+    } else {
+      setStartMonth("");
+      setStartYear(item.start || "");
+    }
+
+    if (item.end === "Present") {
+      setCurrentlyWorking(true);
+      setEndMonth("");
+      setEndYear("");
+    } else {
+      setCurrentlyWorking(false);
+      const endParts = item.end ? item.end.split(" ") : [];
+      if (endParts.length > 1) {
+        setEndMonth(endParts[0]);
+        setEndYear(endParts.slice(1).join(" "));
+      } else {
+        setEndMonth("");
+        setEndYear(item.end || "");
+      }
+    }
+
+    setEditingIndex(index);
+    setShowAdd(true);
+  };
+
+  const cancelEdit = () => {
+    setJobTitle("");
+    setEmployer("");
+    setCity("");
+    setCountry("");
+    setStartMonth("");
+    setStartYear("");
+    setEndMonth("");
+    setEndYear("");
+    setCurrentlyWorking(false);
+    setEditingIndex(null);
+    setShowAdd(false);
+  };
+
+  const deleteExperience = (index) => {
+    const updatedList = experiences.filter((_, idx) => idx !== index);
+    setResumeData({
+      ...resumeData,
+      experience: updatedList,
+    });
+    if (editingIndex === index) {
+      cancelEdit();
+    } else if (editingIndex !== null && editingIndex > index) {
+      setEditingIndex(editingIndex - 1);
+    }
   };
 
   return (
@@ -68,7 +141,7 @@ const ExperienceStep = ({ resumeData, setResumeData }) => {
 
           {!showAdd && (
             <button
-              onClick={() => setShowAdd(true)}
+              onClick={() => { setShowAdd(true); setEditingIndex(null); }}
               className="flex items-center gap-1 text-teal-400 text-xs font-mono hover:text-teal-300"
             >
               <Plus size={14} />
@@ -151,15 +224,27 @@ const ExperienceStep = ({ resumeData, setResumeData }) => {
               </label>
             </div>
 
-            <button
-              onClick={addExperience}
-              className="w-full h-8 flex items-center justify-center gap-1 rounded-md
-              border border-teal-500/30 bg-teal-500/10
-              text-teal-400 text-sm font-mono hover:bg-teal-500/20"
-            >
-              <Check size={14} />
-              save_entry
-            </button>
+            <div className="flex gap-2">
+              {editingIndex !== null && (
+                <button
+                  onClick={cancelEdit}
+                  className="w-1/2 h-8 flex items-center justify-center gap-1 rounded-md
+                  border border-slate-700 bg-slate-800/50
+                  text-slate-300 text-sm font-mono hover:bg-slate-800"
+                >
+                  cancel
+                </button>
+              )}
+              <button
+                onClick={saveExperience}
+                className={`h-8 flex items-center justify-center gap-1 rounded-md border text-sm font-mono
+                  ${editingIndex !== null ? "w-1/2 border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20" 
+                                           : "w-full border-teal-500/30 bg-teal-500/10 text-teal-400 hover:bg-teal-500/20"}`}
+              >
+                <Check size={14} />
+                {editingIndex !== null ? "update_entry" : "save_entry"}
+              </button>
+            </div>
           </div>
         )}
 
@@ -181,9 +266,27 @@ const ExperienceStep = ({ resumeData, setResumeData }) => {
                         ` • ${exp.city}${exp.country ? ", " + exp.country : ""}`}
                     </p>
                   </div>
-                  <span className="text-teal-400 font-mono text-xs">
-                    {exp.start} — {exp.end}
-                  </span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-teal-400 font-mono text-xs">
+                      {exp.start} — {exp.end}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => startEdit(index)}
+                        className="text-slate-400 hover:text-teal-400 transition"
+                        title="Edit"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => deleteExperience(index)}
+                        className="text-slate-400 hover:text-red-400 transition"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}

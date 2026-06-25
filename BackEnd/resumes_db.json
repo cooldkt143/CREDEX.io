@@ -1,0 +1,121 @@
+{
+    "4f3930ee-5dfd-4ce7-873c-d9148ad73006": {
+        "filename": "Deepakkumartripathy_resume.pdf",
+        "resume_json": {
+            "header": {
+                "firstName": "Deepak",
+                "lastName": "Tripathy",
+                "city": "Berhampur",
+                "country": "India",
+                "pincode": "",
+                "role": "Gen AI & LLM Application Developer | Full Stack AI Engineer"
+            },
+            "contacts": {
+                "email": "deepakkumartripathy1008@gmail.com",
+                "phone": "+91-96924-13929",
+                "links": [
+                    {
+                        "url": "https://deepak-kumar-tripathy-portfolio.vercel.app/"
+                    },
+                    {
+                        "url": "https://www.linkedin.com/in/deepak-kumar-tripathy-81446128b/"
+                    }
+                ]
+            },
+            "summary": "Software Developer specializing in Generative AI and LLM-based application development, with hands-on experience building intelligent, full-stack systems powered by modern AI models. Skilled in designing chatbot workflows, integrating AI-driven features, and developing context-aware applications that solve real-world problems. Strong foundation in React, backend systems, and machine learning, with experience in computer vision and scalable application design. Proven ability to translate complex ideas into functional AI products through projects, hackathons, and independent development, with a focus on accuracy, usability, and performance.",
+            "education": [
+                {
+                    "degree": "B.Tech. in Computer Science and Technology",
+                    "startYear": "2023",
+                    "endYear": "2027",
+                    "institute": "NIST University",
+                    "address": ""
+                },
+                {
+                    "degree": "Intermediate (12th std)",
+                    "startYear": "2021",
+                    "endYear": "2023",
+                    "institute": "Khalikoat higher secoundary school",
+                    "address": ""
+                },
+                {
+                    "degree": "Matriculation (10th std)",
+                    "startYear": "2021",
+                    "endYear": "2021",
+                    "institute": "Saraswati Sishu Vidya Mandir, Gsoainnuagaon",
+                    "address": ""
+                }
+            ],
+            "skills": {
+                "skills": [
+                    "JavaScript",
+                    "Java",
+                    "Python",
+                    "React.js",
+                    "HTML5",
+                    "CSS3",
+                    "Tailwind CSS",
+                    "Node.js",
+                    "MongoDB",
+                    "Firebase",
+                    "OpenCV",
+                    "TensorFlow",
+                    "Keras"
+                ],
+                "languages": []
+            },
+            "experience": [
+                {
+                    "jobTitle": "Student Trainee",
+                    "employer": "Code Tantra at NIST University",
+                    "city": "",
+                    "country": "",
+                    "start": "May 2024",
+                    "end": "Jun 2024"
+                },
+                {
+                    "jobTitle": "Student Trainee",
+                    "employer": "CTTC BBSR Odisha",
+                    "city": "",
+                    "country": "",
+                    "start": "Jun 2024",
+                    "end": "Jul 2024"
+                }
+            ],
+            "projects": [
+                {
+                    "title": "The Ghoomakkads - Let's Explore India",
+                    "description": "Created an AI-driven travel planning platform with personalized recommendations. Integrated features like Ghoom-Bot, Surprise Trip Planner, and Safety Analyzer. Improved travel decision accuracy using preference-based recommendation logic."
+                },
+                {
+                    "title": "Smart Student Handler",
+                    "description": "Designed an academic management system covering attendance, study material, and exam prep. Integrated AI-based exam assistance and performance analytics. Streamlined academic planning for students through centralized dashboards."
+                },
+                {
+                    "title": "Legal AI",
+                    "description": "Created an AI-based legal assistant to simplify complaint filing and legal awareness. Structured separate workflows for citizens and police, improving data clarity. Enabled IPC and CrPC section mapping with digital case record management."
+                },
+                {
+                    "title": "CREDEX.IO",
+                    "description": "Built a platform aggregating developer activity from GitHub, LinkedIn, and coding platforms. Designed scoring logic to assess skill consistency, activity level, and credibility. Developed a step-based React interface for recruiters and developers."
+                },
+                {
+                    "title": "Face Detection",
+                    "description": "Implemented a real-time face detection and recognition system using OpenCV. Trained CNN models with TensorFlow and Keras for improved recognition accuracy. Covered the complete pipeline from data collection to live webcam inference."
+                },
+                {
+                    "title": "Age and Gender Detection",
+                    "description": "Developed a computer vision system for real-time and image-based age and gender classification. Trained and optimized ML models using Python and OpenCV. Enhanced prediction accuracy through preprocessing and hyperparameter tuning."
+                }
+            ],
+            "achievements": [
+                "Runners up - IEEE Hack-Arena 2024 in GNIT, Hyderabad",
+                "Finalist - IEEE Innovate 2025",
+                "Finalist - HyperSpace Innovation Hackathon in IPEC, Ghaziabad 2026",
+                "Finalist - CodeKirti 4.0 Devxtream in PMEC, Berhampur in 2026",
+                "Finalist - Techspire 1.0 in Nalanda Institute of Technology, BBSR in 2026",
+                "Top Performer - DataSprint 2026 in NIST University, BAM in 2026"
+            ]
+        }
+    }
+}

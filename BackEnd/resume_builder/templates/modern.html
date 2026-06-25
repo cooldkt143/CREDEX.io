@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ header.firstName }} {{ header.lastName }} Resume</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 36px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .contact-info {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2980b9;
+            font-size: 20px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .section-item {
+            margin-bottom: 15px;
+        }
+        .item-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .item-subtitle {
+            font-style: italic;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .skills-list {
+            list-style: none;
+            padding: 0;
+        }
+        .skills-list li {
+            display: inline-block;
+            background-color: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>{{ header.firstName }} {{ header.lastName }}</h1>
+    <div class="contact-info">
+        {% if header.city or header.country %}{{ header.city }}, {{ header.country }} | {% endif %}
+        {% if contacts.email %}{{ contacts.email }} | {% endif %}
+        {% if contacts.phone %}{{ contacts.phone }}{% endif %}
+        <br>
+        {% if contacts.links %}
+            {% for link in contacts.links %}
+                {{ link.url }} | 
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    {% if summary %}
+    <h2>Professional Summary</h2>
+    <p>{{ summary }}</p>
+    {% endif %}
+
+    {% if experience and experience|length > 0 %}
+    <h2>Experience</h2>
+    {% for exp in experience %}
+    <div class="section-item">
+        <div class="item-title">{{ exp.jobTitle }} at {{ exp.employer }}</div>
+        <div class="item-subtitle">{% if exp.city or exp.country %}{{ exp.city }}, {{ exp.country }} | {% endif %}{{ exp.start }} - {{ exp.end }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if education and education|length > 0 %}
+    <h2>Education</h2>
+    {% for edu in education %}
+    <div class="section-item">
+        <div class="item-title">{{ edu.degree }}</div>
+        <div class="item-subtitle">{{ edu.institute }}{% if edu.address %}, {{ edu.address }}{% endif %} | {{ edu.startYear }} - {{ edu.endYear }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if projects and projects|length > 0 %}
+    <h2>Projects</h2>
+    {% for proj in projects %}
+    <div class="section-item">
+        <div class="item-title">{{ proj.title }}</div>
+        <p>{{ proj.description }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if skills.skills and skills.skills|length > 0 %}
+    <h2>Skills</h2>
+    <ul class="skills-list">
+        {% for skill in skills.skills %}
+        <li>{{ skill }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+</body>
+</html>

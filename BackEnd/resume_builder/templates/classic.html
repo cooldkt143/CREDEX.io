@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ header.firstName }} {{ header.lastName }} Resume</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .contact-info {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        h2 {
+            font-size: 16px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #000000;
+            padding-bottom: 2px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .section-item {
+            margin-bottom: 15px;
+        }
+        .item-header {
+            display: table;
+            width: 100%;
+        }
+        .item-title {
+            display: table-cell;
+            font-weight: bold;
+            text-align: left;
+        }
+        .item-date {
+            display: table-cell;
+            text-align: right;
+            font-weight: normal;
+        }
+        .item-subtitle {
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+        p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        ul.skills-list {
+            list-style-type: square;
+            padding-left: 20px;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        ul.skills-list li {
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>{{ header.firstName }} {{ header.lastName }}</h1>
+        <div class="contact-info">
+            {% if header.city or header.country %}{{ header.city }}, {{ header.country }} | {% endif %}
+            {% if contacts.email %}{{ contacts.email }} | {% endif %}
+            {% if contacts.phone %}{{ contacts.phone }}{% endif %}
+            <br>
+            {% if contacts.links %}
+                {% for link in contacts.links %}
+                    {{ link.url }} | 
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if summary %}
+    <h2>Professional Summary</h2>
+    <p>{{ summary }}</p>
+    {% endif %}
+
+    {% if experience and experience|length > 0 %}
+    <h2>Experience</h2>
+    {% for exp in experience %}
+    <div class="section-item">
+        <div class="item-header">
+            <div class="item-title">{{ exp.jobTitle }}</div>
+            <div class="item-date">{{ exp.start }} - {{ exp.end }}</div>
+        </div>
+        <div class="item-subtitle">{{ exp.employer }}{% if exp.city or exp.country %} ({{ exp.city }}, {{ exp.country }}){% endif %}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if education and education|length > 0 %}
+    <h2>Education</h2>
+    {% for edu in education %}
+    <div class="section-item">
+        <div class="item-header">
+            <div class="item-title">{{ edu.degree }}</div>
+            <div class="item-date">{{ edu.startYear }} - {{ edu.endYear }}</div>
+        </div>
+        <div class="item-subtitle">{{ edu.institute }}{% if edu.address %}, {{ edu.address }}{% endif %}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if projects and projects|length > 0 %}
+    <h2>Projects</h2>
+    {% for proj in projects %}
+    <div class="section-item">
+        <div class="item-header">
+            <div class="item-title">{{ proj.title }}</div>
+        </div>
+        <p>{{ proj.description }}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if skills.skills and skills.skills|length > 0 %}
+    <h2>Skills</h2>
+    <ul class="skills-list">
+        {% for skill in skills.skills %}
+        <li>{{ skill }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+</body>
+</html>

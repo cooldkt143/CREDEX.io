@@ -1,13 +1,13 @@
 import React from "react";
 
 const DescriptionStep = ({ resumeData, setResumeData }) => {
-  const description = resumeData.description || "";
+  const summary = resumeData.summary || "";
   const maxChars = 300;
 
   const updateText = (value) => {
     setResumeData({
       ...resumeData,
-      description: value
+      summary: value
     });
   };
 
@@ -29,19 +29,19 @@ const DescriptionStep = ({ resumeData, setResumeData }) => {
           </span>
           <span
             className={`font-mono text-xs ${
-              description.length > maxChars
+              summary.length > maxChars
                 ? "text-red-400"
                 : "text-slate-500"
             }`}
           >
-            {description.length}/{maxChars}
+            {summary.length}/{maxChars}
           </span>
         </div>
 
         {/* Textarea */}
         <textarea
           rows="6"
-          value={description}
+          value={summary}
           onChange={(e) => updateText(e.target.value)}
           placeholder={`For example :- Frontend developer with experience in React, Tailwind, and building scalable UI systems...`}
           className="w-full resize-none bg-transparent text-slate-200 font-mono text-sm
@@ -51,7 +51,7 @@ const DescriptionStep = ({ resumeData, setResumeData }) => {
         {/* Footer hint */}
         <div className="mt-3 flex items-center justify-between text-xs font-mono text-slate-500">
           <span>// Keep it concise and ATS friendly</span>
-          <span>{description.length > maxChars && "limit exceeded"}</span>
+          <span>{summary.length > maxChars && "limit exceeded"}</span>
         </div>
       </div>
     </>
