@@ -16,3 +16,4 @@ pymongo
 dnspython
 multipart
 python-multipart
+pymupdf
