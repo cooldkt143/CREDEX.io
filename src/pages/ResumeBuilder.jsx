@@ -8,6 +8,7 @@ import ResumeSource from "../components/resumeLayout/ResumeSource";
 import EditDetails from "../components/resumeLayout/EditDetails";
 import Preview from "../components/resumeLayout/Preview";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const steps = [
   { id: 1, title: "Resume_Source", hint: "Create your resume from scratch or upload an existing one to extract details" },
@@ -158,7 +159,7 @@ const ResumeBuilder = () => {
   const handleExport = async () => {
     setIsExporting(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8000/resume-builder/generate-pdf", {
+      const res = await axios.post(`${API_URL}/resume-builder/generate-pdf`, {
         template_id: templateId,
         resume_data: resumeData
       }, {

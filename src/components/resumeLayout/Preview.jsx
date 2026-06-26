@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../../config";
 import { Loader2 } from "lucide-react";
 
 const Preview = ({ resumeData, templateId }) => {
@@ -9,7 +10,7 @@ const Preview = ({ resumeData, templateId }) => {
   useEffect(() => {
     const fetchHtml = async () => {
       try {
-        const res = await axios.post("http://127.0.0.1:8000/resume-builder/preview-html", {
+        const res = await axios.post(`${API_URL}/resume-builder/preview-html`, {
           template_id: templateId,
           resume_data: resumeData || {}
         });

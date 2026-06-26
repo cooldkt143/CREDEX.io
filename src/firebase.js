@@ -15,6 +15,7 @@ import {
   setDoc,
   getDoc
 } from "firebase/firestore";
+import { API_URL } from "./config";
 
 // Firebase config
 const firebaseConfig = {
@@ -71,7 +72,7 @@ export const addOrUpdateUser = async (user) => {
 
     // Send user login data to MongoDB via FastAPI backend
     try {
-      await fetch("http://127.0.0.1:8000/api/auth/login", {
+      await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

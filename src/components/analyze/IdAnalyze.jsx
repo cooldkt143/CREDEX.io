@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "../../config";
 
 const PizzaPieChart = ({ platform, profile }) => {
   const size = 220;
@@ -420,7 +421,7 @@ const steps = [
 ];
 
 const ANALYZE_DURATION = 2400;
-const API_URL = "http://127.0.0.1:8000/idanalyze/analyze";
+const ID_ANALYZE_API_URL = `${API_URL}/idanalyze/analyze`;
 
 const IdAnalyze = () => {
   const [platformId, setPlatformId] = useState("");
@@ -492,7 +493,7 @@ const IdAnalyze = () => {
     setError(null);
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(ID_ANALYZE_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

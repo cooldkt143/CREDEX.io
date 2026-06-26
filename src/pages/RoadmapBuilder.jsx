@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "../components/Header";
+import { API_URL } from "../config";
 
 const container = {
   hidden: { opacity: 0 },
@@ -70,7 +71,7 @@ const RoadmapBuilder = () => {
         setLoadingStage(stages[stageIndex]);
       }, 2500);
 
-      const response = await fetch("http://127.0.0.1:8000/api/roadmap/generate", {
+      const response = await fetch(`${API_URL}/api/roadmap/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

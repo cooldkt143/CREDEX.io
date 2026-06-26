@@ -10,11 +10,12 @@ import {
 } from "react-icons/fa";
 import html2canvas from "html2canvas";
 import Header from "../components/Header";
+import { API_URL } from "../config";
 
 import CredexBg from "../assets/images/credexCard-bg.png"; // background for score card
 import CredexLogo from "../assets/images/credex.io_logo.png";  // logo
 
-const API_URL = "http://127.0.0.1:8000/credex/analyze";
+const CREDEX_API_URL = `${API_URL}/credex/analyze`;
 
 const CredexAnalyze = () => {
   const [projects, setProjects] = useState([{ name: "", repo: "", live: "" }]);
@@ -92,7 +93,7 @@ const CredexAnalyze = () => {
     formData.append("projects", JSON.stringify(projects));
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(CREDEX_API_URL, {
         method: "POST",
         body: formData,
       });

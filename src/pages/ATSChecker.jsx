@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Header from "../components/Header";
+import { API_URL } from "../config";
 import { UploadCloud, CheckCircle } from "lucide-react";
 
 const ATSChecker = () => {
@@ -47,8 +48,8 @@ const ATSChecker = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/ats/check",
+       const response = await fetch(
+        `${API_URL}/api/ats/check`,
         {
           method: "POST",
           body: formData,

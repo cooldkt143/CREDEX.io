@@ -18,14 +18,23 @@ app = FastAPI(title="CREDEX Backend")
 os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
+# Read allowed frontend URLs from environment variables
+frontend_url = os.getenv("FRONTEND_URL")
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+]
+if frontend_url:
+    if "," in frontend_url:
+        origins.extend([url.strip() for url in frontend_url.split(",") if url.strip()])
+    else:
+        origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

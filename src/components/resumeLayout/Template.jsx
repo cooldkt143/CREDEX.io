@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import axios from "axios";
+import { API_URL } from "../../config";
 
 const TemplatePreview = ({ templateId, resumeData }) => {
   const [html, setHtml] = useState(null);
@@ -9,7 +10,7 @@ const TemplatePreview = ({ templateId, resumeData }) => {
   useEffect(() => {
     const fetchHtml = async () => {
       try {
-        const res = await axios.post("http://127.0.0.1:8000/resume-builder/preview-html", {
+        const res = await axios.post(`${API_URL}/resume-builder/preview-html`, {
           template_id: templateId,
           resume_data: resumeData || {}
         });
