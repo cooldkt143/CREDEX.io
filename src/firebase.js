@@ -46,9 +46,11 @@ export const addOrUpdateUser = async (user) => {
   if (!user) return;
 
   const userRef = doc(db, "users", user.uid);
+  const emailPrefix = user.email ? user.email.split("@")[0] : "user";
+  const handle = `@${emailPrefix.toLowerCase()}`;
   const userData = {
     username: user.displayName || "",
-    handle: `@${user.displayName?.replace(/\s+/g, "_").toLowerCase() || "user"}`,
+    handle: handle,
     rank: 0,
     phone: "",
     location: "",
@@ -56,7 +58,7 @@ export const addOrUpdateUser = async (user) => {
     platforms: {
       github: 0,
       hackerrank: 0,
-      leetcode: 0,
+      geeksforgeeks: 0,
       linkedin: 0
     },
     education: [],
@@ -66,6 +68,26 @@ export const addOrUpdateUser = async (user) => {
 
   try {
     await setDoc(userRef, userData, { merge: true });
+
+    // Send user login data to MongoDB via FastAPI backend
+    try {
+      await fetch("http://127.0.0.1:8000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          email: user.email || "",
+          displayName: user.displayName || "",
+          photoURL: user.photoURL || "",
+          userData: userData
+        })
+      });
+    } catch (apiErr) {
+      console.warn("FastAPI backend login storage failed or backend offline:", apiErr.message);
+    }
+
     return userRef;
   } catch (error) {
     console.error("Error creating user document:", error.message);

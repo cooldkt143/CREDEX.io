@@ -34,7 +34,7 @@ const EditDetails = ({ resumeData, setResumeData }) => {
     <div className="flex bg-gray-950 border border-gray-800 rounded-xl p-5">
       <Sidebar activeStep={activeStep} setActiveStep={setActiveStep} />
 
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
         <StepRenderer
           activeStep={activeStep}
           resumeData={resumeData}

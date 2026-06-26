@@ -7,7 +7,6 @@ import Home from "./pages/Home.jsx";
 import PlatformAnalyze from "./pages/PlatformAnalyze.jsx";
 import ResumeAndATS from "./pages/ResumeAndATS.jsx";
 import Profile from "./pages/Profile.jsx";
-import LeaderBoard from "./pages/LeaderBoard.jsx";
 import Settings from "./pages/Settings.jsx";
 import CredexAnalyze from "./pages/CredexAnalyze.jsx";
 import ResumeBuilder from "./pages/ResumeBuilder.jsx";
@@ -33,7 +32,6 @@ function App() {
 
         {/* Menu Page */}
         <Route path="/profile" element={<Profile />} />
-        <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/resume" element={<ResumeAndATS />} />
         <Route path="/settings" element={<Settings />} />
 

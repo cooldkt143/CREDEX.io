@@ -50,4 +50,24 @@ async def credex_analyze(
 
     payload.otherPlatforms = []
 
-    return analyze_profile(payload)
+    result = analyze_profile(payload)
+
+    # Save score and name to MongoDB
+    try:
+        from app.db import get_mongo_db
+        from datetime import datetime
+        db = get_mongo_db()
+        db.credex_scores.insert_one({
+            "fullName": fullName,
+            "experience": experience,
+            "github_link": github_link,
+            "linkedin_link": linkedin_link,
+            "credex_score": result.get("credex_score", 0),
+            "level": result.get("level", "Developer"),
+            "timestamp": datetime.utcnow()
+        })
+        print(f"[DATABASE] Successfully saved CREDEX score for {fullName} to MongoDB.")
+    except Exception as db_err:
+        print(f"[DATABASE] Error saving CREDEX score to MongoDB: {db_err}")
+
+    return result

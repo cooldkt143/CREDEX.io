@@ -2,7 +2,7 @@ import React from "react";
 
 const DescriptionStep = ({ resumeData, setResumeData }) => {
   const summary = resumeData.summary || "";
-  const maxChars = 300;
+  const maxChars = 1000;
 
   const updateText = (value) => {
     setResumeData({

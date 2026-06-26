@@ -24,6 +24,15 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;
 }
 
+/* Hide scrollbar class utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
 /* Custom premium scrollbar for local scrollable containers */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;

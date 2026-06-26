@@ -70,7 +70,7 @@ const RoadmapBuilder = () => {
         setLoadingStage(stages[stageIndex]);
       }, 2500);
 
-      const response = await fetch("http://localhost:8000/api/roadmap/generate", {
+      const response = await fetch("http://127.0.0.1:8000/api/roadmap/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

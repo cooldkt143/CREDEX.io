@@ -148,16 +148,6 @@ const Header = () => {
 
           <button
             onClick={() => {
-              navigate("/leaderboard");
-              setOpen(false);
-            }}
-            className="w-full px-4 py-3 text-left hover:bg-teal-400/10 hover:text-teal-400 transition"
-          >
-            Leaderboard
-          </button>
-
-          <button
-            onClick={() => {
               navigate("/resume");
               setOpen(false);
             }}
