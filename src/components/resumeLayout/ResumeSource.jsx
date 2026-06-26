@@ -15,7 +15,7 @@ const ResumeSource = ({ onCreate, onUploadStart, onUploadComplete, onUploadError
 
     try {
       const res = await axios.post(
-        "/resume-builder/upload",
+        "http://127.0.0.1:8000/resume-builder/upload",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

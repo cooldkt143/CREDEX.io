@@ -73,13 +73,13 @@ const Profile = () => {
       }
       try {
         setLoading(true);
-        const res = await fetch(`/api/auth/profile/${user.uid}`);
+        const res = await fetch(`http://127.0.0.1:8000/api/auth/profile/${user.uid}`);
         if (res.ok) {
           const data = await res.json();
           setDbProfile(data);
         } else {
           // Initialize profile in DB
-          await fetch("/api/auth/login", {
+          await fetch("http://127.0.0.1:8000/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -89,7 +89,7 @@ const Profile = () => {
               photoURL: user.photoURL || ""
             })
           });
-          const retryRes = await fetch(`/api/auth/profile/${user.uid}`);
+          const retryRes = await fetch(`http://127.0.0.1:8000/api/auth/profile/${user.uid}`);
           if (retryRes.ok) {
             const data = await retryRes.json();
             setDbProfile(data);
@@ -120,7 +120,7 @@ const Profile = () => {
         .map(s => s.trim())
         .filter(s => s.length > 0);
         
-      const res = await fetch(`/api/auth/profile/${user.uid}`, {
+      const res = await fetch(`http://127.0.0.1:8000/api/auth/profile/${user.uid}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -133,7 +133,7 @@ const Profile = () => {
         })
       });
       if (res.ok) {
-        const updatedRes = await fetch(`/api/auth/profile/${user.uid}`);
+        const updatedRes = await fetch(`http://127.0.0.1:8000/api/auth/profile/${user.uid}`);
         if (updatedRes.ok) {
           const data = await updatedRes.json();
           setDbProfile(data);
@@ -156,7 +156,7 @@ const Profile = () => {
 
     try {
       setIsUploading(true);
-      const res = await fetch(`/api/auth/profile/${user.uid}/upload-resume`, {
+      const res = await fetch(`http://127.0.0.1:8000/api/auth/profile/${user.uid}/upload-resume`, {
         method: "POST",
         body: formData,
       });
@@ -325,7 +325,7 @@ const Profile = () => {
                     </div>
                     <div className="flex gap-2">
                       <a
-                        href={`/${dbProfile.resume.file_path}`}
+                        href={`http://127.0.0.1:8000/${dbProfile.resume.file_path}`}
                         target="_blank"
                         rel="noreferrer"
                         className="px-2.5 py-1.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-teal-400 hover:border-teal-400 transition"

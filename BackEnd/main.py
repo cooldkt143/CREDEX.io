@@ -12,7 +12,6 @@ from roadmap_builder.router import router as roadmap_router
 
 import os
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 
 app = FastAPI(title="CREDEX Backend")
 
@@ -75,29 +74,6 @@ app.include_router(
 )
 
 
-# Setup paths to check for the React build folder (dist)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
-DIST_DIR = os.path.join(ROOT_DIR, "dist")
-
-if os.path.exists(DIST_DIR):
-    assets_dir = os.path.join(DIST_DIR, "assets")
-    if os.path.exists(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
-
-    @app.get("/{catchall:path}")
-    def serve_react_app(catchall: str):
-        # Exclude backend API routes and auto-docs to prevent interception
-        if catchall.startswith(("api/", "credex/", "idanalyze/", "resume-builder/", "uploads/", "docs", "openapi.json", "redoc")):
-            from fastapi import HTTPException
-            raise HTTPException(status_code=404, detail="Not Found")
-            
-        file_path = os.path.join(DIST_DIR, catchall)
-        if os.path.isfile(file_path):
-            return FileResponse(file_path)
-            
-        return FileResponse(os.path.join(DIST_DIR, "index.html"))
-else:
-    @app.get("/")
-    def root():
-        return {"status": "CREDEX backend running (development mode: frontend dist not found)"}
+@app.get("/")
+def root():
+    return {"status": "CREDEX backend running"}

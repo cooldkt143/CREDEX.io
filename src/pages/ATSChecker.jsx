@@ -48,7 +48,7 @@ const ATSChecker = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        "/api/ats/check",
+        "http://127.0.0.1:8000/api/ats/check",
         {
           method: "POST",
           body: formData,
