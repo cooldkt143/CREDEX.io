@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import shutil
 import uuid
+import traceback
 from app.db import get_mongo_db
 
 router = APIRouter()
@@ -59,6 +60,7 @@ async def register_login(request: LoginRequest):
         )
         return {"status": "success", "message": "User login stored successfully", "username": username}
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 class ProfileUpdateRequest(BaseModel):
@@ -83,6 +85,7 @@ async def get_profile(uid: str):
     except HTTPException:
         raise
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @router.put("/profile/{uid}")
@@ -136,6 +139,7 @@ async def update_profile(uid: str, request: ProfileUpdateRequest):
     except HTTPException:
         raise
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @router.post("/profile/{uid}/upload-resume")
@@ -183,6 +187,7 @@ async def upload_profile_resume(uid: str, file: UploadFile = File(...)):
             "profileCompletion": completion
         }
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Failed to upload resume: {str(e)}")
 
 

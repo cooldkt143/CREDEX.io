@@ -20,7 +20,11 @@ _client = None
 def get_mongo_client():
     global _client
     if _client is None:
-        _client = MongoClient(MONGO_URI)
+        try:
+            import certifi
+            _client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
+        except ImportError:
+            _client = MongoClient(MONGO_URI)
     return _client
 
 def get_mongo_db():
