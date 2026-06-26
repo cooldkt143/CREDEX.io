@@ -6,9 +6,6 @@ python-docx
 jinja2
 xhtml2pdf
 scikit-learn
-sentence-transformers
-transformers
-torch
 requests
 python-dotenv
 pydantic

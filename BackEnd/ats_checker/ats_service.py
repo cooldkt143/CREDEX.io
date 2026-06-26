@@ -23,6 +23,8 @@ _ner_pipeline = None
 
 def get_bge_model():
     global _bge_model
+    if os.getenv("DISABLE_HEAVY_MODELS", "true").lower() == "true":
+        return None
     if _bge_model is None:
         try:
             from sentence_transformers import SentenceTransformer
@@ -34,6 +36,8 @@ def get_bge_model():
 
 def get_ner_pipeline():
     global _ner_pipeline
+    if os.getenv("DISABLE_HEAVY_MODELS", "true").lower() == "true":
+        return None
     if _ner_pipeline is None:
         try:
             from transformers import pipeline
