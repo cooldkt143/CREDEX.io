@@ -14,7 +14,7 @@ import Header from "../components/Header";
 import CredexBg from "../assets/images/credexCard-bg.png"; // background for score card
 import CredexLogo from "../assets/images/credex.io_logo.png";  // logo
 
-const API_URL = "http://127.0.0.1:8000/credex/analyze";
+const API_URL = "/credex/analyze";
 
 const CredexAnalyze = () => {
   const [projects, setProjects] = useState([{ name: "", repo: "", live: "" }]);

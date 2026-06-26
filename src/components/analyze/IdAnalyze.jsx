@@ -420,7 +420,7 @@ const steps = [
 ];
 
 const ANALYZE_DURATION = 2400;
-const API_URL = "http://127.0.0.1:8000/idanalyze/analyze";
+const API_URL = "/idanalyze/analyze";
 
 const IdAnalyze = () => {
   const [platformId, setPlatformId] = useState("");
