@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="relative border-t border-teal-400/20 bg-black/80 backdrop-blur">
       {/* Neon glow background */}
@@ -28,7 +30,6 @@ const Footer = () => {
             </h4>
             <ul className="space-y-3 text-sm text-white/70">
               {[
-                { label: "Home", id: "home" },
                 { label: "Credex Analyze", id: "home" },
                 { label: "Platforms Score Card", id: "platform-score-card" },
                 { label: "Resume builder and ATS Checker", id: "resume-builder-ats" },
@@ -37,8 +38,12 @@ const Footer = () => {
                 <li
                   key={item.id}
                   onClick={() => {
-                    const section = document.getElementById(item.id);
-                    section?.scrollIntoView({ behavior: "smooth" });
+                    if (item.id === "credex-analyze") {
+                      navigate("/credex-analyze");
+                    } else {
+                      const section = document.getElementById(item.id);
+                      section?.scrollIntoView({ behavior: "smooth" });
+                    }
                   }}
                   className="cursor-pointer transition-all
                   hover:text-teal-400 hover:translate-x-1
